@@ -1,35 +1,28 @@
 <script>
-    import {onMount} from "svelte";
+    import { onMount } from "svelte";
+    import gsap from "gsap";
     import {SplitText} from "gsap/SplitText";
-    import {gsap} from "gsap";
 
-    let {text, imageSrc, dim} = $props()
-    let headerText
+    const {imagePath, title, description, pageTitle} = $props();
+    let titleElement
+    let descriptionElement
 
-    gsap.registerPlugin(SplitText)
     onMount(() => {
-        const splitHeaderText = SplitText.create(headerText).words
+        gsap.registerPlugin(SplitText);
+        document.title = pageTitle;
 
-        gsap.fromTo(splitHeaderText, {
-            yPercent: 50,
-            opacity: 0,
-        }, {
-            yPercent: 0,
-            opacity: 1,
-            stagger: 1/5,
-            duration: .5,
-            delay: .5,
-            ease: "power2.out",
-        })
-    })
+        const titleText = SplitText.create(titleElement, {type: "chars"}).chars;
+
+        gsap.from(titleText, {opacity: 0, y: 50, stagger: 1/10, duration: 0.4});
+        gsap.from(descriptionElement, {opacity: 0, y: 50, duration: 0.5, delay: 0.3});
+    });
 </script>
 
-<div class="relative w-full h-[30vh] flex flex-col items-center justify-center">
-    <header bind:this={headerText} class="relative z-10 text-stone-200 text-4xl">{text}</header>
-    {#if dim}
-        <img class="absolute z-0 top-0 left-0 w-full h-full object-cover brightness-50" src={imageSrc} alt=""/>
-    {:else}
-        <img class="absolute z-0 top-0 left-0 w-full h-full object-cover" src={imageSrc} alt=""/>
-    {/if}
-
-</div>
+<section class="relative flex h-[34vh] w-full items-center justify-center overflow-hidden text-center">
+    <img class="absolute inset-0 h-full w-full object-cover brightness-[.4]" src={imagePath} alt=""/>
+    <div class="absolute inset-0 bg-kcblue/40"></div>
+    <div class="relative z-10 px-6">
+        <h1 bind:this={titleElement} class="font-[abril] text-5xl italic text-kcyellow md:text-7xl">{title}</h1>
+        <p bind:this={descriptionElement} class="mt-3 text-lg text-stone-200 md:text-xl">{description}</p>
+    </div>
+</section>

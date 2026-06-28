@@ -1,49 +1,92 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn-svelte/tailwind.css";
+@import "@fontsource-variable/inter";
 
 @theme {
-    --color-kcyellow: #fed450;
-    --color-kcblack: #231f20;
+  --color-kcyellow: #fed450; /* Pantone 122 Yellow */
+  --color-kcblack: #231f20; /* Pantone Black */
+  --color-kcblue: #003366; /* Pantone 295 Blue */
+  --color-kcgold: #b49759; /* Pantone 872 Gold */
+
+  --color-background: oklch(1 0 0);
+  --color-foreground: oklch(0.145 0 0);
+  --color-card: oklch(1 0 0);
+  --color-card-foreground: oklch(0.145 0 0);
+  --color-popover: oklch(1 0 0);
+  --color-popover-foreground: oklch(0.145 0 0);
+  --color-primary: #fed450;
+  --color-primary-foreground: #231f20;
+  --color-secondary: oklch(0.97 0 0);
+  --color-secondary-foreground: oklch(0.205 0 0);
+  --color-muted: oklch(0.97 0 0);
+  --color-muted-foreground: oklch(0.556 0 0);
+  --color-accent: oklch(0.97 0 0);
+  --color-accent-foreground: oklch(0.205 0 0);
+  --color-destructive: oklch(0.45 0.2 27.325);
+  --color-border: oklch(0.922 0 0);
+  --color-input: oklch(0.922 0 0);
+  --color-ring: oklch(0.708 0 0);
+  --color-chart-1: oklch(0.87 0 0);
+  --color-chart-2: oklch(0.556 0 0);
+  --color-chart-3: oklch(0.439 0 0);
+  --color-chart-4: oklch(0.371 0 0);
+  --color-chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --color-sidebar: oklch(0.985 0 0);
+  --color-sidebar-foreground: oklch(0.145 0 0);
+  --color-sidebar-primary: oklch(0.205 0 0);
+  --color-sidebar-primary-foreground: oklch(0.985 0 0);
+  --color-sidebar-accent: oklch(0.97 0 0);
+  --color-sidebar-accent-foreground: oklch(0.205 0 0);
+  --color-sidebar-border: oklch(0.922 0 0);
+  --color-sidebar-ring: oklch(0.708 0 0);
+}
+
+@layer base {
+  body {
+    @apply font-[century-gothic] bg-kcblack text-stone-100;
+  }
+  p {
+    @apply text-base leading-relaxed;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-[century-gothic-bold];
+  }
+  button {
+    @apply cursor-pointer;
+  }
 }
 
 @font-face {
-    font-family: abril;
-    font-style: normal;
-    src: url("/fonts/abril-display-regular.otf") format("opentype");
+  font-family: abril;
+  font-style: normal;
+  src: url("/fonts/abril-display-regular.otf") format("opentype");
 }
 
 @font-face {
-    font-family: century-gothic;
-    font-style: normal;
-    src: url("/fonts/centurygothic.ttf") format("opentype");
+  font-family: century-gothic;
+  font-style: normal;
+  src: url("/fonts/centurygothic.ttf") format("opentype");
 }
 
 @font-face {
-    font-family: century-gothic-bold;
-    font-style: normal;
-    src: url("/fonts/centurygothic_bold.ttf") format("opentype");
+  font-family: century-gothic-bold;
+  font-style: normal;
+  src: url("/fonts/centurygothic_bold.ttf") format("opentype");
 }
 
-button {
-    cursor: pointer;
-}
-
-body {
-    @apply font-[century-gothic] bg-kcblack text-stone-200;
-}
-
-header {
-    @apply font-semibold;
-}
-
-a {
-    @apply hover:underline;
-}
-
-/** {*/
-/*    border: 1px solid black;*/
-/*}*/
-
-.text-black-outline {
-    -webkit-text-stroke: 2px black;
-    paint-order: stroke fill;
+/* Honor users who prefer less motion: kill transitions/animations site-wide. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

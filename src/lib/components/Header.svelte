@@ -1,68 +1,83 @@
 <script>
     import gsap from "gsap";
     import {onMount} from "svelte";
+    import {page} from "$app/state";
+    import Icon from "@iconify/svelte";
 
-    let menu
-    let menuButton
-    let menuOpen = $state(false)
-    let windowClickHandler
+    const links = [
+        {href: "/", label: "Home"},
+        {href: "/about", label: "About"},
+        {href: "/hours", label: "Hours"},
+        {href: "/dcon", label: "DCON"},
+        {href: "/events", label: "Events"},
+    ]
+
+    let drawer
+    let drawerButton
+    let drawerOpen = $state(false)
+
+    const isActive = (href) => href === "/" ? page.url.pathname === "/" : page.url.pathname.startsWith(href)
 
     onMount(() => {
-        gsap.set(menu, {
-            transformOrigin: "top left",
-            xPercent: 100
+        gsap.set(drawer, {
+            transformOrigin: "top right"
         })
-        windowClickHandler = (event) => handleClickOutside(event)
-        addEventListener("click", windowClickHandler)
-        return () => removeEventListener("click", windowClickHandler)
+        const onWindowClick = (event) => {
+            if (drawerOpen && !drawer.contains(event.target) && !drawerButton.contains(event.target)) {
+                drawerOpen = false
+            }
+        }
+        addEventListener("click", onWindowClick)
+        return () => removeEventListener("click", onWindowClick)
     })
 
     $effect(() => {
-        console.log("open/close")
-        gsap.to(menu, {
-            xPercent: menuOpen ? -100 : 0,
-            duration: .3,
-            ease: "power2.out"
-        })
+        gsap.to(drawer, {xPercent: drawerOpen ? 0 : 100, duration: .3, ease: "power2.out"})
     })
-
-    // if a user clicks and the menu and menu button don't contain the click, close the menu
-    const handleClickOutside = (event) => {
-        if (menuOpen && !menu.contains(event.target) && !menuButton.contains(event.target)) {
-            menuOpen = false
-        }
-    }
 </script>
 
-<section class="relative flex flex-col w-full h-27.5 md:h-45 z-30 text-kcblack bg-stone-200 p-4 items-center"
-         style="box-shadow: 0px 5px 5px 5px hsl(0 1% 30% / .1)">
-    <a class="w-[80%] md:w-auto max-h-full md:h-[80%] self-start md:self-auto" href="/"><img class="h-full object-contain" src="/keyclub_horizontal_black.png" alt="Key Club Logo"/></a>
-    <button class="block md:hidden" bind:this={menuButton} onclick={() => menuOpen = !menuOpen} aria-label="Menu button">
-        <svg class="absolute right-3 top-2" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path fill="currentColor" d="M4 18q-.425 0-.712-.288T3 17t.288-.712T4 16h16q.425 0 .713.288T21 17t-.288.713T20 18zm0-5q-.425 0-.712-.288T3 12t.288-.712T4 11h16q.425 0 .713.288T21 12t-.288.713T20 13zm0-5q-.425 0-.712-.288T3 7t.288-.712T4 6h16q.425 0 .713.288T21 7t-.288.713T20 8z"/></svg>
+<header class="relative z-30 flex w-full flex-col items-center bg-stone-100 p-4 text-kcblack md:flex-row md:justify-between md:px-8 lg:px-12">
+    <a class="w-[78%] self-start md:w-auto md:self-auto" href="/" aria-label="Key Club home">
+        <img class="h-12 w-full object-contain object-left md:h-14 lg:h-16" src="/keyclub_horizontal_black.png" alt="Henry M. Jackson Key Club"/>
+    </a>
+
+    <button class="absolute right-3 top-5 md:hidden" bind:this={drawerButton}
+            onclick={() => drawerOpen = !drawerOpen} aria-label="Toggle menu" aria-expanded={drawerOpen}>
+        <Icon icon="solar:hamburger-menu-linear" class="size-10 text-kcblack"/>
     </button>
 
-    <ul class="hidden md:flex w-full xl:w-[80%] text-xl xl:text-2xl items-center justify-between">
-        <li><a href="/">Home</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/events">Events</a></li>
-        <li><a href="/membership">Membership</a></li>
-        <li><a href="/districtproject">District Project</a></li>
-    </ul>
-</section>
+    <nav class="hidden md:block">
+        <ul class="flex items-center gap-7 text-lg lg:gap-10 lg:text-xl">
+            {#each links as link (link.href)}
+                <li>
+                    <a class="relative py-1"
+                       href={link.href}>
+                        {link.label}
+                        <span class="pointer-events-none absolute bottom-0.5 left-0 h-0.5 w-full {isActive(link.href) ? 'bg-kcyellow' : 'bg-transparent'}"></span>
+                    </a>
+                </li>
+            {/each}
+        </ul>
+    </nav>
+</header>
 
-<section
-    bind:this={menu}
-    class="fixed flex flex-col right-0 top-0 z-20 w-[70%] h-screen bg-stone-200 p-4"
-    style="transform: translateX(100%);"
->
-    <div class="spacer w-full h-27.5"></div>
-    <ul class="text-kcblack text-3xl space-y-2">
-        <li><a href="/">Home</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/events">Events</a></li>
-        <li><a href="/membership">Membership</a></li>
-        <li><a href="/districtproject">District Project</a></li>
-    </ul>
-    <div class="spacer flex-1"></div>
-    <img class="object-contain w-32 h-32 mx-auto" src="/bee.webp" alt="Wolfbee">
-</section>
+<!-- Mobile drawer -->
+<!-- I wrote the translate-x-full here instead of with GSAP because it was causing it to flash briefly when the page loaded -->
+<aside bind:this={drawer} class="fixed right-0 top-0 z-20 flex h-screen w-[72%] max-w-xs flex-col bg-stone-100 p-6 text-kcblack translate-x-full">
+    <nav class="pt-16">
+        <ul class="space-y-3 text-3xl">
+            {#each links as link (link.href)}
+                <li>
+                    <a class="relative py-1"
+                       href={link.href} onclick={() => drawerOpen = false}>{link.label}
+                       <span class="pointer-events-none absolute bottom-0.5 left-0 h-0.5 w-full {isActive(link.href) ? 'bg-kcyellow' : 'bg-transparent'}">
+
+                       </span>
+                    </a>
+                </li>
+            {/each}
+        </ul>
+    </nav>
+    <div class="flex-1"></div>
+    <img class="mx-auto h-28 w-28 object-contain opacity-90" src="/faz.webp" alt="Henry M. Jackson Key Club"/>
+</aside>
