@@ -1,12 +1,32 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-		%sveltekit.head%
-	</head>
-	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents">%sveltekit.body%</div>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+    <!-- Link/social preview (Open Graph + Twitter). Absolute URLs required by most messaging apps. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="JHS Key Club" />
+    <meta property="og:title" content="JHS Key Club" />
+    <meta
+      property="og:description"
+      content="Henry M. Jackson High School Key Club — a student-led volunteering family making a difference."
+    />
+    <!-- ponytail: webp preview works on Discord/Slack/Twitter/iMessage; if WhatsApp/older apps show no image, swap to a .jpg -->
+    <meta property="og:image" content="https://jhskeyclub.org/club.webp" />
+    <meta property="og:url" content="https://jhskeyclub.org" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="JHS Key Club" />
+    <meta
+      name="twitter:description"
+      content="Henry M. Jackson High School Key Club — a student-led volunteering family making a difference."
+    />
+    <meta name="twitter:image" content="https://jhskeyclub.org/club.webp" />
+
+    %sveltekit.head%
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents">%sveltekit.body%</div>
+  </body>
 </html>
