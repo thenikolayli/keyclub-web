@@ -1,490 +1,181 @@
 <script>
-    import gsap from "gsap";
-    import ScrollTrigger from "gsap/ScrollTrigger";
-    import {horizontalLoop} from "$lib/HorizontalLoop.js";
     import Header from "$lib/components/Header.svelte";
     import Footer from "$lib/components/Footer.svelte";
-    import ResponsiveButton from "$lib/components/ResponsiveButton.svelte";
-    import Icon from "@iconify/svelte"
+    import Icon from "@iconify/svelte";
+    import gsap from "gsap";
+    import {ScrollTrigger} from "gsap/ScrollTrigger";
     import {onMount} from "svelte";
-    import textFit from "textfit";
+    import ImageHeader from "$lib/components/ImageHeader.svelte";
+    import * as Carousel from "$lib/components/ui/carousel/index.js";
+    import {Button} from "$lib/components/ui/button/index.js";
 
-    let loop
-    let officer_section
-    const partnerChange = {duration: .8, ease: "power2.out"}
+    const officers = [
+        {name: "Annabelle Ho", role: "President", email: "annabelle.zt.ho@gmail.com", image: "/about/annabelle.jpg"},
+        {name: "Eldana Woldegiorgis", role: "Vice President", email: "eldanaaw.38@gmail.com", image: "/about/eldana.jpg"},
+        {name: "Kaitlyn Luu", role: "Treasurer", email: "kaitlynluu579@gmail.com", image: "/about/kaitlyn.jpg"},
+        {name: "Nadia Villarreal-Carriedo", role: "Secretary", email: "nvillarrealcarriedo@gmail.com", image: "/about/nadia.jpg"},
+        {name: "Ellie Nguyen", role: "Editor", email: "ellienguyen882@gmail.com", image: "/about/ellie.jpg"},
+        {name: "Nana Endo", role: "Editor", email: "shibewanco49@gmail.com", image: "/about/nana.jpg"},
+        {name: "Nikolay Li", role: "Webmaster", email: "nikolayliwork@gmail.com", image: "/about/nikolay.jpg"},
+        {name: "Daya Putheth", role: "Historian", email: "puthethdaya@gmail.com", image: "/about/daya.jpg"},
+    ]
+
+    const facultyAdvisors = [
+        {name: "Alfred Cain", email: "acain@everettsd.org", image: "/about/mrcain.png"},
+        {name: "Rachel Vaught", email: "rvaught@everettsd.org", image: "/about/mrsvaught.jpg"},
+    ]
+
+    const kiwanisAdvisors = [
+        {name: "John Steckler", email: "johnsteckler@comcast.net", image: "/about/mrsteckler.png"},
+        {name: "Lisa Steckler", email: "stecklerlisa@gmail.com", image: "/about/mrssteckler.png"},
+    ]
+
+    const partners = [
+        {name: "Thirst Project", href: "https://thirstproject.org/", text: "Educating the next generation about the global water crisis and how they can be part of social change.", image: "/about/thirst_project.svg"},
+        {name: "UNICEF", href: "https://www.unicef.org/", text: "The only United Nations organization dedicated exclusively to children, providing for their needs in more than 150 countries.", image: "/about/unicef.png"},
+        {name: "Erika's Lighthouse", href: "https://erikaslighthouse.org/", text: "Making sure no young person feels alone in their depression, breaking down the stigma around mental health.", image: "/about/erikas_lighthouse.webp"},
+        {name: "Schoolhouse", href: "https://schoolhouse.world/key-club", text: "Free peer tutoring for learners across the world — learn something new, or become a tutor yourself.", image: "/about/schoolhouse.jpg"},
+        {name: "Collegewise", href: "https://collegewise.com/", text: "College and test-prep guidance, with a suite of Runway resources free for every Key Club member.", image: "/about/collegewise.svg"},
+    ]
 
     let canSend = $state(true)
-    let small = $state(false)
-    let fbsrc = $state("")
-
-    let thirst
-    let lighthouse
-    let schoolhouse
-    let collegewise
-    let unicef
+    let carouselAPI = $state()
+    let scrollSnaps = $state([])
+    let selectedSnap = $state(0)
 
     onMount(() => {
-        document.title = "About"
         gsap.registerPlugin(ScrollTrigger)
 
-        textFit(thirst)
-        textFit(lighthouse)
-        textFit(schoolhouse)
-        textFit(collegewise)
-        textFit(unicef)
-
-        fbsrc = "https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FKiwanisofmillcreek&tabs=timeline&width=340&height=500"
-
-        gsap.fromTo(officer_section, {
-                backgroundColor: "#e7e5e4"
-            }, {
-                backgroundColor: "#231f20",
-                scrollTrigger: {
-                    trigger: officer_section,
-                    start: "top top",
-                    end: () => "+=" + 1/4 * innerHeight, // end after quarter of screen height
-                    scrub: 1,
-                    once: true,
-                    // markers: true,
-                }
-            }
-        )
-        gsap.to(".intro-text", {
-            color: "#fed450",
-            scrollTrigger: {
-                trigger: officer_section,
-                start: "top top",
-                end: () => "+=" + 1/4 * innerHeight,
-                scrub: 1,
-                once: true,
-                // markers: true,
-            }
+        const mm = gsap.matchMedia()
+        mm.add("(prefers-reduced-motion: no-preference)", () => {
+            gsap.utils.toArray(".reveal").forEach((el) => {
+                gsap.from(el, {
+                    opacity: 0, y: 40, duration: .6, ease: "power2.out",
+                    scrollTrigger: {trigger: el, start: "top 88%"}
+                })
+            })
         })
+        return () => mm.revert()
+    })
 
-        small = innerWidth < 768
-        // if larger than md
-        if (!small) {
-            gsap.set(".cards-info", {
-                xPercent: -100
-            })
-        } else {
-            gsap.set(".cards-info-stack", {
-                yPercent: -100
-            })
+    $effect(() => {
+        if (carouselAPI) {
+            scrollSnaps = carouselAPI.scrollSnapList()
+            carouselAPI.on("select", () => selectedSnap = carouselAPI.selectedScrollSnap())
         }
-        gsap.set(".cards", {
-            xPercent: -110
-        })
-
-        gsap.utils.toArray(".cards").forEach((card) => {
-            const card_st = ScrollTrigger.create({
-                trigger: card,
-                start: small ? "top 40%" : "top 60%",
-                // markers: true
-            })
-
-            gsap.to(card, {
-                xPercent: 0,
-                duration: .3,
-                ease: "power2.out",
-                scrollTrigger: card_st
-            })
-            if (!small) {
-                gsap.to(card.querySelectorAll(".cards-info"), {
-                    xPercent: 0,
-                    stagger: .2,
-                    duration: .3,
-                    ease: "power2.out",
-                    delay: .2,
-                    scrollTrigger: card_st
-                })
-            } else {
-                gsap.to(card.querySelectorAll(".cards-info-stack"), {
-                    yPercent: 0,
-                    stagger: .2,
-                    duration: .3,
-                    ease: "power2.out",
-                    delay: .2,
-                    scrollTrigger: card_st
-                })
-            }
-        })
-
-
-        const partners = gsap.utils.toArray(".partner")
-        let active_element
-        loop = horizontalLoop(partners, {
-            paused: true,
-            draggable: false,
-            center: true,
-            onChange: (element) => { // when the active element changes, this function gets called.
-                active_element && active_element.classList.remove("active");
-                element.classList.add("active");
-                active_element = element;
-            }
-        })
-
-        setInterval(() => {
-            loop.next({duration: 1, ease: "power2.out"});
-        }, 10 * 1000)
-
-        return () => ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
     })
 </script>
 
 <Header/>
-<section bind:this={officer_section} class="w-full h-fit text-stone-200 bg-stone-200">
-    <div class="w-full h-[75vh] flex flex-col items-center justify-center text-center">
-        <header class="intro-text text-black text-7xl">MEET THE OFFICERS</header>
-<!--        <h1 class="intro-text text-black mt-8">(scroll)</h1>-->
-    </div>
-    <section class="space-y-[14rem] py-[10rem] w-[80%] md:w-fit mx-auto overflow-hidden">
 
-        <div class="relative cards h-fit w-full md:flex">
-            <img class="relative w-full md:size-[20rem] aspect-square border-kcyellow border-16 z-10"
-                 src="/about/annabelle.jpeg"
-                 alt="Annabelle Ho"/>
-            <div class="cards-info-stack absolute left-0 md:relative w-fit ml-4 overflow-hidden">
-                <div class={"h-4 w-full"}></div>
-                <h1 class="cards-info text-5xl text-kcyellow font-[century-gothic-bold]">Annabelle Ho</h1>
-                <h3 class="cards-info text-3xl mt-2">President</h3>
-                <h3 class="cards-info text-lg flex items-center text-gray-400"><Icon icon="fe:mail" /><span
-                        class="ml-2">annabelle.zt.ho@gmail.com</span></h3>
-            </div>
+<ImageHeader imagePath="/about.jpg" title="About Us" description="The people and partners behind JHS Key Club" pageTitle="About"/>
+
+<!-- Officers -->
+<section class="w-full bg-foreground px-8 py-20">
+    <div class="mx-auto max-w-6xl">
+        <h2 class="reveal text-center text-4xl text-background md:text-5xl">Meet the officers</h2>
+        <div class="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {#each officers as officer (officer.email)}
+                <div class="reveal flex flex-col items-center text-center">
+                    <img class="aspect-square w-full border-8 border-primary object-cover" src={officer.image} alt={officer.name}/>
+                    <h3 class="font-bold-gothic mt-4 text-2xl text-primary">{officer.name}</h3>
+                    <p class="text-lg text-background">{officer.role}</p>
+                    <a class="mt-1 flex items-center gap-1 text-sm text-muted-foreground hover:text-accent transition-colors" href="mailto:{officer.email}">
+                        <Icon icon="fe:mail"/><span>{officer.email}</span>
+                    </a>
+                </div>
+            {/each}
         </div>
-
-        <div class="relative cards h-fit w-full md:flex">
-            <img class="relative w-full md:size-[20rem] aspect-square border-kcyellow border-16 z-10"
-                 src="/about/eldana.jpeg"
-                 alt="Eldana Woldegiorgis"/>
-            <div class="cards-info-stack absolute left-0 md:relative w-fit ml-4 overflow-hidden">
-                <div class="h-4 w-full"></div>
-                <h1 class="cards-info text-5xl text-kcyellow font-[century-gothic-bold]">Eldana Woldegiorgis</h1>
-                <h2 class="cards-info text-3xl mt-2">Vice President</h2>
-                <h3 class="cards-info text-xl flex items-center text-gray-400"><Icon icon="fe:mail" /><span
-                        class="ml-2">eldanaaw.38@gmail.com</span></h3>
-            </div>
-        </div>
-
-        <div class="relative cards h-fit w-full md:w-fit md:flex">
-            <img class="relative w-full md:size-[20rem] aspect-square border-kcyellow border-16 z-10"
-                 src="/about/kaitlyn.jpg" alt="Kaitlyn Luu"/>
-            <div class="cards-info-stack absolute left-0 md:relative w-fit ml-4 overflow-hidden">
-                <div class="h-4 w-full"></div>
-                <h1 class="cards-info text-5xl text-kcyellow font-[century-gothic-bold]">Kaitlyn Luu</h1>
-                <h2 class="cards-info text-3xl mt-2">Treasurer</h2>
-                <h3 class="cards-info text-xl flex items-center text-gray-400"><Icon icon="fe:mail" /><span
-                        class="ml-2">kaitlynluu579@gmail.com</span></h3>
-            </div>
-        </div>
-
-        <div class="relative cards h-fit w-full md:w-fit md:flex">
-            <img class="relative w-full md:size-[20rem] aspect-square border-kcyellow border-16 z-10"
-                 src="/about/nadia.jpeg" alt="Nadia Villareal-Carriedo"/>
-            <div class="cards-info-stack absolute left-0 md:relative w-fit ml-4 overflow-hidden">
-                <div class="h-4 w-full"></div>
-                <h1 class="cards-info text-5xl text-kcyellow font-[century-gothic-bold]">Nadia Villareal-Carriedo</h1>
-                <h2 class="cards-info text-3xl mt-2">Secretary</h2>
-                <h3 class="cards-info text-xl flex items-center text-gray-400"><Icon icon="fe:mail" /><span
-                        class="ml-2">nvillarrealcarriedo@gmail.com</span></h3>
-            </div>
-        </div>
-
-        <div class="relative cards h-fit w-full md:w-fit md:flex">
-            <img class="relative w-full md:size-[20rem] aspect-square border-kcyellow border-16 z-10"
-                 src="/about/ellie.jpeg" alt="Ellie Nguyen"/>
-            <div class="cards-info-stack absolute left-0 md:relative w-fit ml-4 overflow-hidden">
-                <div class="h-4 w-full"></div>
-                <h1 class="cards-info text-5xl text-kcyellow font-[century-gothic-bold]">Ellie Nguyen</h1>
-                <h2 class="cards-info text-3xl mt-2">Editor</h2>
-                <h3 class="cards-info text-xl flex items-center text-gray-400"><Icon icon="fe:mail" /><span
-                        class="ml-2">ellienguyen882@gmail.com</span></h3>
-            </div>
-        </div>
-
-        <div class="relative cards h-fit w-full md:w-fit md:flex">
-            <img class="relative w-full md:size-[20rem] aspect-square border-kcyellow border-16 z-10"
-                 src="/about/nana.jpg" alt="Nana endo"/>
-            <div class="cards-info-stack absolute left-0 md:relative w-fit ml-4 overflow-hidden">
-                <div class="h-4 w-full"></div>
-                <h1 class="cards-info text-5xl text-kcyellow font-[century-gothic-bold]">Nana endo</h1>
-                <h2 class="cards-info text-3xl mt-2">Editor</h2>
-                <h3 class="cards-info text-xl flex items-center text-gray-400"><Icon icon="fe:mail" /><span
-                        class="ml-2">shibewanco49@gmail.com	</span></h3>
-            </div>
-        </div>
-        <div class="relative cards h-fit w-full md:w-fit md:flex">
-            <img class="relative w-full md:size-[20rem] aspect-square border-kcyellow border-16 z-10"
-                 src="/about/nikolay.jpg" alt="Nikolay Li"/>
-            <div class="cards-info-stack absolute left-0 md:relative w-fit ml-4 overflow-hidden">
-                <div class="h-4 w-full"></div>
-                <h1 class="cards-info text-5xl text-kcyellow font-[century-gothic-bold] pr-1">Nikolay Li</h1>
-                <h2 class="cards-info text-3xl mt-2">Webmaster</h2>
-                <h3 class="cards-info text-xl flex items-center text-gray-400"><Icon icon="fe:mail" /><span
-                        class="ml-2">nikolayliwork@gmail.com</span></h3>
-            </div>
-        </div>
-        <div class="relative cards h-fit w-full md:w-fit md:flex">
-            <img class="relative w-full md:size-[20rem] aspect-square border-kcyellow border-16 z-10"
-                 src="/about/daya.jpeg" alt="Daya Putheth"/>
-            <div class="cards-info-stack absolute left-0 md:relative w-fit ml-4 overflow-hidden">
-                <div class="h-4 w-full"></div>
-                <h1 class="cards-info text-5xl text-kcyellow font-[century-gothic-bold]">Daya Putheth</h1>
-                <h2 class="cards-info text-3xl mt-2">Historian</h2>
-                <h3 class="cards-info text-xl flex items-center text-gray-400"><Icon icon="fe:mail" /><span
-                        class="ml-2">puthethdaya@gmail.com</span></h3>
-            </div>
-        </div>
-
-    </section>
-</section>
-
-<section class="w-full min-h-screen p-8 flex items-center flex-col text-center text-kcblack bg-stone-200">
-    <header class="text-6xl sm:text-7xl mb-4">FACULTY ADVISORS</header>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-[4rem] w-[90%] lg:w-[70%] xl:w-[60%] flex-1">
-
-        <div class="flex flex-col h-full w-full items-center justify-center">
-            <img class="object-cover border-kcyellow border-16 aspect-[3/4] w-full" src="/about/mrcain.png"
-                 alt="Mr. Cain"/>
-            <h1 class="font-[century-gothic-bold] text-5xl mt-4">Alfred Cain</h1>
-            <h2 class="text-2xl flex items-center text-gray-600"><Icon icon="fe:mail" /><span class="ml-2">
-                            acain@everettsd.org</span></h2>
-        </div>
-
-        <div class="flex flex-col h-full w-full items-center justify-center">
-            <img class="object-cover border-kcyellow border-16 aspect-[3/4] w-full"
-                 src="/about/mrsvaught.jpeg"
-                 alt="Mrs. Vaught"/>
-            <h1 class="font-[century-gothic-bold] text-5xl mt-4">Rachel Vaught</h1>
-            <h2 class="text-2xl flex items-center text-gray-600"><Icon icon="fe:mail" /><span class="ml-2">
-                            rvaught@everettsd.org</span></h2>
-        </div>
-
     </div>
 </section>
 
-<section class="w-full min-h-screen p-8 flex items-center flex-col text-center text-kcblack bg-stone-200">
-    <header class="text-6xl sm:text-7xl mb-4">KIWANIS ADVISORS</header>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-[4rem] w-[90%] lg:w-[70%] xl:w-[60%] flex-1">
-
-        <div class="flex flex-col h-full w-full items-center justify-center">
-            <img class="object-cover border-kcyellow border-16 aspect-[3/4] w-full"
-                 src="/about/mrsteckler.png"
-                 alt="Mr. Cain"/>
-            <h1 class="font-[century-gothic-bold] text-5xl mt-4">John Steckler</h1>
-            <h2 class="text-2xl flex items-center text-gray-600"><Icon icon="fe:mail" /><span class="ml-2">
-                            johnsteckler@comcast.net</span></h2>
+<!-- Advisors -->
+<section class="w-full bg-background px-8 py-20 text-foreground">
+    <div class="mx-auto max-w-5xl">
+        <h2 class="reveal text-center text-4xl md:text-5xl">Faculty advisors</h2>
+        <div class="mx-auto mt-10 grid max-w-3xl grid-cols-1 gap-10 sm:grid-cols-2">
+            {#each facultyAdvisors as advisor (advisor.email)}
+                <div class="reveal flex flex-col items-center text-center">
+                    <img class="aspect-3/4 w-full border-8 border-primary object-cover" src={advisor.image} alt={advisor.name}/>
+                    <h3 class="font-bold-gothic mt-4 text-3xl">{advisor.name}</h3>
+                    <a class="flex items-center gap-1 hover:text-muted-foreground transition-colors" href="mailto:{advisor.email}">
+                        <Icon icon="fe:mail"/><span>{advisor.email}</span>
+                    </a>
+                </div>
+            {/each}
         </div>
 
-        <div class="flex flex-col h-full w-full items-center justify-center">
-            <img class="object-cover border-kcyellow border-16 aspect-[3/4] w-full"
-                 src="/about/mrssteckler.png"
-                 alt="Mrs. Vaught"/>
-            <h1 class="font-[century-gothic-bold] text-5xl mt-4">Lisa Steckler</h1>
-            <h2 class="text-2xl flex items-center text-gray-600"><Icon icon="fe:mail" /><span class="ml-2">
-                            stecklerlisa@gmail.com</span></h2>
+        <h2 class="reveal mt-20 text-center text-4xl md:text-5xl">Kiwanis advisors</h2>
+        <div class="mx-auto mt-10 grid max-w-3xl grid-cols-1 gap-10 sm:grid-cols-2">
+            {#each kiwanisAdvisors as advisor (advisor.email)}
+                <div class="reveal flex flex-col items-center text-center">
+                    <img class="aspect-3/4 w-full border-8 border-primary object-cover" src={advisor.image} alt={advisor.name}/>
+                    <h3 class="font-bold-gothic mt-4 text-3xl">{advisor.name}</h3>
+                    <a class="flex items-center gap-1 text-muted-foreground hover:text-muted-foreground transition-colors" href="mailto:{advisor.email}">
+                        <Icon icon="fe:mail"/><span>{advisor.email}</span>
+                    </a>
+                </div>
+            {/each}
         </div>
 
+        <h2 class="reveal mt-20 text-center text-4xl md:text-5xl">D21 Lieutenant Governor</h2>
+        <div class="reveal mx-auto mt-10 flex max-w-xs flex-col items-center text-center">
+            <img class="aspect-3/4 w-full border-8 border-primary object-cover" src="/about/ryan.png" alt="Ryan Tran"/>
+            <h3 class="font-bold-gothic mt-4 text-3xl">Ryan Tran</h3>
+            <a class="flex items-center gap-1 text-muted-foreground hover:text-muted-foreground transition-colors" href="mailto:ltg21@pnwkeyclub.org">
+                <Icon icon="fe:mail"/><span>ltg21@pnwkeyclub.org</span>
+            </a>
+        </div>
     </div>
 </section>
 
-<section class="w-full min-h-screen p-8 flex items-center flex-col text-center text-kcblack bg-stone-200">
-    <header class="text-6xl sm:text-7xl mb-4">D21 LIEUTENANT GOVERNOR</header>
-
-    <div
-            class="w-[90%] sm:w-[50%] lg:w-[35%] xl:w-[30%] flex-1 flex flex-col items-center justify-center">
-        <img class="object-cover border-kcyellow border-16 h-[90%] aspect-[3/4] w-full"
-             src="/about/ryan.png"
-             alt="Ryan Tran"/>
-        <h1 class="font-[century-gothic-bold] text-5xl mt-4">Ryan Tran</h1>
-        <h2 class="text-2xl flex items-center text-gray-600"><Icon icon="fe:mail" /><span class="ml-2">
-                            ltg21@pnwkeyclub.org</span></h2>
+<!-- Partners -->
+<section class="w-full bg-secondary px-8 py-20 text-background flex flex-col items-center">
+    <div class="reveal text-center">
+        <h2 class="text-4xl md:text-5xl">Preferred partners &amp; charities</h2>
+        <p class="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">The organizations we proudly support and partner with.</p>
     </div>
+    <Carousel.Root class="reveal mt-12 w-full md:w-1/2" opts={{loop: true, align: "center"}} setApi={(emblaApi) => (carouselAPI = emblaApi)}>
+        <Carousel.Content>
+            {#each partners as partner (partner.name)}
+            <Carousel.Item>
+                <div class="flex flex-col overflow-hidden rounded-xl bg-background text-foreground shadow-md">
+                    <img class="h-40 w-full object-contain" src={partner.image} alt={partner.name}/>
+                    <div class="flex flex-1 flex-col p-6">
+                        <h3 class="text-2xl">{partner.name}</h3>
+                        <p class="mt-2 flex-1 text-muted-foreground">{partner.text}</p>
+                        <a class="mt-4 inline-flex w-fit items-center gap-1 font-semibold text-secondary hover:underline transition-colors" target="_blank" rel="noopener" href={partner.href}>
+                            Learn more <Icon icon="solar:arrow-right-up-linear"/>
+                        </a>
+                    </div>
+                </div>
+            </Carousel.Item>
+        {/each}
+        </Carousel.Content>
+    </Carousel.Root>
+    <span class="mt-4 flex items-center gap-2">
+        {#each scrollSnaps as _, index}
+        <button class="size-4 rounded-full border-2 border-accent {selectedSnap === index ? 'bg-accent' : 'bg-transparent'}" aria-label="Go to slide {index + 1}" aria-pressed={selectedSnap === index} onclick={() => carouselAPI.scrollTo(index)}></button>
+        {/each}
+    </span>
 </section>
 
-<section class="w-full h-screen p-8 flex items-center flex-col text-stone-200 bg-stone-200">
-    <header class="text-4xl sm:text-7xl text-kcblack text-center">OUR PREFERRED PARTNERS AND CHARITIES</header>
-
-    <div
-            class="border-16 border-kcyellow mt-8 w-full h-[80%] md:h-[70%] md:aspect-[1.2] lg:w-auto lg:aspect-[1.7] flex overflow-hidden">
-
-        <div class="partner relative w-full h-full flex-none">
-            <div class="absolute p-8 h-full z-10">
-                <div class="h-[40%] md:h-[20%] flex flex-col md:flex-row space-y-4 items-start md:items-center justify-between w-full mb-4">
-                    <img class="h-full object-contain" src="/about/thirstproject_logo.png" alt="Logo"/>
-
-                    <a class="text-black bg-stone-200 p-4 text-xl"
-                       href="https://thirstproject.org/" target="_blank">
-                        Learn More
-                    </a>
-                </div>
-
-
-                <p bind:this={thirst} class="w-full h-[60%]">
-                    Thirst Project hopes to educate the next generation by arming students with
-                    information
-                    about how they can be a part of social change,
-                    make a difference and encourage others to join in the effort.
-                </p>
-            </div>
-
-            <img class="object-cover z-0 w-full h-full" src="/about/thirstproject.png" alt="Thirst Project"/>
-        </div>
-
-        <div class="partner relative w-full h-full flex-none">
-            <div class="absolute p-8 h-full z-10">
-                <div class="h-[40%] md:h-[20%] flex flex-col md:flex-row space-y-4 items-start md:items-center justify-between w-full mb-4">
-                    <img class="h-full object-contain" src="/about/unicef_logo.png" alt="Logo"/>
-
-                    <a class="text-black bg-stone-200 p-4 text-xl"
-                       href="https://www.unicef.org/" target="_blank">
-                        Learn More
-                    </a>
-                </div>
-
-                <p bind:this={unicef} class="w-full h-[60%]">
-                    UNICEF is the only organization of the United Nations dedicated exclusively to
-                    children.
-                    Working with other United Nations bodies, governments and non-governmental
-                    organizations,
-                    UNICEF helps to provide for children’s needs in more than 150 developing countries
-                    through community-based services in primary health care,
-                    basic education and safe water and sanitation.
-                </p>
-            </div>
-
-            <img class="object-cover z-0 w-full h-full" src="/about/unicef.jpg" alt="Unicef"/>
-        </div>
-
-        <div class="partner relative w-full h-full flex-none">
-            <div class="absolute p-8 h-full z-10">
-                <div class="h-[40%] md:h-[20%] flex flex-col md:flex-row space-y-4 items-start md:items-center justify-between w-full mb-4">
-                    <img class="h-full object-contain" src="/about/erikaslighthouse_logo.png" alt="Logo"/>
-
-                    <a class="text-black bg-stone-200 p-4 text-xl"
-                       href="https://erikaslighthouse.org/" target="_blank">
-                        Learn More
-                    </a>
-                </div>
-
-                <p bind:this={lighthouse} class="w-full h-[60%]">
-                    The mission of Erika's Lighthouse is to make sure no young person feels alone in
-                    their depression.
-                    This nonprofit organization encourages good mental health and strives to break down
-                    the stigma surrounding mental health issues.
-                    Erika's Lighthouse is dedicated to creating a community of empathy and education and
-                    has resources and programs for students and educators, grades 4-12.
-                </p>
-            </div>
-
-            <img class="object-cover brightness-[.2] z-0 w-full h-full" src="/about/erikaslighthouse.jpeg"
-                 alt="Erika's Lighthouse"/>
-        </div>
-
-        <div class="partner relative w-full h-full flex-none">
-            <div class="absolute p-8 h-full z-10">
-                <div class="h-[40%] md:h-[20%] flex flex-col md:flex-row space-y-4 items-start md:items-center justify-between w-full mb-4">
-                    <img class="h-full object-contain" src="/about/schoolhouse_logo.png" alt="Logo"/>
-
-                    <a class="text-black bg-stone-200 p-4 text-xl"
-                       href="https://schoolhouse.world/key-club" target="_blank">
-                        Learn More
-                    </a>
-                </div>
-
-                <p bind:this={schoolhouse} class="w-full h-[60%]">
-                    Want to make an impact and have fun while doing it? Looking for a service project
-                    that you can complete from the comfort of your bedroom?
-                    Key Club has partnered with Schoolhouse to bring free tutoring to thousands of
-                    learners across the world.
-                    If you're interested in learning something new, or you're interested in becoming a
-                    tutor yourself, sign up today!
-                </p>
-            </div>
-
-            <img class="object-cover brightness-[1.2] z-0 w-full h-full" src="/about/schoolhouse.png"
-                 alt="schoolhouse"/>
-        </div>
-
-        <div class="partner relative w-full h-full flex-none">
-            <div class="absolute p-8 h-full z-10">
-                <div class="h-[40%] md:h-[20%] flex flex-col md:flex-row space-y-4 items-start md:items-center justify-between w-full mb-4">
-                    <img class="h-full object-contain" src="/about/collegewise_logo.png" alt="Logo"/>
-
-                    <a class="text-black bg-stone-200 p-4 text-xl"
-                       href="https://collegewise.com/" target="_blank">
-                        Learn More
-                    </a>
-                </div>
-
-                <p bind:this={collegewise} class="w-full h-[60%]">
-                    Collegewise helps identify the college that’s right for you, assists with the
-                    application process,
-                    and provides tutoring for ACT/SAT exams. While a paid subscription is available for
-                    those who wish to access it,
-                    every Key Club member has access to a suite of Collegewise resources on the Runway
-                    platform as a member benefit.
-                </p>
-            </div>
-
-            <img class="object-cover z-0 w-full h-full" src="/about/collegewise.jpg" alt="Collegewise"/>
-        </div>
-
-    </div>
-
-    <div class="flex text-black gap-8 mt-4">
-        <button onclick={() => loop.previous(partnerChange)} aria-label="Previous">
-            <Icon icon="solar:arrow-left-outline" class="size-[4rem]"/>
-        </button>
-        <button onclick={() => loop.next(partnerChange)} aria-label="Previous">
-            <Icon icon="solar:arrow-right-outline" class="size-[4rem]"/>
-        </button>
-    </div>
-</section>
-
-<section class="w-full h-screen grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 text-kcblack bg-stone-200">
-    <div class="w-full h-full flex flex-col items-center justify-center p-8">
-        <header class="text-4xl md:text-7xl">OUR KIWANIS</header>
-        <p class="text-3xl md:text-2xl mt-8 text-left">
-            JHS Key Club is sponsored by the Kiwanis of Mill Creek.
-            Kiwanis is an international community of clubs in which is dedicated to serving the
-            community and the lives of the children around it.
+<!-- Kiwanis sponsor -->
+<section class="w-full bg-background text-foreground">
+    <div class="reveal flex flex-col justify-center p-8 md:p-14 w-full md:w-1/2 mx-auto">
+        <span class="text-secondary">OUR SPONSOR</span>
+        <h2 class="mt-2 text-4xl md:text-5xl">The Kiwanis of Mill Creek</h2>
+        <p class="mt-6 text-lg md:text-xl">
+            JHS Key Club is sponsored by the Kiwanis of Mill Creek. Kiwanis is an international community of clubs
+            dedicated to serving their community and improving the lives of children around them.
         </p>
-
-        <ResponsiveButton
-            text="Kiwanis Website"
-            busyText="..."
-            onClick={() => window.open("https://k19352.site.kiwanis.org/", "_blank")}
-            canSend={canSend}
-            color="#fed450"
-        />
-    </div>
-    <img class="w-full h-full object-contain" src="/about/kiwanis.jpg" alt="Mill Creek Kiwanis"/>
-</section>
-
-<section class="w-full p-8 text-center text-kcblack bg-stone-200">
-    <header class="text-4xl sm:text-7xl">MORE WEBSITES</header>
-    <p class="mt-4 mb-8 text-3xl text-center">
-        Check out our international and district websites to learn more or catch up with the buzz!
-    </p>
-
-    <div class="flex flex-col md:flex-row mx-auto text-4xl space-x-8">
-        <ResponsiveButton
-            text="Key Club"
-            busyText="..."
-            onClick={() => window.open("https://keyclub.org/", "_blank")}
-            canSend={canSend}
-            color="#fed450"
-        />
-        <ResponsiveButton
-            text="PNW Key Club"
-            busyText="..."
-            onClick={() => window.open("https://pnwkeyclub.org/", "_blank")}
-            canSend={canSend}
-            color="#fed450"
-        />
+        <div class="mt-4 mx-auto">
+            <Button class="w-fit" size="lg" variant="secondary" href="https://k19352.site.kiwanis.org/" target="_blank">
+                <Icon icon="solar:link-bold" class="size-4"/>
+                Kiwanis of Mill Creek website
+            </Button>
+        </div>
     </div>
 </section>
+
 <Footer/>

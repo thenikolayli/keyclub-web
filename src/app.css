@@ -1,49 +1,104 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn-svelte/tailwind.css";
+@import "@fontsource-variable/inter";
 
 @theme {
-    --color-kcyellow: #fed450;
-    --color-kcblack: #231f20;
+  /* Brand colors */
+  --color-kcyellow: oklch(0.8831 0.1524 91.02); /* Pantone 122 Yellow */
+  --color-kcblack: oklch(0.2442 0.0064 0.59); /* Pantone Black */
+  --color-kcblue: oklch(0.3233 0.1025 253.89); /* Pantone 295 Blue */
+  --color-kcgold: oklch(0.689 0.0878 85.08); /* Pantone 872 Gold */
+
+  /* 60% - dominant surfaces (light stone / kcblack) */
+  --color-background: var(--color-stone-100);
+  --color-foreground: var(--color-kcblack);
+  --color-card: oklch(0.99 0.004 253.89);
+  --color-card-foreground: var(--color-kcblack);
+  --color-popover: oklch(0.99 0.004 253.89);
+  --color-popover-foreground: var(--color-kcblack);
+
+  /* 10% - accent (kcyellow) */
+  --color-primary: var(--color-kcyellow);
+  --color-primary-foreground: var(--color-kcblack);
+
+  /* 30% - secondary (kcblue) */
+  --color-secondary: var(--color-kcblue);
+  --color-secondary-foreground: var(--color-stone-100);
+
+  /* Neutrals, subtly tinted toward kcblue so grays stay on-brand */
+  --color-muted: oklch(0.95 0.008 253.89);
+  --color-muted-foreground: oklch(0.64 0.03 253.89);
+  --color-accent: oklch(0.94 0.045 91.02);
+  --color-accent-foreground: var(--color-kcblack);
+  --color-destructive: oklch(0.45 0.2 27.325);
+  --color-border: oklch(0.5 0.012 253.89);
+  --color-input: oklch(0.9 0.012 253.89);
+  --color-ring: var(--color-kcblue);
+
+  /* Charts - brand ramp: yellow → blue → gold → mid/deep blue */
+  --color-chart-1: var(--color-kcyellow);
+  --color-chart-2: var(--color-kcblue);
+  --color-chart-3: var(--color-kcgold);
+  --color-chart-4: oklch(0.55 0.09 253.89);
+  --color-chart-5: oklch(0.45 0.07 253.89);
+  --radius: 0.625rem;
+
+  /* Sidebar - dark surface (kcblack) with kcyellow accent */
+  --color-sidebar: var(--color-kcblack);
+  --color-sidebar-foreground: var(--color-stone-100);
+  --color-sidebar-primary: var(--color-kcyellow);
+  --color-sidebar-primary-foreground: var(--color-kcblack);
+  --color-sidebar-accent: oklch(0.32 0.045 253.89);
+  --color-sidebar-accent-foreground: var(--color-stone-100);
+  --color-sidebar-border: oklch(0.36 0.025 253.89);
+  --color-sidebar-ring: var(--color-kcblue);
+}
+
+@layer base {
+  body {
+    @apply font-[century] bg-kcblack text-stone-100;
+  }
+  p {
+    @apply text-base leading-relaxed;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-[century-bold];
+  }
+  button {
+    @apply cursor-pointer;
+  }
 }
 
 @font-face {
-    font-family: abril;
-    font-style: normal;
-    src: url("/fonts/abril-display-regular.otf") format("opentype");
+  font-family: abril;
+  font-style: normal;
+  src: url("/fonts/abril-display-regular.otf") format("opentype");
 }
 
 @font-face {
-    font-family: century-gothic;
-    font-style: normal;
-    src: url("/fonts/centurygothic.ttf") format("opentype");
+  font-family: century;
+  font-style: normal;
+  src: url("/fonts/centurygothic.ttf") format("opentype");
 }
 
 @font-face {
-    font-family: century-gothic-bold;
-    font-style: normal;
-    src: url("/fonts/centurygothic_bold.ttf") format("opentype");
+  font-family: century-bold;
+  font-style: normal;
+  src: url("/fonts/centurygothic_bold.ttf") format("opentype");
 }
 
-button {
-    cursor: pointer;
-}
-
-body {
-    @apply font-[century-gothic] bg-kcblack text-stone-200;
-}
-
-header {
-    @apply font-semibold;
-}
-
-a {
-    @apply hover:underline;
-}
-
-/** {*/
-/*    border: 1px solid black;*/
-/*}*/
-
-.text-black-outline {
-    -webkit-text-stroke: 2px black;
-    paint-order: stroke fill;
+/* Honor users who prefer less motion: kill transitions/animations site-wide. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
