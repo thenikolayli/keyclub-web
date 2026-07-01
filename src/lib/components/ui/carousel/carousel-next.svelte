@@ -1,7 +1,8 @@
-<script>
+<script lang="ts">
+	import type { WithoutChildren } from "bits-ui";
 	import { getEmblaContext } from "./context.js";
 	import { cn } from "$lib/utils.js";
-	import { Button } from "$lib/components/ui/button/index.js";
+	import { Button, type Props } from "$lib/components/ui/button/index.js";
 	import ChevronRightIcon from '@lucide/svelte/icons/chevron-right';
 
 	let {
@@ -10,7 +11,7 @@
 		variant = "outline",
 		size = "icon-sm",
 		...restProps
-	} = $props();
+	}: WithoutChildren<Props> = $props();
 
 	const emblaCtx = getEmblaContext("<Carousel.Next/>");
 </script>

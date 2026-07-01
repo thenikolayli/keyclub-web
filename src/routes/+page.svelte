@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import Header from "$lib/components/Header.svelte";
     import Footer from "$lib/components/Footer.svelte";
     import Icon from "@iconify/svelte";
@@ -6,7 +6,8 @@
     import {SplitText} from "gsap/SplitText";
     import {ScrollTrigger} from "gsap/ScrollTrigger";
     import {onMount} from "svelte";
-    import { Button } from "$lib/components/ui/button/index.js";
+    import { Button } from "$lib/components/ui/button/index";
+    import { Badge } from "$lib/components/ui/badge/index";
 
     const committees = [
         {name: "Spirit", icon: "solar:fire-bold", text: "One of our LARGEST committees. Create fun energizers, take part in spirited events, and build a great atmosphere.", image: "/spirit_co.jpg"},
@@ -21,8 +22,6 @@
         {label: "YouTube", icon: "fa7-brands:youtube", href: "https://www.youtube.com/@jhskeyclub4870"},
         {label: "Linktree", icon: "solar:link-bold", href: "https://linktr.ee/jhskeyclub21"},
     ]
-
-    let canSend = $state(true)
 
     onMount(() => {
         document.title = "JHS Key Club"
@@ -40,7 +39,7 @@
                 .from(".intro3", {opacity: 0, yPercent: 40}, 1.1)
                 .from(".intro4", {opacity: 0}, 1.5)
 
-            gsap.utils.toArray(".reveal").forEach((el) => {
+            gsap.utils.toArray<HTMLElement>(".reveal").forEach((el) => {
                 gsap.from(el, {
                     opacity: 0, y: 40, duration: .6, ease: "power2.out",
                     scrollTrigger: {trigger: el, start: "top 85%"}
@@ -92,10 +91,9 @@
             your community and make new friends across the division.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
-            <span class="rounded-full bg-primary px-4 py-1.5 text-sm text-primary-foreground">Leadership</span>
-            <span class="rounded-full bg-primary px-4 py-1.5 text-sm text-primary-foreground">Character</span>
-            <span class="rounded-full bg-primary px-4 py-1.5 text-sm text-primary-foreground">Caring</span>
-            <span class="rounded-full bg-primary px-4 py-1.5 text-sm text-primary-foreground">Inclusiveness</span>
+            {#each ["Leadership", "Character", "Caring", "Inclusiveness"] as value}
+                <Badge>{value}</Badge>
+            {/each}
         </div>
     </div>
 </section>

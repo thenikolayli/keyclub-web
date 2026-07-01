@@ -1,5 +1,5 @@
-<script module>
-	import { tv } from "tailwind-variants";
+<script lang="ts" module>
+	import { type VariantProps, tv } from "tailwind-variants";
 
 	export const alertVariants = tv({
 		base: "grid gap-0.5 rounded-lg border border-2 px-2.5 py-2 text-left text-base has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2 *:[svg]:row-span-2 *:[svg]:text-current *:[svg:not([class*='size-'])]:size-4 group/alert relative w-full",
@@ -13,10 +13,13 @@
 			variant: "default",
 		},
 	});
+
+	export type AlertVariant = VariantProps<typeof alertVariants>["variant"];
 </script>
 
-<script>
-	import { cn } from "$lib/utils.js";
+<script lang="ts">
+	import type { HTMLAttributes } from "svelte/elements";
+	import { cn, type WithElementRef } from "$lib/utils.js";
 
 	let {
 		ref = $bindable(null),
@@ -24,6 +27,8 @@
 		variant = "default",
 		children,
 		...restProps
+	}: WithElementRef<HTMLAttributes<HTMLDivElement>> & {
+		variant?: AlertVariant;
 	} = $props();
 </script>
 

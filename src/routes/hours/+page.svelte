@@ -1,20 +1,19 @@
-<script>
+<script lang="ts">
     import Header from "$lib/components/Header.svelte";
     import Footer from "$lib/components/Footer.svelte";
-    import { Button } from "$lib/components/ui/button/index.js";
-    import { Input } from "$lib/components/ui/input/index.js";
+    import { Button } from "$lib/components/ui/button/index";
+    import { Input } from "$lib/components/ui/input/index";
     import Icon from "@iconify/svelte";
-    import {onMount} from "svelte";
-    import {fetchHours} from "$lib/hours.js";
+    import {fetchHours, type HoursResponse} from "$lib/hours";
     import ImageHeader from "$lib/components/ImageHeader.svelte";
-    import * as Alert from "$lib/components/ui/alert/index.js";
+    import * as Alert from "$lib/components/ui/alert/index";
 
     let name = $state("");
     let status = $state("idle"); // idle | loading | error | result
-    let result = $state(null);
+    let result = $state<HoursResponse | null>(null);
     let errorMsg = $state("");
 
-    async function lookup(event) {
+    async function lookup(event: Event) {
         event.preventDefault();
 
         const trimmed = name.trim();
@@ -23,6 +22,7 @@
             errorMsg = "Please enter your name first.";
             return;
         }
+
         status = "loading";
         errorMsg = "";
         try {
@@ -31,7 +31,7 @@
         } catch {
             result = null;
             status = "error";
-            errorMsg = "We couldn't load those hours. Check the spelling of your name, and make sure you're connected.";
+            errorMsg = "We couldn't load those hours. Check the spelling of your name, or contact the Webmaster.";
         }
     }
 </script>
@@ -51,7 +51,7 @@
             <Button type="submit" size="lg" class="mt-6 w-full" disabled={status === "loading"}>
                 {#if status === "loading"}
                     <Icon icon="svg-spinners:ring-resize" data-icon="inline-start"/>
-                    Checking…
+                    Checking...
                 {:else}
                     Check my hours
                 {/if}
@@ -69,7 +69,7 @@
                 <div class="overflow-hidden rounded-2xl bg-foreground text-background shadow-lg">
                     <div class="bg-secondary px-6 py-5">
                         <h2 class="font-bold-gothic text-3xl text-primary">{result.name}</h2>
-                        <p class="mt-1 text-muted-foreground">{result.className} · Class of {result.gradYear}</p>
+                        <p class="mt-1 text-muted-foreground">{result.className} Class of {result.gradYear}</p>
                     </div>
                     <div class="grid grid-cols-2 divide-x divide-border">
                         <div class="p-6 text-center">

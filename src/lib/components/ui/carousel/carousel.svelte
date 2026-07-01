@@ -1,6 +1,11 @@
-<script>
-	import { setEmblaContext } from "./context.js";
-	import { cn } from "$lib/utils.js";
+<script lang="ts">
+	import {
+		type CarouselAPI,
+		type CarouselProps,
+		type EmblaContext,
+		setEmblaContext,
+	} from "./context.js";
+	import { cn, type WithElementRef } from "$lib/utils.js";
 
 	let {
 		ref = $bindable(null),
@@ -11,10 +16,10 @@
 		class: className,
 		children,
 		...restProps
-	} = $props();
+	}: WithElementRef<CarouselProps> = $props();
 
 	// svelte-ignore state_referenced_locally
-	let carouselState = $state({
+	let carouselState = $state<EmblaContext>({
 		api: undefined,
 		scrollPrev,
 		scrollNext,
@@ -40,7 +45,7 @@
 		carouselState.api?.scrollNext();
 	}
 
-	function scrollTo(index, jump) {
+	function scrollTo(index: number, jump?: boolean) {
 		carouselState.api?.scrollTo(index, jump);
 	}
 
@@ -51,7 +56,7 @@
 		carouselState.canScrollPrev = carouselState.api.canScrollPrev();
 	}
 
-	function handleKeyDown(e) {
+	function handleKeyDown(e: KeyboardEvent) {
 		if (e.key === "ArrowLeft") {
 			e.preventDefault();
 			scrollPrev();
@@ -61,7 +66,7 @@
 		}
 	}
 
-	function onInit(event) {
+	function onInit(event: CustomEvent<CarouselAPI>) {
 		carouselState.api = event.detail;
 		setApi(carouselState.api);
 
