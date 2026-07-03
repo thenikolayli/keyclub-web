@@ -155,7 +155,7 @@
     </Carousel.Root>
     <span class="mt-4 flex items-center gap-2">
         {#each scrollSnaps as _, index}
-        <button class="size-4 rounded-full border-2 border-accent {selectedSnap === index ? 'bg-accent' : 'bg-transparent'}" aria-label="Go to slide {index + 1}" aria-pressed={selectedSnap === index} onclick={() => carouselAPI?.scrollTo(index)}></button>
+        <button class="size-4 rounded-full border-2 border-background {selectedSnap === index ? 'bg-background' : 'bg-transparent'}" aria-label="Go to slide {index + 1}" aria-pressed={selectedSnap === index} onclick={() => carouselAPI?.scrollTo(index)}></button>
         {/each}
     </span>
 </section>
