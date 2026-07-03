@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import Header from "$lib/components/Header.svelte";
     import Footer from "$lib/components/Footer.svelte";
     import Icon from "@iconify/svelte";
@@ -6,8 +6,9 @@
     import {ScrollTrigger} from "gsap/ScrollTrigger";
     import {onMount} from "svelte";
     import ImageHeader from "$lib/components/ImageHeader.svelte";
-    import * as Carousel from "$lib/components/ui/carousel/index.js";
-    import {Button} from "$lib/components/ui/button/index.js";
+    import * as Carousel from "$lib/components/ui/carousel/index";
+    import type { CarouselAPI } from "$lib/components/ui/carousel/context";
+    import {Button} from "$lib/components/ui/button/index";
 
     const officers = [
         {name: "Annabelle Ho", role: "President", email: "annabelle.zt.ho@gmail.com", image: "/about/annabelle.jpg"},
@@ -38,9 +39,8 @@
         {name: "Collegewise", href: "https://collegewise.com/", text: "College and test-prep guidance, with a suite of Runway resources free for every Key Club member.", image: "/about/collegewise.svg"},
     ]
 
-    let canSend = $state(true)
-    let carouselAPI = $state()
-    let scrollSnaps = $state([])
+    let carouselAPI = $state<CarouselAPI>()
+    let scrollSnaps = $state<number[]>([])
     let selectedSnap = $state(0)
 
     onMount(() => {
@@ -48,7 +48,7 @@
 
         const mm = gsap.matchMedia()
         mm.add("(prefers-reduced-motion: no-preference)", () => {
-            gsap.utils.toArray(".reveal").forEach((el) => {
+            gsap.utils.toArray<HTMLElement>(".reveal").forEach((el) => {
                 gsap.from(el, {
                     opacity: 0, y: 40, duration: .6, ease: "power2.out",
                     scrollTrigger: {trigger: el, start: "top 88%"}
@@ -61,7 +61,7 @@
     $effect(() => {
         if (carouselAPI) {
             scrollSnaps = carouselAPI.scrollSnapList()
-            carouselAPI.on("select", () => selectedSnap = carouselAPI.selectedScrollSnap())
+            carouselAPI.on("select", () => selectedSnap = carouselAPI?.selectedScrollSnap() ?? 0)
         }
     })
 </script>
@@ -155,7 +155,7 @@
     </Carousel.Root>
     <span class="mt-4 flex items-center gap-2">
         {#each scrollSnaps as _, index}
-        <button class="size-4 rounded-full border-2 border-accent {selectedSnap === index ? 'bg-accent' : 'bg-transparent'}" aria-label="Go to slide {index + 1}" aria-pressed={selectedSnap === index} onclick={() => carouselAPI.scrollTo(index)}></button>
+        <button class="size-4 rounded-full border-2 border-background {selectedSnap === index ? 'bg-background' : 'bg-transparent'}" aria-label="Go to slide {index + 1}" aria-pressed={selectedSnap === index} onclick={() => carouselAPI?.scrollTo(index)}></button>
         {/each}
     </span>
 </section>

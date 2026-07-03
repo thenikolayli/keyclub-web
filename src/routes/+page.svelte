@@ -1,172 +1,275 @@
-<script>
-    import Header from "$lib/components/Header.svelte";
-    import Footer from "$lib/components/Footer.svelte";
-    import Icon from "@iconify/svelte";
-    import gsap from "gsap";
-    import {SplitText} from "gsap/SplitText";
-    import {ScrollTrigger} from "gsap/ScrollTrigger";
-    import {onMount} from "svelte";
-    import { Button } from "$lib/components/ui/button/index.js";
+<script lang="ts">
+  import Header from "$lib/components/Header.svelte";
+  import Footer from "$lib/components/Footer.svelte";
+  import Icon from "@iconify/svelte";
+  import gsap from "gsap";
+  import { SplitText } from "gsap/SplitText";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import { onMount } from "svelte";
+  import { Button } from "$lib/components/ui/button/index";
+  import { Badge } from "$lib/components/ui/badge/index";
 
-    const committees = [
-        {name: "Spirit", icon: "solar:fire-bold", text: "One of our LARGEST committees. Create fun energizers, take part in spirited events, and build a great atmosphere.", image: "/spirit_co.jpg"},
-        {name: "Service", icon: "solar:hand-heart-bold", text: "Brainstorm and run service events that power our District Project and serve the community.", image: "/service_co.jpg"},
-        {name: "Decoration", icon: "solar:pallete-2-bold", text: "Make posters and signage, hang out at the AC, and keep things laid-back and creative after school.", image: "/deco_co.jpg"},
-        {name: "Leadership", icon: "solar:star-bold", text: "Create and lead events for Key Club. Open to sophomores and above.", image: "/gallery.jpg"},
-    ]
+  const committees = [
+    {
+      name: "Spirit",
+      icon: "solar:fire-bold",
+      text: "One of our LARGEST committees. Create fun energizers, take part in spirited events, and build a great atmosphere.",
+      image: "/spirit_co.jpg",
+    },
+    {
+      name: "Service",
+      icon: "solar:hand-heart-bold",
+      text: "Brainstorm and run service events that power our District Project and serve the community.",
+      image: "/service_co.jpg",
+    },
+    {
+      name: "Decoration",
+      icon: "solar:pallete-2-bold",
+      text: "Make posters and signage, hang out at the AC, and keep things laid-back and creative after school.",
+      image: "/deco_co.jpg",
+    },
+    {
+      name: "Leadership",
+      icon: "solar:star-bold",
+      text: "Create and lead events for Key Club. Open to sophomores and above.",
+      image: "/gallery.jpg",
+    },
+  ];
 
-    const socials = [
-        {label: "Instagram", icon: "fa7-brands:instagram", href: "https://www.instagram.com/jhskeyclub21"},
-        {label: "TikTok", icon: "fa7-brands:tiktok", href: "https://tiktok.com/@jhskeyclub21"},
-        {label: "YouTube", icon: "fa7-brands:youtube", href: "https://www.youtube.com/@jhskeyclub4870"},
-        {label: "Linktree", icon: "solar:link-bold", href: "https://linktr.ee/jhskeyclub21"},
-    ]
+  const socials = [
+    {
+      label: "Instagram",
+      icon: "fa7-brands:instagram",
+      href: "https://www.instagram.com/jhskeyclub21",
+    },
+    {
+      label: "TikTok",
+      icon: "fa7-brands:tiktok",
+      href: "https://tiktok.com/@jhskeyclub21",
+    },
+    {
+      label: "YouTube",
+      icon: "fa7-brands:youtube",
+      href: "https://www.youtube.com/@jhskeyclub4870",
+    },
+    {
+      label: "Linktree",
+      icon: "solar:link-bold",
+      href: "https://linktr.ee/jhskeyclub21",
+    },
+  ];
 
-    let canSend = $state(true)
+  onMount(() => {
+    document.title = "JHS Key Club";
+    gsap.registerPlugin(SplitText, ScrollTrigger);
 
-    onMount(() => {
-        document.title = "JHS Key Club"
-        gsap.registerPlugin(SplitText, ScrollTrigger)
+    const mm = gsap.matchMedia();
 
-        const mm = gsap.matchMedia()
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const tl = gsap.timeline({
+        defaults: { ease: "power2.out", duration: 0.7 },
+      });
+      const intro1 = new SplitText(".intro1", { type: "words" }).words;
+      const intro2 = new SplitText(".intro2", { type: "words" }).words;
 
-        mm.add("(prefers-reduced-motion: no-preference)", () => {
-            const tl = gsap.timeline({defaults: {ease: "power2.out", duration: .7}})
-            const intro1 = new SplitText(".intro1", {type: "words"}).words
-            const intro2 = new SplitText(".intro2", {type: "words"}).words
+      tl.from(intro1, { opacity: 0, yPercent: 60, stagger: 0.08 }, 0.3)
+        .from(intro2, { opacity: 0, yPercent: 60, stagger: 0.08 }, 0.7)
+        .from(".intro3", { opacity: 0, yPercent: 40 }, 1.1)
+        .from(".intro4", { opacity: 0 }, 1.5);
 
-            tl.from(intro1, {opacity: 0, yPercent: 60, stagger: .08}, .3)
-                .from(intro2, {opacity: 0, yPercent: 60, stagger: .08}, .7)
-                .from(".intro3", {opacity: 0, yPercent: 40}, 1.1)
-                .from(".intro4", {opacity: 0}, 1.5)
+      gsap.utils.toArray<HTMLElement>(".reveal").forEach((el) => {
+        gsap.from(el, {
+          opacity: 0,
+          y: 40,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: { trigger: el, start: "top 85%" },
+        });
+      });
+    });
 
-            gsap.utils.toArray(".reveal").forEach((el) => {
-                gsap.from(el, {
-                    opacity: 0, y: 40, duration: .6, ease: "power2.out",
-                    scrollTrigger: {trigger: el, start: "top 85%"}
-                })
-            })
-        })
-
-        return () => mm.revert()
-    })
+    return () => mm.revert();
+  });
 </script>
 
-<Header/>
+<Header />
 
 <!-- Hero -->
-<section class="relative flex h-[90vh] w-full flex-col items-center justify-center overflow-hidden text-center">
-    <img class="absolute inset-0 h-full w-full object-cover brightness-[.35]" src="/club.webp" alt=""/>
-    <div class="absolute inset-0 bg-linear-to-b from-secondary/40 via-transparent to-foreground"></div>
+<section
+  class="relative flex h-[90vh] w-full flex-col items-center justify-center overflow-hidden text-center"
+>
+  <img
+    class="absolute inset-0 h-full w-full object-cover brightness-[.35]"
+    src="/club.webp"
+    alt=""
+  />
+  <div
+    class="absolute inset-0 bg-linear-to-b from-foreground/40 via-transparent to-foreground"
+  ></div>
 
-    <div class="relative z-10 px-6">
-        <h2 class="intro1 text-2xl text-background sm:text-3xl">we don't make keys&hellip;</h2>
-        <h2 class="intro2 text-2xl text-background sm:text-3xl">we make a</h2>
-        <h1 class="intro3 font-[abril] mt-2 text-6xl italic text-primary sm:text-7xl md:text-8xl">difference!</h1>
-        <p class="intro4 mt-6 text-xl text-background sm:text-2xl md:text-3xl">Henry M. Jackson High School Key Club</p>
+  <div class="relative z-10 px-6">
+    <h2 class="intro1 text-2xl text-background sm:text-3xl">
+      we don't make keys&hellip;
+    </h2>
+    <h2 class="intro2 text-2xl text-background sm:text-3xl">we make a</h2>
+    <h1
+      class="intro3 font-[abril] mt-2 text-6xl italic text-primary sm:text-7xl md:text-8xl"
+    >
+      difference!
+    </h1>
+    <p class="intro4 mt-6 text-xl text-background sm:text-2xl md:text-3xl">
+      Henry M. Jackson High School Key Club
+    </p>
 
-        <div class="intro4 mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button href="#join" size="xl" class="font-semibold">
-                Join Key Club
-            </Button>
-            <Button href="/hours" variant="secondary" size="xl" class="font-semibold">
-                Check Your Hours
-            </Button>
-        </div>
+    <div
+      class="intro4 mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
+    >
+      <Button href="#join" size="xl" class="font-semibold">
+        Join Key Club
+      </Button>
+      <Button href="/hours" variant="secondary" size="xl" class="font-semibold">
+        Check Your Hours
+      </Button>
     </div>
+  </div>
 
-    <div class="absolute bottom-6 z-10 text-muted">
-        <Icon icon="solar:double-alt-arrow-down-linear" class="size-8 animate-bounce"/>
-    </div>
+  <div class="absolute bottom-6 z-10 text-muted">
+    <Icon
+      icon="solar:double-alt-arrow-down-linear"
+      class="size-8 animate-bounce"
+    />
+  </div>
 </section>
 
 <!-- Who are we -->
-<section class="grid w-full grid-cols-1 bg-background text-foreground md:grid-cols-2">
-    <img class="h-64 w-full object-cover md:h-full" src="/canes.webp" alt="Key Club members volunteering"/>
-    <div class="reveal flex flex-col justify-center p-8 md:p-14">
-        <span class="font-bold-gothic text-kcblue">WHO WE ARE</span>
-        <h2 class="mt-2 text-4xl md:text-5xl">A student-led volunteering family.</h2>
-        <p class="mt-6 text-lg md:text-xl">
-            Key Club is a student-led volunteering organization. Henry M. Jackson High School is one of 14 schools in
-            PNW Division 21 &mdash; and currently the chapter with the most members. It's a great way to give back to
-            your community and make new friends across the division.
-        </p>
-        <div class="mt-8 flex flex-wrap gap-3">
-            <span class="rounded-full bg-primary px-4 py-1.5 text-sm text-primary-foreground">Leadership</span>
-            <span class="rounded-full bg-primary px-4 py-1.5 text-sm text-primary-foreground">Character</span>
-            <span class="rounded-full bg-primary px-4 py-1.5 text-sm text-primary-foreground">Caring</span>
-            <span class="rounded-full bg-primary px-4 py-1.5 text-sm text-primary-foreground">Inclusiveness</span>
-        </div>
+<section
+  class="grid w-full grid-cols-1 bg-background text-foreground md:grid-cols-2"
+>
+  <img
+    class="h-64 w-full object-cover md:h-full"
+    src="/canes.webp"
+    alt="Key Club members volunteering"
+  />
+  <div class="reveal flex flex-col justify-center p-8 md:p-14">
+    <span class="font-bold-gothic text-kcblue">WHO WE ARE</span>
+    <h2 class="mt-2 text-4xl md:text-5xl">
+      A student-led volunteering family.
+    </h2>
+    <p class="mt-6 text-lg md:text-xl">
+      Key Club is a student-led volunteering organization. Henry M. Jackson High
+      School is one of 14 schools in PNW Division 21 &mdash; and currently the
+      chapter with the most members. It's a great way to give back to your
+      community and make new friends across the division.
+    </p>
+    <div class="mt-8 flex flex-wrap gap-3">
+      {#each ["Leadership", "Character", "Caring", "Inclusiveness"] as value}
+        <Badge>{value}</Badge>
+      {/each}
     </div>
+  </div>
 </section>
 
 <!-- Join CTA -->
 <section id="join" class="w-full scroll-mt-24 bg-foreground px-8 py-20">
-    <div class="mx-auto max-w-5xl text-center">
-        <span class="font-bold-gothic text-primary">BECOME A KEYUTIE</span>
-        <h2 class="mt-2 text-4xl text-background md:text-5xl">Join our chapter</h2>
-        <p class="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            Anyone can join &mdash; that's what we're about. Here's how membership works once registration opens.
+  <div class="mx-auto max-w-5xl text-center">
+    <span class="font-bold-gothic text-primary">BECOME A KEYUTIE</span>
+    <h2 class="mt-2 text-4xl text-background md:text-5xl">Join our chapter</h2>
+    <p class="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+      Anyone can join &mdash; that's what we're about. Here's how membership
+      works once registration opens.
+    </p>
+
+    <div class="mt-12 grid gap-6 md:grid-cols-3">
+      <div
+        class="reveal flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
+      >
+        <Icon icon="solar:user-plus-bold" class="size-12 text-primary" />
+        <h3 class="font-bold-gothic mt-4 text-2xl text-background">Register</h3>
+        <p class="mt-3 text-muted">
+          Sign up to become an official Key Club member during registration
+          season.
         </p>
-
-        <div class="mt-12 grid gap-6 md:grid-cols-3">
-            <div class="reveal flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8">
-                <Icon icon="solar:user-plus-bold" class="size-12 text-primary"/>
-                <h3 class="font-bold-gothic mt-4 text-2xl text-background">Register</h3>
-                <p class="mt-3 text-muted">Sign up to become an official Key Club member during registration season.</p>
-            </div>
-            <div class="reveal flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8">
-                <Icon icon="solar:wallet-bold" class="size-12 text-primary"/>
-                <h3 class="font-bold-gothic mt-4 text-2xl text-background">Pay Dues</h3>
-                <p class="mt-3 text-muted">Dues are $41 total: $10 International, $5.50 District, $2.50 Club and a $23 hoodie.</p>
-            </div>
-            <div class="reveal flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8">
-                <img src="/bee.webp" alt="Bee" class="size-14 object-contain"/>
-                <h3 class="font-bold-gothic mt-4 text-2xl text-background">Stay in the Hive</h3>
-                <p class="mt-3 text-muted">Earn 25 service hours a year, attend 50% of general meetings and honor your event sign-ups.</p>
-            </div>
-        </div>
-
-        <div class="mx-auto mt-10 max-w-md">
-            <Button href="https://www.instagram.com/jhskeyclub21" target="_blank" rel="noopener" size="xl" class="font-semibold" variant="secondary">
-                <Icon icon="fa7-brands:instagram" class="size-10"/>
-                Follow for updates
-            </Button>
-            <p class="mt-4 text-muted-foreground">Registration reopens in October 2026. Follow our Instagram to be the first to know.</p>
-        </div>
+      </div>
+      <div
+        class="reveal flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
+      >
+        <Icon icon="solar:wallet-bold" class="size-12 text-primary" />
+        <h3 class="font-bold-gothic mt-4 text-2xl text-background">Pay Dues</h3>
+        <p class="mt-3 text-muted">
+          Dues are $41 total: $10 International, $5.50 District, $2.50 Club and
+          a $23 hoodie.
+        </p>
+      </div>
+      <div
+        class="reveal flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
+      >
+        <img src="/bee.webp" alt="Bee" class="size-14 object-contain" />
+        <h3 class="font-bold-gothic mt-4 text-2xl text-background">
+          Stay in the Hive
+        </h3>
+        <p class="mt-3 text-muted">
+          Earn 25 service hours a year, attend 50% of general meetings and honor
+          your event sign-ups.
+        </p>
+      </div>
     </div>
+
+    <div class="mx-auto mt-10 max-w-md">
+      <Button
+        href="https://www.instagram.com/jhskeyclub21"
+        target="_blank"
+        rel="noopener"
+        size="xl"
+        class="font-semibold"
+        variant="secondary"
+      >
+        <Icon icon="fa7-brands:instagram" class="size-10" />
+        Follow for updates
+      </Button>
+      <p class="mt-4 text-muted-foreground">
+        Registration reopens in October 2026. Follow our Instagram to be the
+        first to know.
+      </p>
+    </div>
+  </div>
 </section>
 
 <!-- Committees -->
 <section class="w-full bg-background px-8 py-20 text-foreground">
-    <div class="mx-auto max-w-6xl">
-        <div class="reveal text-center">
-            <span class="font-bold-gothic text-secondary">GET INVOLVED</span>
-            <h2 class="mt-2 text-4xl md:text-5xl">Our four committees</h2>
-            <p class="mx-auto mt-4 max-w-2xl text-lg">
-                Committees are the best way to meet new people and earn volunteer hours.
-                Every member joins at least one.
-            </p>
-        </div>
-
-        <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {#each committees as committee (committee.name)}
-                <div class="reveal group overflow-hidden rounded-xl bg-card shadow-md transition-transform hover:-translate-y-1">
-                    <div class="relative h-40 overflow-hidden">
-                        <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src={committee.image} alt={committee.name}/>
-                        <div class="absolute inset-0 bg-secondary/30"></div>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex items-center gap-3">
-                            <Icon icon={committee.icon} class="size-7 text-secondary"/>
-                            <h3 class="font-bold-gothic text-2xl">{committee.name}</h3>
-                        </div>
-                        <p class="mt-3 text-card-foreground">{committee.text}</p>
-                    </div>
-                </div>
-            {/each}
-        </div>
+  <div class="mx-auto max-w-6xl">
+    <div class="reveal text-center">
+      <span class="font-bold-gothic text-secondary">GET INVOLVED</span>
+      <h2 class="mt-2 text-4xl md:text-5xl">Our four committees</h2>
+      <p class="mx-auto mt-4 max-w-2xl text-lg">
+        Committees are the best way to meet new people and earn volunteer hours.
+        Every member joins at least one.
+      </p>
     </div>
+
+    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {#each committees as committee (committee.name)}
+        <div
+          class="reveal group overflow-hidden rounded-xl bg-card shadow-md transition-transform hover:-translate-y-1"
+        >
+          <div class="relative h-40 overflow-hidden">
+            <img
+              class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              src={committee.image}
+              alt={committee.name}
+            />
+            <div class="absolute inset-0 bg-secondary/30"></div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-3">
+              <Icon icon={committee.icon} class="size-7 text-secondary" />
+              <h3 class="font-bold-gothic text-2xl">{committee.name}</h3>
+            </div>
+            <p class="mt-3 text-card-foreground">{committee.text}</p>
+          </div>
+        </div>
+      {/each}
+    </div>
+  </div>
 </section>
 
 <!-- Upcoming events teaser -->
@@ -199,17 +302,26 @@
 
 <!-- Socials -->
 <section class="w-full bg-background px-8 py-20 text-center text-foreground">
-    <div class="reveal mx-auto max-w-2xl">
-        <h2 class="text-4xl md:text-5xl">Follow the buzz</h2>
-        <p class="mt-4 text-lg">Catch event recaps, reminders and announcements on our socials.</p>
-        <div class="mt-8 flex items-center justify-center gap-6">
-            {#each socials as social (social.label)}
-                <Button href={social.href} target="_blank" rel="noopener" size="icon-lg" class="text-secondary" variant="icon">
-                    <Icon icon={social.icon} class="size-10"/>
-                </Button>
-            {/each}
-        </div>
+  <div class="reveal mx-auto max-w-2xl">
+    <h2 class="text-4xl md:text-5xl">Follow the buzz</h2>
+    <p class="mt-4 text-lg">
+      Catch event recaps, reminders and announcements on our socials.
+    </p>
+    <div class="mt-8 flex items-center justify-center gap-6">
+      {#each socials as social (social.label)}
+        <Button
+          href={social.href}
+          target="_blank"
+          rel="noopener"
+          size="icon-lg"
+          class="text-secondary"
+          variant="icon"
+        >
+          <Icon icon={social.icon} class="size-10" />
+        </Button>
+      {/each}
     </div>
+  </div>
 </section>
 
-<Footer/>
+<Footer />
