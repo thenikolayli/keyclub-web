@@ -1,5 +1,4 @@
 import { PUBLIC_API_URL } from "$env/static/public";
-import type { CalendarDate } from "@internationalized/date";
 
 export interface EventSearchRequest {
   times: [number, number];

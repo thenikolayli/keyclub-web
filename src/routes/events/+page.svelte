@@ -19,7 +19,7 @@
     searchEvents,
     type Event,
     type EventSearchRequest,
-  } from "$lib/events";
+  } from "../../lib/functions/events";
 
   const calendarSrc =
     "https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FLos_Angeles&showPrint=0&showTz=0&showCalendars=0&src=ZjIzOGY1NzgyYWIwNjg5M2FhMGQ0MzM3YWNhZjBkZjg5ZDU3YTI4ZDI0NTk1OGMyZGIyNzc0Mjc5OWNlMzgzNkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%23F4511E";
@@ -81,7 +81,7 @@
   let status = $state("idle"); // idle | loading | error | result
   let result = $state<Event[] | null>(null);
   let errorMsg = $state("");
-  async function search() {
+  async function handleclick() {
     status = "loading";
     errorMsg = "";
     try {
@@ -120,7 +120,7 @@
     <iframe
       title="JHS Key Club events calendar"
       src={calendarSrc}
-      class="h-[70vh] min-h-[520px] w-full"
+      class="h-[70vh] min-h-130 w-full"
       loading="lazy"
     ></iframe>
   </div>
@@ -204,7 +204,7 @@
     </Accordion.Root>
     <div class="flex justify-between w-full mt-2">
       <Button variant="outline" onclick={clearFilters}>Clear filters</Button>
-      <Button variant="secondary" onclick={search}>
+      <Button variant="secondary" onclick={handleclick}>
         {#if status === "loading"}
           <Icon icon="svg-spinners:ring-resize" data-icon="inline-start" />
           Checking...

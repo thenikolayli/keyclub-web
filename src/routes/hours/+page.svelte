@@ -4,7 +4,7 @@
     import { Button } from "$lib/components/ui/button/index";
     import { Input } from "$lib/components/ui/input/index";
     import Icon from "@iconify/svelte";
-    import {fetchHours, type HoursResponse} from "$lib/hours";
+    import {fetchHours, type HoursResponse} from "$lib/functions/hours";
     import ImageHeader from "$lib/components/ImageHeader.svelte";
     import * as Alert from "$lib/components/ui/alert/index";
 
@@ -13,7 +13,7 @@
     let result = $state<HoursResponse | null>(null);
     let errorMsg = $state("");
 
-    async function lookup(event: Event) {
+    async function handleclick(event: Event) {
         event.preventDefault();
 
         const trimmed = name.trim();
@@ -42,7 +42,7 @@
 
 <section class="w-full bg-background px-6 py-16 text-foreground">
     <div class="mx-auto max-w-xl">
-        <form class="rounded-2xl bg-background p-8 shadow-lg" onsubmit={lookup}>
+        <form class="rounded-2xl bg-background p-8 shadow-lg" onsubmit={handleclick}>
             <h4 class="font-bold-gothic text-2xl text-foreground">Enter your name</h4>
             <p class="mb-4 text-muted-foreground">Use the name you registered with.</p>
 
