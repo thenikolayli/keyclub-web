@@ -2,8 +2,8 @@ import { PUBLIC_API_URL } from "$env/static/public";
 
 export interface User {
   email: string;
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   role: string;
 }
 
@@ -36,9 +36,9 @@ async function fetchUser(): Promise<User> {
   const response = await fetch(`${PUBLIC_API_URL}/auth/me`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
   });
 
   if (!response.ok) throw new Error(`Server responded ${response.status}`);
-
   return await response.json();
 }

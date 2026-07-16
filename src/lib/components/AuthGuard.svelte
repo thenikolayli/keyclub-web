@@ -11,7 +11,7 @@
     if (!userState.user) {
       await userState.fetchUser();
     }
-    if (!userState.user) {
+    if (!userState.user || (userState.user.role !== "officer" && userState.user.role !== "leader")) {
       goto("/admin/login");
       return;
     }

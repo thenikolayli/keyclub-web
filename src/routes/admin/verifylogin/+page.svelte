@@ -5,7 +5,7 @@
     import { onMount } from "svelte";
     import Icon from "@iconify/svelte";
 
-    let token = $derived(page.url.searchParams.get("token") ?? "");
+    let token = $state("");
     let status = $state("idle"); // idle | loading | error | result
     let errorMsg = $state("");
 
@@ -31,6 +31,7 @@
 
     onMount(() => {
         document.title = "Verify Login - Admin";
+        token = page.url.searchParams.get("token") || "";
     });
 </script>
 

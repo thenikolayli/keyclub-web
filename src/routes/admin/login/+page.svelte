@@ -36,6 +36,12 @@
   onMount(() => {
       document.title = "Admin Login";
   });
+
+  $effect(() => {
+    if (userState.user) {
+        goto("/admin");
+      }
+  })
 </script>
 
 <div class="flex min-h-screen items-center justify-center bg-foreground px-4">
