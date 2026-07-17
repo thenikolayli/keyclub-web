@@ -4,6 +4,7 @@
   import MembersTab from "$lib/components/admin/tabs/MembersTab.svelte";
   import EventsTab from "$lib/components/admin/tabs/EventsTab.svelte";
   import AuthGuard from "$lib/components/AuthGuard.svelte";
+  import { onMount } from "svelte";
 
   const tabs = [
     {
@@ -23,31 +24,35 @@
   const visibleTabs = $derived(
     tabs.filter(tab => tab.roles.includes(userState.user?.role || ''))
   );
+
+  onMount(() => {
+    document.title = "Admin Dashboard";
+  })
 </script>
 
 <AuthGuard>
-  <header class="border-b border-gray-200 p-4">
-    <div class="flex items-center gap-2">
-      <span class="font-medium">
-        {userState.user?.firstName} {userState.user?.lastName}
-      </span>
-      <span class="text-sm text-gray-600">
-        ({userState.user?.role})
-      </span>
-    </div>
-  </header>
+  <div class="mx-auto max-w-5xl px-6 py-8">
+    <header class="mb-8">
+      <h1 class="text-3xl font-semibold tracking-tight text-stone-100">
+        Hello, {userState.user?.firstName}
+      </h1>
+      <p class="mt-1 text-sm text-stone-400 italic">
+        {userState.user?.role}
+      </p>
+    </header>
 
-  <Tabs.Root value={visibleTabs[0]?.id}>
-  <Tabs.List class="mb-4">
-    {#each visibleTabs as tab}
-      <Tabs.Trigger value={tab.id}>{tab.label}</Tabs.Trigger>
-    {/each}
-  </Tabs.List>
+    <Tabs.Root value={visibleTabs[0]?.id}>
+      <Tabs.List variant="line" class="mb-6">
+        {#each visibleTabs as tab}
+          <Tabs.Trigger value={tab.id}>{tab.label}</Tabs.Trigger>
+        {/each}
+      </Tabs.List>
 
-  {#each visibleTabs as tab}
-    <Tabs.Content value={tab.id}>
-      <tab.component />
-    </Tabs.Content>
-  {/each}
-</Tabs.Root>
+      {#each visibleTabs as tab}
+        <Tabs.Content value={tab.id}>
+          <tab.component />
+        </Tabs.Content>
+      {/each}
+    </Tabs.Root>
+  </div>
 </AuthGuard>

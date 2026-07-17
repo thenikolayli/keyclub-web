@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { userState } from "$lib/stores/user.svelte";
+  import { userState, updateUser } from "$lib/stores/user.svelte";
   import { goto } from "$app/navigation";
 
   let { children }: { children: import("svelte").Snippet } = $props();
@@ -9,7 +9,7 @@
 
   onMount(async () => {
     if (!userState.user) {
-      await userState.fetchUser();
+      await updateUser();
     }
     if (!userState.user || (userState.user.role !== "officer" && userState.user.role !== "leader")) {
       goto("/admin/login");

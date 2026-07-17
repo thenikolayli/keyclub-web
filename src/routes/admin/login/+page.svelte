@@ -4,7 +4,7 @@
   import { onMount } from "svelte";
   import { login } from "$lib/functions/login";
   import { goto } from "$app/navigation";
-  import { userState } from "$lib/stores/user.svelte";
+  import { userState, updateUser } from "$lib/stores/user.svelte";
   import Icon from "@iconify/svelte";
 
   let email = $state("");
@@ -24,7 +24,7 @@
         errorMsg = "";
         try {
             await login(email);
-            await userState.fetchUser(); // updates the user data after login
+            await updateUser();
             status = "result";
             goto("/admin");
         } catch {
@@ -33,15 +33,15 @@
         }
     }
 
-  onMount(() => {
+  onMount(async () => {
       document.title = "Admin Login";
-  });
-
-  $effect(() => {
-    if (userState.user) {
+      if (!userState.user) {
+        await updateUser();
+      }
+      if (userState.user) {
         goto("/admin");
       }
-  })
+  });
 </script>
 
 <div class="flex min-h-screen items-center justify-center bg-foreground px-4">
