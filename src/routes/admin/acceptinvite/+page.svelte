@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from "$app/state";
     import { Button } from "$lib/components/ui/button/index";
-    import { verifyLogin } from "$lib/functions/login";
+    import { inviteAccept } from "$lib/functions/invite";
     import { onMount } from "svelte";
     import Icon from "@iconify/svelte";
 
@@ -21,16 +21,16 @@
         status = "loading";
         errorMsg = "";
         try {
-            await verifyLogin(token);
+            await inviteAccept(token);
             status = "result";
-        } catch {
+        } catch(error) {
+            errorMsg = error instanceof Error ? error.message : "An unknown error occurred.";
             status = "error";
-            errorMsg = "Verification failed. The token may be invalid or expired.";
         }
     }
 
     onMount(() => {
-        document.title = "Verify Login - Admin";
+        document.title = "Accept Invite - Admin";
         token = page.url.searchParams.get("token") || "";
     });
 </script>
@@ -39,7 +39,7 @@
     <div class="w-full max-w-sm space-y-6">
         <div class="space-y-1.5 text-center">
             <h1 class="text-2xl font-semibold tracking-tight text-background">
-                Verify Login
+                Accept Invite
             </h1>
             {#if status === "error"}
                 <p class="text-sm text-muted-foreground">
@@ -47,21 +47,18 @@
                 </p>
             {:else if status === "result"}
                 <p class="text-sm text-muted-foreground">
-                    Your login has been verified. You may now access the admin dashboard at <a href="/admin" class="text-primary underline">/admin</a>.
+                    Your account has been created. You may login in at <a href="/admin/login" class="text-primary underline">/admin/login</a>.
                 </p>
             {:else}
                 <p class="text-sm text-muted-foreground">
-                    An attempt to log into your account has been made, verify this login?
-                    <br>
-                    <br>
-                    If this wasn't you, close this page.
+                    Accept the invite to create your account. If you have any issues, please contact the Webmaster.
                 </p>
                 <Button class="w-full mt-4" onclick={handleclick} disabled={status === "loading"}>
                 {#if status === "loading"}
                     <Icon icon="svg-spinners:ring-resize" data-icon="inline-start"/>
-                    Verifying...
+                    Creating account...
                 {:else}
-                    Verify login
+                    Accept Invite
                 {/if}
             </Button>
             {/if}

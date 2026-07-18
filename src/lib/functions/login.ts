@@ -10,7 +10,9 @@ async function loginStart(email: string) {
         body: JSON.stringify({ email: email }),
     });
 
-    if (!response.ok) throw new Error(`Server responded ${response.status}`);
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message);
+    return data;
 }
 // private function to wait for the login process to complete
 async function loginWait() {
@@ -20,7 +22,9 @@ async function loginWait() {
         credentials: "include",
     });
 
-    if (!response.ok) throw new Error(`Server responded ${response.status}`);
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message);
+    return data;
 }
 
 
@@ -43,5 +47,7 @@ export async function verifyLogin(token: string) {
         body: JSON.stringify({ token: token }),
     });
 
-    if (!response.ok) throw new Error(`Server responded ${response.status}`);
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message);
+    return data;
 }

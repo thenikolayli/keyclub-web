@@ -81,6 +81,7 @@
   let status = $state("idle"); // idle | loading | error | result
   let result = $state<Event[] | null>(null);
   let errorMsg = $state("");
+  
   async function handleclick() {
     status = "loading";
     errorMsg = "";
@@ -93,9 +94,8 @@
       } as EventSearchRequest)) as Event[];
       status = "result";
     } catch (error) {
-      result = null;
+      errorMsg = error instanceof Error ? error.message : "An unknown error occurred.";
       status = "error";
-      errorMsg = "An unknown error occurred, contact the Webmaster.";
     }
   }
 </script>

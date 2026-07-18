@@ -28,10 +28,9 @@
         try {
             result = await fetchHours(trimmed);
             status = "result";
-        } catch {
-            result = null;
+        } catch (error) {
+            errorMsg = error instanceof Error ? error.message : "An unknown error occurred.";
             status = "error";
-            errorMsg = "We couldn't load those hours. Check the spelling of your name, or contact the Webmaster.";
         }
     }
 </script>

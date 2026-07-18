@@ -3,6 +3,7 @@
   import * as Tabs from "$lib/components/ui/tabs";
   import MembersTab from "$lib/components/admin/tabs/MembersTab.svelte";
   import EventsTab from "$lib/components/admin/tabs/EventsTab.svelte";
+  import InviteTab from "$lib/components/admin/tabs/InviteTab.svelte";
   import AuthGuard from "$lib/components/AuthGuard.svelte";
   import { onMount } from "svelte";
 
@@ -18,6 +19,12 @@
       label: 'Members',
       component: MembersTab,
       roles: ['officer']
+    },
+    {
+      id: 'invite',
+      label: 'Invite',
+      component: InviteTab,
+      roles: ['officer']
     }
   ];
 
@@ -26,7 +33,7 @@
   );
 
   onMount(() => {
-    document.title = "Admin Dashboard";
+    document.title = "Dashboard - Admin";
   })
 </script>
 

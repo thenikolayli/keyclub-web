@@ -27,14 +27,14 @@
             await updateUser();
             status = "result";
             goto("/admin");
-        } catch {
+        } catch(error) {
+            errorMsg = error instanceof Error ? error.message : "An unknown error occurred.";
             status = "error";
-            errorMsg = "Login failed. Please check your email and try again.";
         }
     }
 
   onMount(async () => {
-      document.title = "Admin Login";
+      document.title = "Login - Admin";
       if (!userState.user) {
         await updateUser();
       }

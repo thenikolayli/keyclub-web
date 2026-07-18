@@ -26,7 +26,7 @@ export async function searchEvents(params: EventSearchRequest) {
     body: JSON.stringify(params),
   });
 
-  if (!response.ok) throw new Error(`Server responded ${response.status}`);
-
-  return response.json() as Promise<Event[]>;
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.message);
+  return data;
 }
