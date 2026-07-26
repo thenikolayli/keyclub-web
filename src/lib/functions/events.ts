@@ -1,5 +1,4 @@
 import { PUBLIC_API_URL } from "$env/static/public";
-import type { CalendarDate } from "@internationalized/date";
 
 export interface EventSearchRequest {
   times: [number, number];
@@ -27,7 +26,7 @@ export async function searchEvents(params: EventSearchRequest) {
     body: JSON.stringify(params),
   });
 
-  if (!response.ok) throw new Error(`Server responded ${response.status}`);
-
-  return response.json() as Promise<Event[]>;
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.message);
+  return data;
 }

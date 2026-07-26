@@ -4,7 +4,7 @@
   import { Badge } from "$lib/components/ui/badge/index";
   import { toast } from "svelte-sonner";
   import { cn } from "$lib/utils";
-  import type { Event } from "$lib/events";
+  import type { Event } from "../functions/events";
 
   let { event, size = "sm" }: { event: Event; size?: "sm" | "lg" } = $props();
 

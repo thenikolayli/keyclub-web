@@ -8,16 +8,15 @@ export interface HoursResponse {
   className: string;
 }
 
-export async function fetchHours(name: string): Promise<HoursResponse> {
+export async function fetchHours(name: string) {
   const response = await fetch(`${PUBLIC_API_URL}/members/hours`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name }),
   });
 
-  if (!response.ok) throw new Error(`Server responded ${response.status}`);
-
   const data = await response.json();
+  if (!response.ok) throw new Error(data.message);
   return {
     name: data.name,
     allHours: data.all_hours,

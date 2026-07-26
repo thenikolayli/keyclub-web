@@ -7,7 +7,7 @@
         {href: "/", label: "Home"},
         {href: "/about", label: "About"},
         {href: "/hours", label: "Hours"},
-        // {href: "/dcon", label: "DCON"},
+        {href: "/dcon", label: "DCON"},
         {href: "/events", label: "Events"},
     ]
 

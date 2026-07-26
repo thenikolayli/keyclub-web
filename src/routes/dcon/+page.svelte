@@ -1,6 +1,7 @@
 <script>
     import Header from "$lib/components/Header.svelte";
     import Footer from "$lib/components/Footer.svelte";
+    import ImageHeader from "$lib/components/ImageHeader.svelte";
     import Icon from "@iconify/svelte";
     import gsap from "gsap";
     import {ScrollTrigger} from "gsap/ScrollTrigger";
@@ -16,7 +17,6 @@
     let canSend = $state(true)
 
     onMount(() => {
-        document.title = "DCON";
         gsap.registerPlugin(ScrollTrigger)
         const mm = gsap.matchMedia()
         mm.add("(prefers-reduced-motion: no-preference)", () => {
@@ -33,18 +33,7 @@
 
 <Header/>
 
-<!-- Hero -->
-<section class="relative flex h-[56vh] w-full items-center justify-center overflow-hidden text-center">
-    <img class="absolute inset-0 h-full w-full object-cover brightness-[.35]" src="/faz.webp" alt=""/>
-    <div class="absolute inset-0 bg-gradient-to-b from-kcblue/50 to-kcblack"></div>
-    <div class="relative z-10 px-6">
-        <span class="font-bold-gothic tracking-widest text-kcyellow">PNW DISTRICT CONVENTION</span>
-        <h1 class="font-display mt-2 text-6xl italic text-stone-100 md:text-8xl">DCON</h1>
-        <p class="mx-auto mt-4 max-w-2xl text-lg text-stone-200 md:text-xl">
-            The biggest weekend of the Key Club year. One district, one family.
-        </p>
-    </div>
-</section>
+<ImageHeader imagePath="/faz.webp" title="DCON" description="The biggest weekend of the Key Club year. One district, one family." pageTitle="DCON"/>
 
 <!-- What is DCON -->
 <section class="grid w-full grid-cols-1 bg-stone-200 text-kcblack md:grid-cols-2">
