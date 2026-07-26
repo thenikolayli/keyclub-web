@@ -36,7 +36,7 @@
       roles: ["officer"],
     },
   ];
-  let tab = $derived(page.url.searchParams.get("tab") || "");
+  let tab = $state("");
 
   const visibleTabs = $derived(
     tabs.filter((tab) => tab.roles.includes(userState.user?.role || "")),
@@ -53,7 +53,7 @@
 
   onMount(() => {
     document.title = "Dashboard - Admin";
-    console.log(tab);
+    tab = page.url.searchParams.get("tab") || "";
   });
 </script>
 
