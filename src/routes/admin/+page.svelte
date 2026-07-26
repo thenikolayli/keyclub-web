@@ -1,30 +1,37 @@
 <script lang="ts">
   import { userState } from "$lib/stores/user.svelte";
   import * as Tabs from "$lib/components/ui/tabs";
-  import MembersTab from "$lib/components/admin/tabs/MembersTab.svelte";
-  import EventsTab from "$lib/components/admin/tabs/EventsTab.svelte";
-  import InviteTab from "$lib/components/admin/tabs/InviteTab.svelte";
+  import MembersTab from "$lib/components/tabs/MembersTab.svelte";
+  import EventsTab from "$lib/components/tabs/EventsTab.svelte";
+  import InviteTab from "$lib/components/tabs/InviteTab.svelte";
   import AuthGuard from "$lib/components/AuthGuard.svelte";
+  import CalendarTab from "$lib/components/tabs/CalendarTab.svelte";
   import { onMount } from "svelte";
 
   const tabs = [
-    {
-      id: 'events',
-      label: 'Events',
-      component: EventsTab,
-      roles: ['officer', 'leader']
-    },
-    {
-      id: 'members',
-      label: 'Members',
-      component: MembersTab,
-      roles: ['officer']
-    },
+    // {
+    //   id: 'events',
+    //   label: 'Events',
+    //   component: EventsTab,
+    //   roles: ['officer', 'leader']
+    // },
+    // {
+    //   id: 'members',
+    //   label: 'Members',
+    //   component: MembersTab,
+    //   roles: ['officer']
+    // },
     {
       id: 'invite',
       label: 'Invite',
       component: InviteTab,
       roles: ['officer']
+    },
+    {
+      id: 'add-to-calendar',
+      label: 'Add to Calendar',
+      component: CalendarTab,
+      roles: ['officer', 'leader']
     }
   ];
 

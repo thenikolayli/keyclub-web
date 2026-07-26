@@ -70,15 +70,18 @@
         <p class="text-center text-sm text-muted-foreground">
           Login verified, redirecting...
         </p>
+      {:else if status === "loading"}
+        <Button type="submit" class="w-full" disabled={status === "loading"}>
+          <Icon icon="svg-spinners:ring-resize" data-icon="inline-start"/>
+          Logging in...
+        </Button>
+        <p class="text-center text-sm text-muted-foreground">
+          If an account exists for this email, you will receive a login link. If you don't see the email, please check your spam folder.
+        </p>
       {:else}
         <Button type="submit" class="w-full" disabled={status === "loading"}>
-          {#if status === "loading"}
-            <Icon icon="svg-spinners:ring-resize" data-icon="inline-start"/>
-            Signing in...
-          {:else}
-            Log in
-          {/if}
-        </Button>
+          Log in
+        </Button> 
       {/if}
     </form>
   </div>
