@@ -1,47 +1,60 @@
 <script lang="ts">
   import { userState } from "$lib/stores/user.svelte";
   import * as Tabs from "$lib/components/ui/tabs";
-  import MembersTab from "$lib/components/tabs/MembersTab.svelte";
-  import EventsTab from "$lib/components/tabs/EventsTab.svelte";
   import InviteTab from "$lib/components/tabs/InviteTab.svelte";
+  import InvitesTab from "$lib/components/tabs/InvitesTab.svelte";
   import AuthGuard from "$lib/components/AuthGuard.svelte";
   import CalendarTab from "$lib/components/tabs/CalendarTab.svelte";
+  import UsersTab from "$lib/components/tabs/UsersTab.svelte";
   import { onMount } from "svelte";
+  import { page } from "$app/state";
+  import { goto } from "$app/navigation";
 
   const tabs = [
-    // {
-    //   id: 'events',
-    //   label: 'Events',
-    //   component: EventsTab,
-    //   roles: ['officer', 'leader']
-    // },
-    // {
-    //   id: 'members',
-    //   label: 'Members',
-    //   component: MembersTab,
-    //   roles: ['officer']
-    // },
     {
-      id: 'invite',
-      label: 'Invite',
+      id: "invite",
+      label: "Invite",
       component: InviteTab,
-      roles: ['officer']
+      roles: ["officer"],
     },
     {
-      id: 'add-to-calendar',
-      label: 'Add to Calendar',
+      id: "invites",
+      label: "Invites",
+      component: InvitesTab,
+      roles: ["officer"],
+    },
+    {
+      id: "add-to-calendar",
+      label: "Add to Calendar",
       component: CalendarTab,
-      roles: ['officer', 'leader']
-    }
+      roles: ["officer", "leader"],
+    },
+    {
+      id: "users",
+      label: "Users",
+      component: UsersTab,
+      roles: ["officer"],
+    },
   ];
+  let tab = $derived(page.url.searchParams.get("tab") || "");
 
   const visibleTabs = $derived(
-    tabs.filter(tab => tab.roles.includes(userState.user?.role || ''))
+    tabs.filter((tab) => tab.roles.includes(userState.user?.role || "")),
   );
+
+  function changeTab(newTab: string) {
+    const newParams = new URLSearchParams(page.url.searchParams.toString());
+    newParams.set("tab", newTab);
+    goto(`?${newParams.toString()}`, {
+      keepFocus: true,
+      noScroll: true,
+    });
+  }
 
   onMount(() => {
     document.title = "Dashboard - Admin";
-  })
+    console.log(tab);
+  });
 </script>
 
 <AuthGuard>
@@ -55,7 +68,7 @@
       </p>
     </header>
 
-    <Tabs.Root value={visibleTabs[0]?.id}>
+    <Tabs.Root value={tab} onValueChange={(newTab) => changeTab(newTab)}>
       <Tabs.List variant="line" class="mb-6">
         {#each visibleTabs as tab}
           <Tabs.Trigger value={tab.id}>{tab.label}</Tabs.Trigger>

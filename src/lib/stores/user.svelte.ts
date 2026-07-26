@@ -1,13 +1,13 @@
 import { PUBLIC_API_URL } from "$env/static/public";
 
-export interface User {
+export interface UserInfo {
   email: string;
   firstName: string;
   lastName: string;
   role: string;
 }
 
-export const userState = $state({user: null as User | null});
+export const userState = $state({user: null as UserInfo | null});
 
 export async function updateUser() {
   const response = await fetch(`${PUBLIC_API_URL}/auth/me`, {
@@ -19,6 +19,6 @@ export async function updateUser() {
   if (!response.ok) {
     userState.user = null;
   } else {
-    userState.user = await response.json() as User;
+    userState.user = await response.json() as UserInfo;
   }
 }

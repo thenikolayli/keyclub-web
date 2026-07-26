@@ -1,43 +1,48 @@
 <script lang="ts" module>
-	import { type VariantProps, tv } from "tailwind-variants";
+  import { type VariantProps, tv } from "tailwind-variants";
 
-	export const alertVariants = tv({
-		base: "grid gap-0.5 rounded-lg border border-2 px-2.5 py-2 text-left text-base has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2 *:[svg]:row-span-2 *:[svg]:text-current *:[svg:not([class*='size-'])]:size-4 group/alert relative w-full",
-		variants: {
-			variant: {
-				default: "bg-card text-card-foreground",
-				destructive: "text-destructive bg-card *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current border-destructive",
-			},
-		},
-		defaultVariants: {
-			variant: "default",
-		},
-	});
+  export const alertVariants = tv({
+    base: "grid gap-0.5 rounded-lg border border-2 px-2.5 py-2 text-left text-base has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2 *:[svg]:row-span-2 *:[svg]:text-current *:[svg:not([class*='size-'])]:size-4 group/alert relative w-full",
+    variants: {
+      variant: {
+        default: "bg-card text-card-foreground",
+        destructive:
+          "text-destructive bg-card *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current border-destructive",
+        outline:
+          "border-stone-700 bg-stone-900 text-stone-300 hover:bg-stone-800",
+        destructiveOutline:
+          "border-destructive bg-stone-900 text-destructive hover:bg-stone-800",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  });
 
-	export type AlertVariant = VariantProps<typeof alertVariants>["variant"];
+  export type AlertVariant = VariantProps<typeof alertVariants>["variant"];
 </script>
 
 <script lang="ts">
-	import type { HTMLAttributes } from "svelte/elements";
-	import { cn, type WithElementRef } from "$lib/utils.js";
+  import type { HTMLAttributes } from "svelte/elements";
+  import { cn, type WithElementRef } from "$lib/utils.js";
 
-	let {
-		ref = $bindable(null),
-		class: className,
-		variant = "default",
-		children,
-		...restProps
-	}: WithElementRef<HTMLAttributes<HTMLDivElement>> & {
-		variant?: AlertVariant;
-	} = $props();
+  let {
+    ref = $bindable(null),
+    class: className,
+    variant = "default",
+    children,
+    ...restProps
+  }: WithElementRef<HTMLAttributes<HTMLDivElement>> & {
+    variant?: AlertVariant;
+  } = $props();
 </script>
 
 <div
-	bind:this={ref}
-	data-slot="alert"
-	role="alert"
-	class={cn(alertVariants({ variant }), className)}
-	{...restProps}
+  bind:this={ref}
+  data-slot="alert"
+  role="alert"
+  class={cn(alertVariants({ variant }), className)}
+  {...restProps}
 >
-	{@render children?.()}
+  {@render children?.()}
 </div>
