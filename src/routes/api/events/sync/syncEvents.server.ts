@@ -1,11 +1,11 @@
-import { supabaseAdmin } from "$lib/db/admin";
-import { getCalendarService, getDocsService } from "./google";
+import { supabase } from "$lib/db/admin";
+import { getCalendarService, getDocsService } from "$lib/google";
 import { CALENDAR_ID } from "$env/static/private";
-import type { Event } from "$lib/types/events";
+import type { CalendarEvent } from "$lib/types/events";
 import type { Result } from "$lib/types/responses";
 
 // syncs events from the key club google calendar (Key Club Member Calendar) and returns number of events synced/updated
-export const syncEventsFromCalendar = async (): Promise<Result<number>> => {
+export async function syncEventsFromCalendar(): Promise<Result<number>> {
   const calendar = getCalendarService();
   const docs = getDocsService();
 
@@ -20,7 +20,7 @@ export const syncEventsFromCalendar = async (): Promise<Result<number>> => {
   });
 
   const unparsedEvents = response.data.items || [];
-  const parsedEvents: Event[] = [];
+  const parsedEvents: CalendarEvent[] = [];
 
   for (const calEvent of unparsedEvents) {
     if (!calEvent.attachments || calEvent.attachments.length === 0) continue;
@@ -42,11 +42,11 @@ export const syncEventsFromCalendar = async (): Promise<Result<number>> => {
   let updates = 0;
 
   for (const event of parsedEvents) {
-    const { error: upsertErr } = await supabaseAdmin
+    const { error: upsertError } = await supabase
       .from("calendar_events")
       .upsert(event, { onConflict: "attendance_url", ignoreDuplicates: false });
-    if (upsertErr) {
-      console.error("sync: upsert failed for", event.name, upsertErr);
+    if (upsertError) {
+      console.error("sync: upsert failed for", event.name, upsertError);
       continue;
     }
     updates++;
@@ -76,7 +76,7 @@ const docsUrlToId = (url: string): string | null => {
 const parseAttendanceDoc = async (
   documentId: string,
   docs: ReturnType<typeof getDocsService>,
-): Promise<Event | null> => {
+): Promise<CalendarEvent | null> => {
   const res = await docs.documents.get({ documentId });
   const doc = res.data;
 

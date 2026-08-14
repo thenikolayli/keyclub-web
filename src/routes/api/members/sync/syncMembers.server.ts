@@ -1,8 +1,9 @@
-import { supabaseAdmin as supabase } from "$lib/db/admin";
-import { getSheetsService } from "./google";
+import { supabase } from "$lib/db/admin";
+import { getSheetsService } from "$lib/google";
 import { SPREADSHEET_ID } from "$env/static/private";
 import { randomUUID } from "node:crypto";
 import type { Result } from "$lib/types/responses";
+import type { Member } from "$lib/types/members";
 
 const SHEET_NAME = "2025-2026 Members";
 
@@ -21,42 +22,6 @@ const RANGES = [
 ];
 
 type Parser<T> = (v: string) => T;
-
-const Parsers = {
-  string: ((s: string) => s) as Parser<string>,
-  float: ((s: string) => {
-    const n = parseFloat(s);
-    return isNaN(n) ? 0 : n;
-  }) as Parser<number>,
-  int: ((s: string) => {
-    const n = parseInt(s, 10);
-    return isNaN(n) ? 0 : n;
-  }) as Parser<number>,
-  bool: ((s: string) =>
-    s.toLowerCase() === "true" ||
-    s.toLowerCase() === "yes" ||
-    s === "1") as Parser<boolean>,
-};
-
-function normalize<T>(values: any[][], length: number, parse: Parser<T>): T[] {
-  const out: T[] = new Array(length).fill(null).map(() => parse(""));
-  for (let i = 0; i < Math.min(values.length, length); i++) {
-    if (values[i] && values[i][0] != null) {
-      const v = values[i][0];
-      const parsed = parse(String(v));
-      out[i] = parsed;
-    }
-  }
-  return out;
-}
-
-function formatPhoneNumber(raw: string): string {
-  const cleaned = raw.replace(/[\s\-\(\)]/g, "");
-  if (cleaned.length === 10) {
-    return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
-  }
-  return raw;
-}
 
 export async function syncMembers(): Promise<Result<number>> {
   const sheets = getSheetsService();
@@ -127,45 +92,9 @@ export async function syncMembers(): Promise<Result<number>> {
     if (!name) continue;
 
     const phone = formatPhoneNumber(phoneNumbers[i]);
-    const now = new Date().toISOString();
-    const id = randomUUID();
-
-    const existing = await supabase
+    const { error: upsertError } = await supabase
       .from("members")
-      .select("id, name, created_at")
-      .eq("name", name)
-      .maybeSingle();
-
-    if (existing.error && existing.error.code !== "PGRST116") {
-      console.error("syncMembers: lookup failed for", name, existing.error);
-      continue;
-    }
-
-    if (existing.data) {
-      const { error: updateErr } = await supabase
-        .from("members")
-        .update({
-          all_hours: allHours[i],
-          term_hours: termHours[i],
-          grad_year: gradYears[i],
-          class: classes[i],
-          strikes: strikes[i],
-          personal_email: personalEmails[i],
-          school_email: schoolEmails[i],
-          phone_number: phone,
-          shirt_size: shirtSizes[i],
-          paid_dues: paidDues[i],
-          updated_ad: now,
-        })
-        .eq("id", existing.data.id);
-
-      if (updateErr) {
-        console.error("syncMembers: update failed for", name, updateErr);
-        continue;
-      }
-    } else {
-      const { error: insertErr } = await supabase.from("members").insert({
-        id,
+      .upsert({
         name,
         all_hours: allHours[i],
         term_hours: termHours[i],
@@ -177,18 +106,50 @@ export async function syncMembers(): Promise<Result<number>> {
         phone_number: phone,
         shirt_size: shirtSizes[i],
         paid_dues: paidDues[i],
-        created_at: now,
-        updated_ad: now,
-      });
-
-      if (insertErr) {
-        console.error("syncMembers: insert failed for", name, insertErr);
-        continue;
-      }
+      }, { onConflict: "name", ignoreDuplicates: false });
+    if (upsertError) {
+      console.error("syncMembers: upsert failed for", name, upsertError);
+      continue;
     }
 
     synced++;
   }
 
   return { ok: true, data: synced };
+}
+
+const Parsers = {
+  string: ((s: string) => s) as Parser<string>,
+  float: ((s: string) => {
+    const n = parseFloat(s);
+    return isNaN(n) ? 0 : n;
+  }) as Parser<number>,
+  int: ((s: string) => {
+    const n = parseInt(s, 10);
+    return isNaN(n) ? 0 : n;
+  }) as Parser<number>,
+  bool: ((s: string) =>
+    s.toLowerCase() === "true" ||
+    s.toLowerCase() === "yes" ||
+    s === "1") as Parser<boolean>,
+};
+
+function normalize<T>(values: any[][], length: number, parse: Parser<T>): T[] {
+  const out: T[] = new Array(length).fill(null).map(() => parse(""));
+  for (let i = 0; i < Math.min(values.length, length); i++) {
+    if (values[i] && values[i][0] != null) {
+      const v = values[i][0];
+      const parsed = parse(String(v));
+      out[i] = parsed;
+    }
+  }
+  return out;
+}
+
+function formatPhoneNumber(raw: string): string {
+  const cleaned = raw.replace(/[\s\-\(\)]/g, "");
+  if (cleaned.length === 10) {
+    return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
+  }
+  return raw;
 }

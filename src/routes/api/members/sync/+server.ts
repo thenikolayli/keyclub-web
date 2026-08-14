@@ -1,11 +1,17 @@
-import { syncMembers } from "$lib/server/syncMembers";
+import { syncMembers } from "./syncMembers.server";
+import { syncMemberTokens } from "./syncMemberTokens.server";
+
 import type { RequestHandler } from "./$types";
 import { toResponse } from "$lib/types/responses";
 
 export const GET: RequestHandler = async () => {
-  const result = await syncMembers();
-  if (!result.ok) {
-    return toResponse(result, 500);
+  const memberResult = await syncMembers();
+  if (!memberResult.ok) {
+    return toResponse(memberResult, 500);
   }
-  return toResponse({ ok: true, data: { synced: result.data } }, 200);
+  const tokenResult = await syncMemberTokens();
+  if (!tokenResult.ok) {
+    return toResponse(tokenResult, 500);
+  }
+  return toResponse({ ok: true, data: { synced: memberResult.data } }, 200);
 };

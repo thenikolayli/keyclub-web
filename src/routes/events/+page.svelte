@@ -15,16 +15,23 @@
   import { RangeCalendar } from "$lib/components/ui/range-calendar/index";
   import { Button } from "$lib/components/ui/button/index";
   import EventCard from "$lib/components/EventCard.svelte";
-  import { searchEvents } from "$lib/client/searchEvents";
-  import type { Event, EventSearchRequest } from "$lib/types/events";
+  import { onMount } from "svelte";
+  import { searchEvents } from "./events.remote";
+  import { PUBLIC_CALENDAR_SRC } from "$env/static/public";
+  import type { Result } from "$lib/types/responses";
+  import type { CalendarEvent } from "$lib/types/events";
 
-  const calendarSrc =
-    "https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FLos_Angeles&showPrint=0&showTz=0&showCalendars=0&src=ZjIzOGY1NzgyYWIwNjg5M2FhMGQ0MzM3YWNhZjBkZjg5ZDU3YTI4ZDI0NTk1OGMyZGIyNzc0Mjc5OWNlMzgzNkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%23F4511E";
+  const start = today(getLocalTimeZone());
+  const end = start.add({ days: 7 });
+  let dates = $state<{start: CalendarDate; end: CalendarDate}>({ start, end });
   let length = $state<[number, number]>([0, 24]);
   let spots = $state<[number, number]>([0, 40]);
+  let times = $state<[number, number]>([0, 24]);
+
+  let result = $state<Result<CalendarEvent[]> | null>(null);
+  let loading = $state(false);
 
   // Time filter with 12-hour format conversions
-  let times = $state<[number, number]>([0, 24]);
   let timeLabel = $derived(() => {
     let startLabel;
     if (times[0] === 0) {
@@ -51,12 +58,6 @@
 
   // Date filter with short date format
   // By default, the calendar shows events for the next week
-  const start = today(getLocalTimeZone());
-  const end = start.add({ days: 7 });
-  let dates = $state<{ start: CalendarDate; end: CalendarDate }>({
-    start,
-    end,
-  });
   const dateFormatter = new DateFormatter("en-US", {
     dateStyle: "short",
   });
@@ -66,36 +67,32 @@
       : "Pick a date range",
   );
 
-  // Filter defaults
-  // Keep these pretty broad, so at least some events are shown
-  function clearFilters() {
+  // the defaults, keep these pretty broad, so at least some events are shown
+  function resetFilters() {
     times = [0, 24];
     length = [0, 24];
     dates = { start, end };
     spots = [0, 40];
   }
 
-  let status = $state("idle"); // idle | loading | error | result
-  let result = $state<Event[] | null>(null);
-  let errorMsg = $state("");
+  // helper function to create a uniform time format with a leading zero for single-digit hours
+  const toTimeStr = (hours: number) =>
+    `${hours.toString().padStart(2, "0")}:00:00`;
 
-  async function handleclick() {
-    status = "loading";
-    errorMsg = "";
-    try {
-      result = (await searchEvents({
-        times,
-        length,
-        dates: [dates.start.toString(), dates.end.toString()],
-        spots,
-      } as EventSearchRequest)) as Event[];
-      status = "result";
-    } catch (error) {
-      errorMsg =
-        error instanceof Error ? error.message : "An unknown error occurred.";
-      status = "error";
-    }
+  async function handleClick() {
+    loading = true;
+    result = await searchEvents({
+      times: [toTimeStr(times[0]), toTimeStr(times[1])],
+      lengths: [length[0], length[1]],
+      dates: [dates.start.toString(), dates.end.toString()],
+      spots: [spots[0], spots[1]],
+    });
+    loading = false;
   }
+
+  onMount(async () => {
+    document.title = "Events";
+  })
 </script>
 
 <Header />
@@ -117,7 +114,7 @@
   >
     <iframe
       title="JHS Key Club events calendar"
-      src={calendarSrc}
+      src={PUBLIC_CALENDAR_SRC}
       class="h-[70vh] min-h-130 w-full"
       loading="lazy"
     ></iframe>
@@ -200,10 +197,11 @@
         </Accordion.Content>
       </Accordion.Item>
     </Accordion.Root>
+
     <div class="flex justify-between w-full mt-2">
-      <Button variant="outline" onclick={clearFilters}>Clear filters</Button>
-      <Button variant="secondary" onclick={handleclick}>
-        {#if status === "loading"}
+      <Button variant="outline" onclick={resetFilters}>Reset filters</Button>
+      <Button variant="secondary" onclick={handleClick}>
+        {#if loading}
           <Icon icon="svg-spinners:ring-resize" data-icon="inline-start" />
           Checking...
         {:else}
@@ -215,18 +213,18 @@
 
   <!-- States -->
   <div class="mt-8 w-full flex flex-col gap-4" aria-live="polite">
-    {#if status === "error"}
+    {#if result && !result.ok}
       <Alert.Root variant="destructive">
         <Icon icon="solar:danger-triangle-bold" class="size-7" />
-        <Alert.Title>{errorMsg}</Alert.Title>
+        <Alert.Title>{result.error.message}</Alert.Title>
       </Alert.Root>
-    {:else if status === "result" && result && result.length > 0}
+    {:else if result && result.ok && result.data.length > 0}
       <div class="w-full flex flex-wrap gap-4 justify-center">
-        {#each result as event, i (i)}
+        {#each result.data as event, i (i)}
           <EventCard {event} size="lg" />
         {/each}
       </div>
-    {:else if status === "result" && result && result.length === 0}
+    {:else if result && result.ok && result.data.length === 0}
       <Alert.Root>
         <Icon icon="solar:danger-triangle-bold" class="size-7" />
         <Alert.Title>

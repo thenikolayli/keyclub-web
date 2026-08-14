@@ -46,5 +46,5 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
   const { data: claimsData, error } = await supabase.auth.getClaims();
   const claims = error ? null : claimsData?.claims;
 
-  return { supabase, claims, profile: data.profile, cookies: data.cookies };
+  return { supabase, claims, profile: data.profile };
 };

@@ -51,6 +51,7 @@
 		"postgres": "^3.4.9",
 		"supabase": "^2.111.0",
 		"tailwindcss": "^4.1.11",
-		"textfit": "^2.4.0"
+		"textfit": "^2.4.0",
+		"valibot": "^1.4.2"
 	}
 }

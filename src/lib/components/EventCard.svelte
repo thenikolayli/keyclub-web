@@ -4,9 +4,9 @@
   import { Badge } from "$lib/components/ui/badge/index";
   import { toast } from "svelte-sonner";
   import { cn } from "$lib/utils";
-  import type { Event } from "$lib/types/events";
+  import type { CalendarEvent } from "$lib/types/events";
 
-  let { event, size = "sm" }: { event: Event; size?: "sm" | "lg" } = $props();
+  let { event, size = "sm" }: { event: CalendarEvent; size?: "sm" | "lg" } = $props();
 
   const sizeClasses = {
     sm: "w-sm",
@@ -40,6 +40,19 @@
     return { h, m: mStr || 0 };
   }
 
+  const dateFmt = new Intl.DateTimeFormat("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  function formatDate(d: string | null) {
+    if (!d) return "\u2014";
+    const date = new Date(d);
+    if (Number.isNaN(date.getTime())) return d;
+    return dateFmt.format(date);
+  }
+
   function formatTime(t: string | null) {
     if (!t) return "\u2014";
     const { h, m } = parseTime(t);
@@ -59,19 +72,7 @@
     return diff > 0 ? (diff / 60).toFixed(1) : null;
   });
 
-  const dateFmt = new Intl.DateTimeFormat("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-  });
-
-  function formatDate(d: string | null) {
-    if (!d) return "\u2014";
-    const datePart = d.split("T")[0];
-    const [y, mo, day] = datePart.split("-").map(Number);
-    if (!y || !mo || !day) return d;
-    return dateFmt.format(new Date(y, mo - 1, day));
-  }
+  const eventAddress = $derived(event.address);
 
   async function copyAddress(address: string) {
     try {
@@ -87,8 +88,7 @@
   class="overflow-hidden flex flex-col rounded-2xl bg-foreground text-background shadow-lg {sizeClasses[
     size
   ]}"
->
-  <div class="bg-secondary px-5 py-3">
+>  <div class="bg-secondary px-5 py-3">
     <h2 class="font-bold-gothic text-2xl text-primary">{event.name}</h2>
   </div>
 
@@ -106,7 +106,7 @@
     <div class="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
       <span class="flex items-center gap-1.5">
         <Icon icon="solar:calendar-linear" class="size-4 text-primary" />
-        {formatDate(event.date!)}
+        {formatDate(event.date)}
       </span>
       <span class="flex items-center gap-1.5">
         <Icon icon="solar:clock-circle-linear" class="size-4 text-primary" />
@@ -127,16 +127,16 @@
     </div>
 
     <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
-      {#if event.address}
+      {#if eventAddress}
         <Button
           variant="secondary"
           size="sm"
           class="max-w-full"
-          onclick={() => copyAddress(event.address!)}
+          onclick={() => copyAddress(eventAddress!)}
           title="Copy address to clipboard"
         >
           <Icon icon="solar:map-point-linear" data-icon="inline-start" />
-          <span class="truncate">{event.address}</span>
+          <span class="truncate">{eventAddress}</span>
           <Icon icon="solar:copy-linear" data-icon="inline-end" />
         </Button>
       {/if}

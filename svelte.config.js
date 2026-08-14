@@ -9,6 +9,14 @@ const config = {
       strict: true,
       fallback: "index.html",
     }),
+    experimental: {
+      remoteFunctions: true,
+    },
+  },
+  compilerOptions: {
+    experimental: {
+      async: true,
+    },
   },
 };
 

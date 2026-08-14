@@ -1,4 +1,4 @@
-import { syncEventsFromCalendar } from "$lib/server/syncEvents";
+import { syncEventsFromCalendar } from "./syncEvents.server";
 import type { RequestHandler } from "./$types";
 import { toResponse } from "$lib/types/responses";
 
