@@ -5,7 +5,7 @@ import type { Database } from "$lib/db/schema";
 declare global {
   namespace App {
     interface Locals {
-      profile: Profile;
+      profile?: Profile;
       supabase: SupabaseClient<Database>;
     }
   }

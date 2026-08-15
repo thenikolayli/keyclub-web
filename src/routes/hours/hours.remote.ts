@@ -5,19 +5,12 @@ import type { Member, MemberToken } from "$lib/types/members";
 import tokenizeName from "$lib/tokenizeName";
 import type { Result } from "$lib/types/responses";
 
-async function intersectTokens(tokens: string[]): Promise<Result<MemberToken>> {
-  const {data, error} = await supabase.rpc("match_all_tokens", {tokens})
-  if (error || data.length === 0) {
-    return { ok: false, error: "No member found." };
-  }
-  return { ok: true, data: data[0] };
-}
 
 export const getHours = form(
   v.object({
     name: v.pipe(v.string(), v.trim(), v.nonEmpty()),
   }),
-  async ({ name }): Promise<Result<Member>> => {
+  async ({ name }): Promise<Result<{name: string, class: string, grad_year: number, all_hours: number, term_hours: number}>> => {
     const tokens = tokenizeName(name);
     const result = await intersectTokens(tokens);
     if (!result.ok) {
@@ -35,3 +28,11 @@ export const getHours = form(
     return { ok: true, data: data };
   },
 );
+
+async function intersectTokens(tokens: string[]): Promise<Result<MemberToken>> {
+  const {data, error} = await supabase.rpc("match_all_tokens", {tokens})
+  if (error || data.length === 0) {
+    return { ok: false, error: "No member found." };
+  }
+  return { ok: true, data: data[0] };
+}

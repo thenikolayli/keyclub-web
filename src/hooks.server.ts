@@ -15,12 +15,6 @@ export const handle: Handle = async ({ event, resolve }) => {
           return event.cookies.getAll();
         },
         setAll(cookiesToSet, headers) {
-          /**
-           * Note: You have to add the `path` variable to the
-           * set and remove method due to sveltekit's cookie API
-           * requiring this to be set, setting the path to `/`
-           * will replicate previous/standard behavior (https://kit.svelte.dev/docs/types#public-types-cookies)
-           */
           cookiesToSet.forEach(({ name, value, options }) =>
             event.cookies.set(name, value, { ...options, path: "/" }),
           );
@@ -31,20 +25,6 @@ export const handle: Handle = async ({ event, resolve }) => {
       },
     },
   );
-
-  // loads the profile of the current user into event locals per-request
-  const user = await event.locals.supabase.auth.getUser();
-  if (user.data.user) {
-    const profile = await event.locals.supabase
-      .from("profiles")
-      .select("*")
-      .eq("user_id", user.data.user.id)
-      .single();
-
-    if (profile.data) {
-      event.locals.profile = profile.data;
-    }
-  }
 
   return resolve(event, {
     filterSerializedResponseHeaders(name) {

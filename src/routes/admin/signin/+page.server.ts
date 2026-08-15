@@ -2,7 +2,7 @@ import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals }) => {
-  if (locals.profile && ["leader", "officer"].includes(locals.profile!.role)) {
-    throw redirect(308, "/admin");
+  if (locals.profile) {
+    throw redirect(307, "/admin");
   }
 };
