@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { goto, invalidate } from "$app/navigation";
   import * as Card from "$lib/components/ui/card/index";
   import { Input } from "$lib/components/ui/input/index";
   import { Button } from "$lib/components/ui/button/index";
@@ -9,16 +8,6 @@
 
   onMount(() => {
     document.title = "Admin Sign In";
-  });
-
-  let previousResult = $state.raw(signIn.result);
-
-  $effect(() => {
-    const current = signIn.result;
-    if (current && current.ok && current !== previousResult) {
-      previousResult = current;
-      void invalidate("supabase:auth").then(() => goto("/admin"));
-    }
   });
 </script>
 

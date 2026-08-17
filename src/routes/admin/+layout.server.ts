@@ -1,32 +1,23 @@
-import { redirect } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types";
-import { supabase as supabaseAdmin } from "$lib/db/admin";
+import { getToolsForRole } from "$lib/tools";
+import { redirect } from "@sveltejs/kit";
+import { getProfile } from "$lib/getProfile";
 
-export const prerender = false;
-
-export const load: LayoutServerLoad = async ({ locals, url }) => {
-  const {
-    data: { user },
-    error: userError,
-  } = await locals.supabase.auth.getUser();
-
-  if (!user) {
-    // Only enforce auth on protected admin routes, not on the sign-in page itself.
-    if (url.pathname !== "/admin/signin") {
-      throw redirect(307, "/admin/signin");
-    }
-
-    return { profile: null };
+export const load: LayoutServerLoad = async ({ cookies, locals, url }) => {
+  let result = await getProfile(locals.supabase);
+  if (!result.ok) { // error getting profile OR user is not authenticated
+    throw redirect(307, "/signin");
   }
 
-  // Uses admin client to bypass RLS on the `profiles` table.
-  // It's more secure that way
-  const { data: profile, error: profileError } = await supabaseAdmin
-    .from("profiles")
-    .select("*")
-    .eq("user_id", user.id)
-    .maybeSingle();
+  const tools = getToolsForRole(result.data.role);
+  for (const tool of tools) {
+    if (tool.href == url.pathname && !tool.roles.includes(result.data.role)) {
+      throw redirect(307, "/admin");
+    }
+  }
 
-  locals.profile = profile ?? undefined;
-  return { profile: profile ?? null };
+  return {
+    cookies: cookies.getAll(),
+    profile: result.data,
+  };
 };
