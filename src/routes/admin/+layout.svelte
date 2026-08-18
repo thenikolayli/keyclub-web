@@ -1,14 +1,10 @@
 <script lang="ts">
   import * as Sidebar from "$lib/components/ui/sidebar/index.js";
-  import { Separator } from "$lib/components/ui/separator/index.js";
   import LogOutIcon from "@lucide/svelte/icons/log-out";
-  import SparklesIcon from "@lucide/svelte/icons/sparkles";
   import { page } from "$app/state";
   import { getToolsForRole } from "$lib/tools.js";
 
   let { data, children } = $props();
-
-  // The sign-in page renders standalone without the sidebar shell  const currentPath = $derived(page.url.pathname);
   const currentPath = $derived(page.url.pathname);
   const isSignIn = $derived(currentPath === "/admin/signin");
   const tools = $derived(getToolsForRole(data.profile?.role));
@@ -30,9 +26,7 @@
                     <Sidebar.MenuButton size="lg">
                         {#snippet child(p)}
                         <a {...p.props} href="/admin">
-                            <div class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                                <SparklesIcon class="size-5" />
-                            </div>
+                            <img src="/bee.webp" alt="Bee" class="size-8 object-contain">
                             <div class="grid flex-1 text-left leading-tight">
                                 <span class="truncate font-semibold">Beekeper</span>
                                 <span class="truncate text-xs text-muted-foreground">Admin Panel</span>
@@ -44,21 +38,23 @@
             </Sidebar.Header>
 
             <Sidebar.Content>
-                {#each tools as tool}
-                <Sidebar.MenuItem>
+                <Sidebar.Menu>
+                    {#each tools as tool}
+                    <Sidebar.MenuItem>
                     <Sidebar.MenuButton
                         isActive={currentPath === tool.href}
                         tooltipContent={tool.label}
                     >
-                    {#snippet child(p)}
-                        <a {...p.props} href={tool.href}>
-                            <tool.icon />
-                            <span>{tool.label}</span>
-                        </a>
-                    {/snippet}
-                    </Sidebar.MenuButton>
-                </Sidebar.MenuItem>
-                {/each}
+                        {#snippet child(p)}
+                            <a {...p.props} href={tool.href}>
+                                <tool.icon />
+                                <span>{tool.label}</span>
+                            </a>
+                        {/snippet}
+                        </Sidebar.MenuButton>
+                    </Sidebar.MenuItem>
+                    {/each}
+                </Sidebar.Menu>
             </Sidebar.Content>
 
             <Sidebar.Footer>
@@ -73,26 +69,24 @@
                 </div>
                 </div>
                 <Sidebar.Menu>
-                <Sidebar.MenuItem>
-                    <Sidebar.MenuButton variant="outline" onclick={signOut}>
-                    <LogOutIcon />
-                    <span>Sign out</span>
+                    <Sidebar.MenuButton variant="secondary" onclick={signOut}>
+                        <LogOutIcon />
+                        Sign out
                     </Sidebar.MenuButton>
-                </Sidebar.MenuItem>
                 </Sidebar.Menu>
             </Sidebar.Footer>
             <Sidebar.Rail />
         </Sidebar.Root>
 
         <Sidebar.Inset>
-        <header class="flex h-14 shrink-0 items-center gap-2 border-b px-4">
-            <Sidebar.Trigger class="-ml-1" />
-            <Separator orientation="vertical" class="mr-2 h-4" />
-            <span class="text-sm font-medium">Beekeper</span>
-        </header>
-        <div class="flex flex-1 flex-col gap-4 p-4 md:p-6">
-            {@render children?.()}
-        </div>
+            <!-- <header class="flex h-14 shrink-0 items-center gap-2 border-b px-4">
+                <Sidebar.Trigger class="-ml-1" />
+                <Separator orientation="vertical" class="mr-2 h-4" />
+                <span class="text-sm font-medium">Beekeper</span>
+            </header> -->
+            <div class="flex flex-1 flex-col gap-4 p-4 md:p-6">
+                {@render children?.()}
+            </div>
         </Sidebar.Inset>
     </Sidebar.Provider>
   </section>
