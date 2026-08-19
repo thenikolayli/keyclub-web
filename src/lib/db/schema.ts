@@ -136,6 +136,30 @@ export type Database = {
         }
         Relationships: []
       }
+      pending_invites: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          invited_by: string | null
+          role: Database["public"]["Enums"]["role"] | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          invited_by?: string | null
+          role?: Database["public"]["Enums"]["role"] | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          invited_by?: string | null
+          role?: Database["public"]["Enums"]["role"] | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -145,7 +169,6 @@ export type Database = {
           last_name: string
           role: Database["public"]["Enums"]["role"]
           updated_at: string
-          user_id: string
         }
         Insert: {
           created_at?: string
@@ -155,7 +178,6 @@ export type Database = {
           last_name: string
           role: Database["public"]["Enums"]["role"]
           updated_at?: string
-          user_id: string
         }
         Update: {
           created_at?: string
@@ -165,7 +187,6 @@ export type Database = {
           last_name?: string
           role?: Database["public"]["Enums"]["role"]
           updated_at?: string
-          user_id?: string
         }
         Relationships: []
       }

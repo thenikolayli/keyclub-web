@@ -19,7 +19,8 @@ export const handle: Handle = async ({ event, resolve }) => {
             event.cookies.set(name, value, { ...options, path: "/" }),
           );
           if (Object.keys(headers).length > 0) {
-            event.setHeaders(headers);
+            const { "cache-control": _cacheControl, ...rest } = headers;
+            event.setHeaders(rest);
           }
         },
       },

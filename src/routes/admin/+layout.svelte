@@ -11,7 +11,7 @@
 
   async function signOut() {
     await data.supabase.auth.signOut();
-    window.location.href = "/admin/signin";
+    window.location.href = "/signin";
   }
 </script>
 

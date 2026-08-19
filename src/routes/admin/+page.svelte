@@ -1,10 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import * as Card from "$lib/components/ui/card/index.js";
-  import { Badge } from "$lib/components/ui/badge/index.js";
   import ShieldAlertIcon from "@lucide/svelte/icons/shield-alert";
   import { getToolsForRole } from "$lib/tools";
-    import { Separator } from "$lib/components/ui/separator";
+  import { Separator } from "$lib/components/ui/separator";
 
   let { data } = $props();
   const tools = $derived(getToolsForRole(data.profile?.role));
@@ -45,7 +44,7 @@
         <br>
         Please let me know if you have any questions.
         <br>
-        <span class="text-muted-foreground">(Best contact via Instagram @imnikolayli)</span>
+        <span class="text-muted-foreground">(Contact via Instagram @imnikolayli)</span>
     </p>
   </section>
 {/if}

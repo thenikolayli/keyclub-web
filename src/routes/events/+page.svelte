@@ -216,7 +216,7 @@
     {#if result && !result.ok}
       <Alert.Root variant="destructive">
         <Icon icon="solar:danger-triangle-bold" class="size-7" />
-        <Alert.Title>{result.error.message}</Alert.Title>
+        <Alert.Title>{result.error}</Alert.Title>
       </Alert.Root>
     {:else if result && result.ok && result.data.length > 0}
       <div class="w-full flex flex-wrap gap-4 justify-center">

@@ -1,7 +1,7 @@
 import { form } from "$app/server";
 import * as v from "valibot";
 import { supabase } from "$lib/db/admin";
-import type { Member, MemberToken } from "$lib/types/members";
+import type { MemberToken } from "$lib/types/members";
 import tokenizeName from "$lib/tokenizeName";
 import type { Result } from "$lib/types/responses";
 

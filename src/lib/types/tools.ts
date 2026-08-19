@@ -8,5 +8,4 @@ export type Tool = {
   href: string;
   icon: Component;
   roles: Role[];
-  group: string;
 };

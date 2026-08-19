@@ -7,6 +7,11 @@
     import ImageHeader from "$lib/components/ImageHeader.svelte";
     import * as Alert from "$lib/components/ui/alert/index";
     import { getHours } from "./hours.remote";
+    import { onMount } from "svelte";
+
+    onMount(() => {
+      document.title = "Hours"
+    })
 </script>
 
 <Header/>
@@ -35,7 +40,7 @@
         <div class="mt-8" aria-live="polite">
             {#if getHours.result && !getHours.result.ok}
                 <Alert.Root variant="destructive">
-                    <Icon icon="solar:danger-triangle-bold" class="size-7"/>
+                    <Icon icon="solar:danger-triangle-bold" class="size-7" />
                     <Alert.Title>{getHours.result.error}</Alert.Title>
                 </Alert.Root>
             {:else if getHours.result && getHours.result.ok}
