@@ -16,26 +16,32 @@ export const invite = form(
       .eq("email", email)
       .maybeSingle();
     if (profileError) {
-      return {ok: false, error: profileError.message}
+      return { ok: false, error: profileError.message };
     }
     if (profileData) {
-      return {ok: false, error: "User already exists"}
+      return { ok: false, error: "User already exists" };
     }
 
-    const event = getRequestEvent()
-    const {data: userData, error: userError} = await event.locals.supabase.auth.getUser()
+    const event = getRequestEvent();
+    const { data: userData, error: userError } =
+      await event.locals.supabase.auth.getUser();
     if (userError) {
-      return {ok: false, error: userError.message}
+      return { ok: false, error: userError.message };
     }
 
-    await supabaseAdmin.auth.admin.inviteUserByEmail(email)
-    const {data: insertData, error: insertError} = await supabaseAdmin
+    const { error: inviteError } =
+      await supabaseAdmin.auth.admin.inviteUserByEmail(email);
+    if (inviteError) {
+      return { ok: false, error: inviteError.message };
+    }
+
+    const { data: insertData, error: insertError } = await supabaseAdmin
       .from("pending_invites")
       .upsert({ email, role, invited_by: userData.user.id });
     if (insertError) {
-      return {ok: false, error: insertError.message}
+      return { ok: false, error: insertError.message };
     }
 
-    return {ok: true, data: null}
-  }
-)
+    return { ok: true, data: null };
+  },
+);

@@ -1,5 +1,3 @@
-import LayoutDashboardIcon from "@lucide/svelte/icons/layout-dashboard";
-import UserPlusIcon from "@lucide/svelte/icons/user-plus";
 import type { Tool } from "$lib/types/tools";
 import type { Role } from "$lib/types/profiles";
 
@@ -7,19 +5,24 @@ export const Tools: Tool[] = [
   {
     id: "dashboard",
     label: "Dashboard",
-    description: "Overview of the club",
     href: "/admin",
-    icon: LayoutDashboardIcon,
+    icon: "lucide:layout-dashboard",
     roles: ["leader", "officer"],
   },
   {
     id: "invites",
     label: "Invites",
-    description: "Send invites",
     href: "/admin/invites",
-    icon: UserPlusIcon,
+    icon: "lucide:user-plus",
     roles: ["officer"],
   },
+  {
+    id: "calendar",
+    label: "Calendar",
+    href: "/admin/calendar",
+    icon: "lucide:calendar",
+    roles: ["leader", "officer"]
+  }
 ];
 
 export function getToolsForRole(role: Role | undefined): Tool[] {

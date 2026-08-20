@@ -3,6 +3,7 @@
   import LogOutIcon from "@lucide/svelte/icons/log-out";
   import { page } from "$app/state";
   import { getToolsForRole } from "$lib/tools.js";
+  import Icon from "@iconify/svelte";
 
   let { data, children } = $props();
   const currentPath = $derived(page.url.pathname);
@@ -47,7 +48,7 @@
                     >
                         {#snippet child(p)}
                             <a {...p.props} href={tool.href}>
-                                <tool.icon />
+                                <Icon icon={tool.icon} />
                                 <span>{tool.label}</span>
                             </a>
                         {/snippet}

@@ -14,14 +14,10 @@ export const handle: Handle = async ({ event, resolve }) => {
         getAll() {
           return event.cookies.getAll();
         },
-        setAll(cookiesToSet, headers) {
+        setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) =>
             event.cookies.set(name, value, { ...options, path: "/" }),
           );
-          if (Object.keys(headers).length > 0) {
-            const { "cache-control": _cacheControl, ...rest } = headers;
-            event.setHeaders(rest);
-          }
         },
       },
     },

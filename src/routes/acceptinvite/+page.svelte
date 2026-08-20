@@ -58,7 +58,7 @@
                         <Icon icon="solar:check-bold" class="size-7" />
                         <Alert.Title>Account created successfully!</Alert.Title>
                         <Alert.Description>
-                            Click <a href="/admin">here</a> to be redirected to the Beekeper admin panel.
+                            Click <a class="underline text-secondary" href="/admin">here</a> to be redirected to the Beekeper admin panel.
                         </Alert.Description>
                     </Alert.Root>
                 {:else if accept.result && !accept.result.ok}
