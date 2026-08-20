@@ -8,6 +8,7 @@ const config = {
     adapter: adapter({
       strict: true,
       fallback: "index.html",
+      runtime: "nodejs24.x"
     }),
     experimental: {
       remoteFunctions: true,

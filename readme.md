@@ -41,3 +41,12 @@ I'm using Go-style error handling for this with the `Result` type.
 Essentially, all functions must return a `Result`, for simpler and more detailed error handling.
 But, the API endpoints must return `toResponse(result)` instead.
 The `toResponse()` function turns a `Result` object into a `Response` object.
+
+## Rotating Google API Credentials
+
+The Google Service Account credentials are stored in the `google_key.json` file, once you get a new json credentials file, rename it to `google_key.json` and replace the old one.
+Also, run 
+```sh
+cat google_key.json | base64
+```
+and copy and paste that into the `GOOGLE_KEY_BASE64` environment variable in the .env file.
