@@ -1,9 +1,7 @@
 import { supabase } from "$lib/db/admin";
 import { getSheetsService } from "$lib/google";
 import { SPREADSHEET_ID } from "$env/static/private";
-import { randomUUID } from "node:crypto";
 import type { Result } from "$lib/types/responses";
-import type { Member } from "$lib/types/members";
 
 const SHEET_NAME = "2025-2026 Members";
 

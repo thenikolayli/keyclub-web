@@ -1,7 +1,8 @@
 import { google } from "googleapis";
+import { GOOGLE_KEY_BASE64 } from "$env/static/private";
 
 const auth = new google.auth.GoogleAuth({
-  keyFile: "./google_key.json",
+  credentials: JSON.parse(Buffer.from(GOOGLE_KEY_BASE64, "base64").toString("utf-8")),
   scopes: [
     "https://www.googleapis.com/auth/calendar",
     "https://www.googleapis.com/auth/documents",
