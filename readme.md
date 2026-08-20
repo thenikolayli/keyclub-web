@@ -1,25 +1,52 @@
-
 # Key Club Website
 
 This is the website for the Henry M. Jackson High School Key Club. Key Club is an international student-led volunteering organization, and this is the website for the chapter at the Henry M. Jackson High School. Its purpose is to highlight our club and be helpful to our members and officers via various tools featured on the website.
-## My Role
 
-I served as the Webmaster for my high school’s Key Club and led this project end-to-end from March 2025 to March 2026 (one officer term). I was responsible for system design, implementation, deployment, and maintenance. During the design phase, I collaborated with the club’s Editors to align the site’s visual design with the club’s identity, while independently making architectural and infrastructure decisions.
-## Technical Stack
+## The Stack
 
-- Frontend - SvelteKit for the frontend and used the Node adapter, taking the Server Side Rendering approach instead of the Single Page App approach to improve SEO.
-- Backend - SQLite for persistence due to its simplicity, low overhead, and suitability for the project’s scale.
-- API - FastAPI for its performance, simplicity, and explicit control over request handling and authentication logic.
-- Hosting - Self-hosted on a Linux home server using Docker Compose, with NGINX as a reverse proxy and Certbot for TLS.
-- Auth - Implemented JWT-based auth with refresh token rotation; later began migrating toward session-based auth before the club transitioned to a third-party management system.
-## What I Learned
+- Sveltekit is used for the frontend and API. I'm using the Vercel adapter as this project is hosted on Vercel. This project also uses the experimental remote functions for safety and simplicity.
+- Supabase is used for the database. There are two instances: one for development and one for production.
+Review the sync and the pushing updates sections below.
+- Supabase Auth is used for authentication. I wanted to go for the simplest solution and the smallest stack, so that's why I'm using Supabase Auth over something like Auth.js or BetterAuth or whatever.
+- Vercel is used for hosting. It's a serverless platform and it's not blocked on school wifi, which is one of the main reasons.
 
-Being my biggest project thus far, I learned a lot of things working on it.
-- Google APIs - I learned to use Python to access the Google Docs, Sheets, and Calendar APIs for reading and writing to and from Google Docs and Sheets (for automatic event attendance and logging), and for fetching upcoming events from the Google Calendar (for automated event reminders on the club Discord).
-- Discord.py - I learned to use the Discord.py library to run the Discord bot for the club Discord. I used it in tandem with the website API to create commands that let users check their volunteer hours, class ranks, and to send automated reminders for upcoming events that need members.
-- JWT - I implemented a simple, but crude version of JWT authentication. I used the simple-jwt Python package to implement it, with refresh token rotation and endpoints for getting user info, refreshing the access token, and logging in and out.
-- Nginx - Since this is the second website I was hosting, I had to rework how I host websites on my home server. I created an overhead proxy that handles TLS and forwards requests to the per-website reverse proxy, that way I can host my portfolio website and this website on one machine.
-- Deployment - I learned to use Docker and Docker compose to effectively containerize this website and host it on my home server.
-## What I'd Improve
+## Sync
 
-If the club were to continue using this site as its primary management tool, I would redesign the authentication system entirely, moving to session-based auth for simplicity and maintainability. From a UX perspective, I would also add clearer loading and error states (e.g., when volunteer hours are being fetched or fail to load) to improve feedback and usability.
+There are two sync endpoints, `/api/members/sync` and `/api/events/sync`.
+They're public and not rate limited right now, but I'll add rate limiting and API-key based authentication in the future.
+They will be called using Vercel or Github actions (since this is stateless).
+
+Supabase should be the source of truth for the database schema. 
+Run the following command to generate the schema types for the codebase:
+```sh
+npx supabase gen types typescript --linked > ./src/lib/db/schema.ts
+```
+
+## Pushing Updates
+
+To push updates to the server, simply commit your changes and push to the `main` branch.
+Vercel will automatically deploy the changes and update the website to the latest commit if it has no build errors.
+Run this function to copy development database changes:
+```sh
+supabase db dump --db-url "postgresql://postgres:[DEV_PASSWORD]@[DEV_HOST]:5432/postgres" --schema public -f schema.sql
+```
+And then this function to push it to the production database:
+```sh
+supabase db push --db-url "postgresql://postgres:[PROD_PASSWORD]@[PROD_HOST]:5432/postgres" -f schema.sql
+```
+
+## Error Handling and Returning Data
+
+I'm using Go-style error handling for this with the `Result` type.
+Essentially, all functions must return a `Result`, for simpler and more detailed error handling.
+But, the API endpoints must return `toResponse(result)` instead.
+The `toResponse()` function turns a `Result` object into a `Response` object.
+
+## Rotating Google API Credentials
+
+The Google Service Account credentials are stored in the `google_key.json` file, once you get a new json credentials file, rename it to `google_key.json` and replace the old one.
+Also, run 
+```sh
+cat google_key.json | base64
+```
+and copy and paste that into the `GOOGLE_KEY_BASE64` environment variable in the .env file.

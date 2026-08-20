@@ -3,3 +3,6 @@ node_modules
 build
 .svelte-kit
 .env
+google_key.json
+keyclub-api
+.vercel

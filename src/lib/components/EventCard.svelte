@@ -4,9 +4,9 @@
   import { Badge } from "$lib/components/ui/badge/index";
   import { toast } from "svelte-sonner";
   import { cn } from "$lib/utils";
-  import type { Event } from "../functions/events";
+  import type { CalendarEvent } from "$lib/types/events";
 
-  let { event, size = "sm" }: { event: Event; size?: "sm" | "lg" } = $props();
+  let { event, size = "sm" }: { event: CalendarEvent; size?: "sm" | "lg" } = $props();
 
   const sizeClasses = {
     sm: "w-sm",
@@ -26,25 +26,53 @@
     hour: "numeric",
     minute: "2-digit",
   });
-  function formatTime(t: string) {
-    const [h, m] = t.split(":").map(Number);
+  function parseTime(t: string) {
+    const pm = /pm/i.test(t);
+    const am = /am/i.test(t);
+    const [hStr, mStr] = t
+      .replace(/(am|pm)/i, "")
+      .trim()
+      .split(":")
+      .map(Number);
+    let h = hStr;
+    if (pm && h !== 12) h += 12;
+    if (am && h === 12) h = 0;
+    return { h, m: mStr || 0 };
+  }
+
+  const dateFmt = new Intl.DateTimeFormat("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  function formatDate(d: string | null) {
+    if (!d) return "\u2014";
+    const date = new Date(d);
+    if (Number.isNaN(date.getTime())) return d;
+    return dateFmt.format(date);
+  }
+
+  function formatTime(t: string | null) {
+    if (!t) return "\u2014";
+    const { h, m } = parseTime(t);
     if (Number.isNaN(h) || Number.isNaN(m)) return t;
     return timeFmt.format(new Date(2000, 0, 1, h, m));
   }
 
-  const dateFmt = new Intl.DateTimeFormat("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric",
+  const openSlots = $derived(
+    (event.n_of_slots ?? 0) - (event.n_of_volunteers ?? 0),
+  );
+
+  const eventLength = $derived(() => {
+    if (!event.start_time || !event.end_time) return null;
+    const s = parseTime(event.start_time);
+    const e = parseTime(event.end_time);
+    const diff = e.h * 60 + e.m - (s.h * 60 + s.m);
+    return diff > 0 ? (diff / 60).toFixed(1) : null;
   });
-  function formatDate(d: string) {
-    // ponytail: assumes ISO YYYY-MM-DD from the server; parsed as local to
-    // avoid the UTC-midnight off-by-one day shift.
-    const [y, mo, day] = d.split("-").map(Number);
-    if (!y || !mo || !day) return d;
-    return dateFmt.format(new Date(y, mo - 1, day));
-  }
+
+  const eventAddress = $derived(event.address);
 
   async function copyAddress(address: string) {
     try {
@@ -60,8 +88,7 @@
   class="overflow-hidden flex flex-col rounded-2xl bg-foreground text-background shadow-lg {sizeClasses[
     size
   ]}"
->
-  <div class="bg-secondary px-5 py-3">
+>  <div class="bg-secondary px-5 py-3">
     <h2 class="font-bold-gothic text-2xl text-primary">{event.name}</h2>
   </div>
 
@@ -83,37 +110,41 @@
       </span>
       <span class="flex items-center gap-1.5">
         <Icon icon="solar:clock-circle-linear" class="size-4 text-primary" />
-        {formatTime(event.startTime)} &ndash; {formatTime(event.endTime)}
+        {formatTime(event.start_time)} &ndash; {formatTime(event.end_time)}
       </span>
       <span class="flex items-center gap-1.5">
         <Icon icon="solar:hourglass-linear" class="size-4 text-primary" />
-        {event.length} hours
+        {eventLength() ?? "\u2014"} hours
       </span>
-      <Badge class="py-1 px-2 {cn(spotsClass(event.nofOpenSlots))}">
-        {#if event.nofOpenSlots <= 0}
+      <Badge class="py-1 px-2 {cn(spotsClass(openSlots))}">
+        {#if openSlots <= 0}
           Full
         {:else}
-          {event.nofOpenSlots}
-          {event.nofOpenSlots === 1 ? "spot" : "spots"} left
+          {openSlots}
+          {openSlots === 1 ? "spot" : "spots"} left
         {/if}
       </Badge>
     </div>
 
     <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
-      {#if event.address}
+      {#if eventAddress}
         <Button
           variant="secondary"
           size="sm"
           class="max-w-full"
-          onclick={() => copyAddress(event.address)}
+          onclick={() => copyAddress(eventAddress!)}
           title="Copy address to clipboard"
         >
           <Icon icon="solar:map-point-linear" data-icon="inline-start" />
-          <span class="truncate">{event.address}</span>
+          <span class="truncate">{eventAddress}</span>
           <Icon icon="solar:copy-linear" data-icon="inline-end" />
         </Button>
       {/if}
-      <Button href={event.signUpUrl} target="_blank" rel="noopener noreferrer">
+      <Button
+        href={event.attendance_url}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         Sign up
         <Icon icon="solar:arrow-right-linear" data-icon="inline-end" />
       </Button>
