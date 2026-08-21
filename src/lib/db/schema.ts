@@ -142,21 +142,21 @@ export type Database = {
           email: string
           id: string
           invited_by: string | null
-          role: Database["public"]["Enums"]["role"] | null
+          role: Database["public"]["Enums"]["role"]
         }
         Insert: {
           created_at?: string
           email: string
           id?: string
           invited_by?: string | null
-          role?: Database["public"]["Enums"]["role"] | null
+          role: Database["public"]["Enums"]["role"]
         }
         Update: {
           created_at?: string
           email?: string
           id?: string
           invited_by?: string | null
-          role?: Database["public"]["Enums"]["role"] | null
+          role?: Database["public"]["Enums"]["role"]
         }
         Relationships: []
       }
@@ -187,6 +187,51 @@ export type Database = {
           last_name?: string
           role?: Database["public"]["Enums"]["role"]
           updated_at?: string
+        }
+        Relationships: []
+      }
+      spreadsheet_events: {
+        Row: {
+          address: string | null
+          created_at: string
+          date: string | null
+          end_time: string | null
+          id: string
+          leaders: string[] | null
+          made_by: string | null
+          n_slots: number | null
+          n_volunteers: number | null
+          name: string | null
+          start_time: string | null
+          total_hours: number | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          date?: string | null
+          end_time?: string | null
+          id?: string
+          leaders?: string[] | null
+          made_by?: string | null
+          n_slots?: number | null
+          n_volunteers?: number | null
+          name?: string | null
+          start_time?: string | null
+          total_hours?: number | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          date?: string | null
+          end_time?: string | null
+          id?: string
+          leaders?: string[] | null
+          made_by?: string | null
+          n_slots?: number | null
+          n_volunteers?: number | null
+          name?: string | null
+          start_time?: string | null
+          total_hours?: number | null
         }
         Relationships: []
       }

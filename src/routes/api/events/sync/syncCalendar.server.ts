@@ -6,7 +6,7 @@ import type { Result } from "$lib/types/responses";
 import { parseAttendanceDoc, docsUrlToId } from "$lib/events";
 
 // syncs events from the key club google calendar (Key Club Member Calendar) and returns number of events synced/updated
-export async function syncEventsFromCalendar(): Promise<Result<number>> {
+export async function syncCalendar(): Promise<Result<number>> {
   const calendar = getCalendarService();
   const docs = getDocsService();
 

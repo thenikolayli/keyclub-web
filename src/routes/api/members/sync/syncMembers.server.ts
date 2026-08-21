@@ -3,10 +3,10 @@ import { getSheetsService } from "$lib/google";
 import { SPREADSHEET_ID } from "$env/static/private";
 import type { Result } from "$lib/types/responses";
 
-const SHEET_NAME = "2025-2026 Members";
+const SHEET_NAME = "2026-2027 Members";
 
 const RANGES = [
-  `${SHEET_NAME}!A2:A`, // names
+  `${SHEET_NAME}!A2:A`, // name
   `${SHEET_NAME}!B2:B`, // all_hours
   `${SHEET_NAME}!C2:C`, // term_hours
   `${SHEET_NAME}!D2:D`, // grad_year
@@ -31,12 +31,12 @@ export async function syncMembers(): Promise<Result<number>> {
 
   const valueRanges = response.data.valueRanges;
   if (!valueRanges || valueRanges.length === 0) {
-    return { ok: false, error: new Error("No data returned from spreadsheet") };
+    return { ok: false, error: "No data returned from spreadsheet" };
   }
 
   const length = valueRanges[0].values?.length ?? 0;
   if (length === 0) {
-    return { ok: false, error: new Error("No members found.") };
+    return { ok: false, error: "No members found."};
   }
 
   const names = normalize(valueRanges[0].values ?? [], length, Parsers.string);
@@ -86,14 +86,11 @@ export async function syncMembers(): Promise<Result<number>> {
   let synced = 0;
 
   for (let i = 0; i < length; i++) {
-    const name = names[i];
-    if (!name) continue;
-
     const phone = formatPhoneNumber(phoneNumbers[i]);
     const { error: upsertError } = await supabase
       .from("members")
       .upsert({
-        name,
+        name: names[i],
         all_hours: allHours[i],
         term_hours: termHours[i],
         grad_year: gradYears[i],
@@ -106,7 +103,7 @@ export async function syncMembers(): Promise<Result<number>> {
         paid_dues: paidDues[i],
       }, { onConflict: "name", ignoreDuplicates: false });
     if (upsertError) {
-      console.error("syncMembers: upsert failed for", name, upsertError);
+      console.error("syncMembers: upsert failed for", names[i], upsertError);
       continue;
     }
 

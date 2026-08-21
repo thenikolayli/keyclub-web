@@ -1,6 +1,7 @@
 import type { CalendarEvent } from "./types/events";
 import { getDocsService } from "./google";
 import type { Result } from "./types/responses";
+import { parseDateField, parseTimeField } from "./datetime";
 
 // Local type not in $lib/types because it's used locally only
 interface InfoTableResult {
@@ -127,6 +128,8 @@ function parseInfoTable(table: any): InfoTableResult {
 
   if (dateStr) {
     date = parseDateField(dateStr);
+  } else {
+    date = parseDateField(name.split(")")[0].substring(1));
   }
 
   if (timeStr) {
@@ -138,36 +141,6 @@ function parseInfoTable(table: any): InfoTableResult {
   }
 
   return { name, date, startTime, endTime, address };
-}
-
-// Handles date strings like "2026-08-22", "August 22, 2026", or "monday, august 22nd, 2026".
-function parseDateField(dateStr: string): string | null {
-  const normalized = dateStr
-    .replace(
-      /^\s*(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday),?\s*/i,
-      "",
-    )
-    .replace(/\b(\d+)(?:st|nd|rd|th)\b/gi, "$1")
-    .trim();
-
-  const parsed = new Date(normalized);
-  if (isNaN(parsed.getTime())) return null;
-  return parsed.toISOString().split("T")[0];
-}
-
-// Converts "10 am", "4 pm", "10:30 am", or "16:00" into 24h "HH:MM:SS".
-function parseTimeField(timeStr: string): string | null {
-  const m = timeStr.trim().match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)?$/i);
-  if (!m) return null;
-
-  let hours = parseInt(m[1], 10);
-  const minutes = m[2] ? parseInt(m[2], 10) : 0;
-  const meridiem = m[3]?.toLowerCase();
-
-  if (meridiem === "pm" && hours < 12) hours += 12;
-  if (meridiem === "am" && hours === 12) hours = 0;
-
-  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:00`;
 }
 
 function getCellText(cell: any): string {
