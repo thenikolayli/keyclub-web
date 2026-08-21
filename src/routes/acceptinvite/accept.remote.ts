@@ -3,6 +3,7 @@ import * as v from "valibot"
 import { getRequestEvent } from "$app/server";
 import { supabase as supabaseAdmin } from "$lib/db/admin";
 import type { Result } from "$lib/types/responses";
+import { isValidPassword } from "$lib/validatePassword";
 
 export const accept = form(
   v.object({
@@ -11,9 +12,13 @@ export const accept = form(
     last_name: v.pipe(v.string(), v.nonEmpty(), v.trim()),
     password: v.string(),
   }),
-  async ({token_hash, first_name, last_name, password}): Promise<Result<null>> => {
-    const event = getRequestEvent();
+  async ({ token_hash, first_name, last_name, password }): Promise<Result<null>> => {
+    const validPassword = isValidPassword(password);
+    if (!validPassword.ok) {
+      return validPassword;
+    }
 
+    const event = getRequestEvent();
     const { data: verifyData, error: verifyError } = await event.locals.supabase.auth.verifyOtp({
       token_hash: token_hash,
       type: "invite",
