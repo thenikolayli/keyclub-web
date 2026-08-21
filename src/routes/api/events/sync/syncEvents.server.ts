@@ -34,7 +34,7 @@ export async function syncEventsFromCalendar(): Promise<Result<number>> {
 
     try {
       const parsed = await parseAttendanceDoc(docId, docs);
-      if (parsed) parsedEvents.push(parsed);
+      if (parsed.ok) parsedEvents.push(parsed.data);
     } catch (err) {
       console.warn("sync: failed to parse doc for", calEvent.summary, err);
     }
