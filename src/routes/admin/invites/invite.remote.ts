@@ -6,8 +6,8 @@ import { getRequestEvent } from "$app/server";
 
 export const invite = form(
   v.object({
-    email: v.pipe(v.string(), v.trim(), v.email()),
-    role: v.pipe(v.string(), v.trim(), v.nonEmpty()),
+    email: v.pipe(v.string(), v.trim(), v.email(), v.toLowerCase()),
+    role: v.pipe(v.string(), v.trim(), v.nonEmpty(), v.toLowerCase()),
   }),
   async ({ email, role }): Promise<Result<null>> => {
     const { data: profileData, error: profileError } = await supabaseAdmin
