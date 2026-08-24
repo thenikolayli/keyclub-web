@@ -1,6 +1,6 @@
 import { syncCalendar } from "./syncCalendar.server";
 import { syncSpreadsheet } from "./syncSpreadsheet.server";
-import { toResponse } from "$lib/types/responses";
+import { toResponse } from "$lib/responses";
 import { SYNC_SECRET } from "$env/static/private";
 
 export async function GET({ url }) {

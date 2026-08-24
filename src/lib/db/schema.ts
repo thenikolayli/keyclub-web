@@ -23,8 +23,8 @@ export type Database = {
           description: string | null
           end_time: string | null
           id: string
-          n_of_slots: number | null
-          n_of_volunteers: number | null
+          n_slots: number | null
+          n_volunteers: number | null
           name: string
           start_time: string | null
         }
@@ -36,8 +36,8 @@ export type Database = {
           description?: string | null
           end_time?: string | null
           id?: string
-          n_of_slots?: number | null
-          n_of_volunteers?: number | null
+          n_slots?: number | null
+          n_volunteers?: number | null
           name: string
           start_time?: string | null
         }
@@ -49,8 +49,8 @@ export type Database = {
           description?: string | null
           end_time?: string | null
           id?: string
-          n_of_slots?: number | null
-          n_of_volunteers?: number | null
+          n_slots?: number | null
+          n_volunteers?: number | null
           name?: string
           start_time?: string | null
         }
@@ -193,6 +193,7 @@ export type Database = {
       spreadsheet_events: {
         Row: {
           address: string | null
+          attendance_url: string | null
           created_at: string
           date: string | null
           end_time: string | null
@@ -207,6 +208,7 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          attendance_url?: string | null
           created_at?: string
           date?: string | null
           end_time?: string | null
@@ -221,6 +223,7 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          attendance_url?: string | null
           created_at?: string
           date?: string | null
           end_time?: string | null

@@ -4,7 +4,7 @@
   import { Badge } from "$lib/components/ui/badge/index";
   import { toast } from "svelte-sonner";
   import { cn } from "$lib/utils";
-  import type { CalendarEvent } from "$lib/types/events";
+  import type { CalendarEvent } from "$lib/events/types";
 
   let { event, size = "sm" }: { event: CalendarEvent; size?: "sm" | "lg" } = $props();
 
@@ -61,7 +61,7 @@
   }
 
   const openSlots = $derived(
-    (event.n_of_slots ?? 0) - (event.n_of_volunteers ?? 0),
+    (event.n_slots ?? 0) - (event.n_volunteers ?? 0),
   );
 
   const eventLength = $derived(() => {

@@ -2,8 +2,8 @@ import { form } from "$app/server";
 import * as v from "valibot"
 import { getRequestEvent } from "$app/server";
 import { supabase as supabaseAdmin } from "$lib/db/admin";
-import type { Result } from "$lib/types/responses";
-import { isValidPassword } from "$lib/validatePassword";
+import type { Result } from "$lib/responses";
+import { isValidPassword } from "$lib/auth/validatePassword";
 
 export const accept = form(
   v.object({
@@ -52,17 +52,17 @@ export const accept = form(
       return { ok: false, error: profileError.message };
     }
 
-    const { data: roleDeleteData, error: roleDeleteError } = await supabaseAdmin
-      .from("pending_invites")
-      .delete()
-      .eq("id", roleData.id)
-    if (roleDeleteError) {
-      return { ok: false, error: roleDeleteError.message };
-    }
-
     const { data: updateData, error: updateError } = await event.locals.supabase.auth.updateUser({ password });
     if (updateError) {
       return { ok: false, error: updateError.message };
+    }
+
+    const { data: pendingInviteDeleteData, error: pendingInviteDeleteError } = await supabaseAdmin
+      .from("pending_invites")
+      .delete()
+      .eq("id", roleData.id)
+    if (pendingInviteDeleteError) {
+      return { ok: false, error: pendingInviteDeleteError.message };
     }
 
     return { ok: true, data: null };

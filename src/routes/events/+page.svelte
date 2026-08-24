@@ -18,8 +18,8 @@
   import { onMount } from "svelte";
   import { searchEvents } from "./events.remote";
   import { PUBLIC_CALENDAR_SRC } from "$env/static/public";
-  import type { Result } from "$lib/types/responses";
-  import type { CalendarEvent } from "$lib/types/events";
+  import type { Result } from "$lib/responses";
+  import type { CalendarEvent } from "$lib/events/types";
 
   const start = today(getLocalTimeZone());
   const end = start.add({ days: 7 });

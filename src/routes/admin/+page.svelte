@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import * as Card from "$lib/components/ui/card/index.js";
   import ShieldAlertIcon from "@lucide/svelte/icons/shield-alert";
-  import { getToolsForRole } from "$lib/tools";
+  import { getToolsForRole } from "$lib/auth/tools";
   import { Separator } from "$lib/components/ui/separator";
 
   let { data } = $props();

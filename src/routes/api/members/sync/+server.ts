@@ -1,6 +1,6 @@
 import { syncMembers } from "./syncMembers.server";
 import { syncMemberTokens } from "./syncMemberTokens.server";
-import { toResponse } from "$lib/types/responses";
+import { toResponse } from "$lib/responses";
 import { SYNC_SECRET } from "$env/static/private";
 
 export async function GET({ url }) {

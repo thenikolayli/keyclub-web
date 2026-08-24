@@ -1,7 +1,7 @@
 import type { LayoutServerLoad } from "./$types";
-import { getToolsForRole } from "$lib/tools";
+import { getToolsForRole } from "$lib/auth/tools";
 import { redirect } from "@sveltejs/kit";
-import { getProfile } from "$lib/getProfile";
+import { getProfile } from "$lib/auth/getProfile";
 
 export const load: LayoutServerLoad = async ({ cookies, locals, url }) => {
   let result = await getProfile(locals.supabase);

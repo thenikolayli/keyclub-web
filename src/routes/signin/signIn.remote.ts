@@ -1,6 +1,6 @@
 import * as v from 'valibot';
 import { form } from '$app/server';
-import type { Result } from '$lib/types/responses';
+import type { Result } from '$lib/responses';
 import { getRequestEvent } from '$app/server';
 
 export const signIn = form(

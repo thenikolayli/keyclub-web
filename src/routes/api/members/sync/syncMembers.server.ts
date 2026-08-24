@@ -1,23 +1,8 @@
 import { supabase } from "$lib/db/admin";
 import { getSheetsService } from "$lib/google";
 import { SPREADSHEET_ID } from "$env/static/private";
-import type { Result } from "$lib/types/responses";
-
-const SHEET_NAME = "2026-2027 Members";
-
-const RANGES = [
-  `${SHEET_NAME}!A2:A`, // name
-  `${SHEET_NAME}!B2:B`, // all_hours
-  `${SHEET_NAME}!C2:C`, // term_hours
-  `${SHEET_NAME}!D2:D`, // grad_year
-  `${SHEET_NAME}!E2:E`, // class
-  `${SHEET_NAME}!F2:F`, // strikes
-  `${SHEET_NAME}!G2:G`, // personal_email
-  `${SHEET_NAME}!H2:H`, // school_email
-  `${SHEET_NAME}!I2:I`, // phone_number
-  `${SHEET_NAME}!J2:J`, // shirt_size
-  `${SHEET_NAME}!K2:K`, // paid_dues
-];
+import type { Result } from "$lib/responses";
+import { membersSheet } from "$lib/sheetsConfig";
 
 type Parser<T> = (v: string) => T;
 
@@ -26,7 +11,19 @@ export async function syncMembers(): Promise<Result<number>> {
 
   const response = await sheets.spreadsheets.values.batchGet({
     spreadsheetId: SPREADSHEET_ID,
-    ranges: RANGES,
+    ranges: [
+      membersSheet.names,
+      membersSheet.all_hours,
+      membersSheet.term_hours,
+      membersSheet.grad_year,
+      membersSheet.class,
+      membersSheet.strikes,
+      membersSheet.personal_email,
+      membersSheet.school_email,
+      membersSheet.phone_number,
+      membersSheet.shirt_size,
+      membersSheet.paid_dues,
+    ],
   });
 
   const valueRanges = response.data.valueRanges;
