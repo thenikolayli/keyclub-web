@@ -18,9 +18,10 @@
   import { onMount } from "svelte";
   import { searchEvents } from "./events.remote";
   import { PUBLIC_CALENDAR_SRC } from "$env/static/public";
-  import type { Result } from "$lib/types/responses";
-  import type { CalendarEvent } from "$lib/types/events";
+  import type { Result } from "$lib/responses";
+  import type { CalendarEvent } from "$lib/events/types";
 
+  // The @internationalized/date stuff is for the date-picker component
   const start = today(getLocalTimeZone());
   const end = start.add({ days: 7 });
   let dates = $state<{start: CalendarDate; end: CalendarDate}>({ start, end });

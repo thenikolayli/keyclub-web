@@ -1,6 +1,6 @@
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { getProfile } from "$lib/getProfile";
+import { getProfile } from "$lib/auth/getProfile";
 
 export const load: PageServerLoad = async ({ cookies, locals }) => {
   let result = await getProfile(locals.supabase);

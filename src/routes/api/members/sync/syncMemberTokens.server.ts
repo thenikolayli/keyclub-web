@@ -1,7 +1,7 @@
 import { supabase } from "$lib/db/admin";
-import type { Result } from "$lib/types/responses";
-import type { MemberToken, Member } from "$lib/types/members";
-import tokenizeName from "$lib/tokenizeName";
+import type { Result } from "$lib/responses";
+import type { MemberToken, Member } from "$lib/members/types";
+import {tokenizeName} from "$lib/members/tokenizeName";
 
 
 export async function syncMemberTokens(): Promise<Result<null>> {

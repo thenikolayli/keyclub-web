@@ -2,7 +2,7 @@
   import * as Sidebar from "$lib/components/ui/sidebar/index.js";
   import LogOutIcon from "@lucide/svelte/icons/log-out";
   import { page } from "$app/state";
-  import { getToolsForRole } from "$lib/tools.js";
+  import { getToolsForRole } from "$lib/auth/tools";
   import Icon from "@iconify/svelte";
 
   let { data, children } = $props();

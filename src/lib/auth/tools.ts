@@ -1,5 +1,4 @@
-import type { Tool } from "$lib/types/tools";
-import type { Role } from "$lib/types/profiles";
+import type { Role, Tool } from "$lib/auth/types";
 
 export const Tools: Tool[] = [
   {
@@ -22,6 +21,13 @@ export const Tools: Tool[] = [
     href: "/admin/calendar",
     icon: "lucide:calendar",
     roles: ["leader", "officer"]
+  },
+  {
+    id: "events",
+    label: "Log Event",
+    href: "/admin/events",
+    icon: "lucide:clipboard-check",
+    roles: ["officer"],
   }
 ];
 

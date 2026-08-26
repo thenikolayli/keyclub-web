@@ -1,4 +1,4 @@
-import type { Result } from "./types/responses";
+import type { Result } from "../responses";
 
 export function isValidPassword(password: string): Result<null> {
   if (password.length < 6) {

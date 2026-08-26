@@ -1,8 +1,8 @@
 import { query } from "$app/server";
 import * as v from "valibot";
 import { supabase } from "$lib/db/postgres";
-import type { Result } from "$lib/types/responses";
-import type { CalendarEvent } from "$lib/types/events";
+import type { Result } from "$lib/responses";
+import type { CalendarEvent } from "$lib/events/types";
 
 export const searchEvents = query(
   v.object({
@@ -17,7 +17,7 @@ export const searchEvents = query(
     WHERE start_time BETWEEN ${times[0]} AND ${times[1]}
     AND end_time BETWEEN ${times[0]} AND ${times[1]}
     AND date BETWEEN ${dates[0]} AND ${dates[1]}
-    AND n_of_slots - n_of_volunteers BETWEEN ${spots[0]} AND ${spots[1]}
+    AND n_slots - n_volunteers BETWEEN ${spots[0]} AND ${spots[1]}
   `;
 
   return { ok: true, data: rows };

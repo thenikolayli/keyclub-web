@@ -1,12 +1,12 @@
 import { supabase } from "$lib/db/admin";
 import { getCalendarService, getDocsService } from "$lib/google";
 import { CALENDAR_ID } from "$env/static/private";
-import type { CalendarEvent } from "$lib/types/events";
-import type { Result } from "$lib/types/responses";
-import { parseAttendanceDoc, docsUrlToId } from "$lib/events";
+import type { BaseEvent } from "$lib/events/types";
+import type { Result } from "$lib/responses";
+import { parseBaseEvent, docsUrlToId } from "$lib/events/events";
 
 // syncs events from the key club google calendar (Key Club Member Calendar) and returns number of events synced/updated
-export async function syncEventsFromCalendar(): Promise<Result<number>> {
+export async function syncCalendar(): Promise<Result<number>> {
   const calendar = getCalendarService();
   const docs = getDocsService();
 
@@ -21,7 +21,7 @@ export async function syncEventsFromCalendar(): Promise<Result<number>> {
   });
 
   const unparsedEvents = response.data.items || [];
-  const parsedEvents: CalendarEvent[] = [];
+  const parsedEvents: BaseEvent[] = [];
 
   for (const calEvent of unparsedEvents) {
     if (!calEvent.attachments || calEvent.attachments.length === 0) continue;
@@ -29,12 +29,13 @@ export async function syncEventsFromCalendar(): Promise<Result<number>> {
     const fileUrl = calEvent.attachments[0].fileUrl;
     if (!fileUrl) continue;
 
-    const docId = docsUrlToId(fileUrl);
-    if (!docId) continue;
+    const docIdResult = docsUrlToId(fileUrl);
+    if (!docIdResult.ok) continue;
+    const docId = docIdResult.data;
 
     try {
-      const parsed = await parseAttendanceDoc(docId, docs);
-      if (parsed.ok) parsedEvents.push(parsed.data);
+      const parsed = await parseBaseEvent(docId, docs);
+      if (parsed.ok) parsedEvents.push(parsed.data.event);
     } catch (err) {
       console.warn("sync: failed to parse doc for", calEvent.summary, err);
     }
@@ -45,7 +46,20 @@ export async function syncEventsFromCalendar(): Promise<Result<number>> {
   for (const event of parsedEvents) {
     const { error: upsertError } = await supabase
       .from("calendar_events")
-      .upsert(event, { onConflict: "attendance_url", ignoreDuplicates: false });
+      .upsert(
+        {
+          name: event.name!,
+          date: event.date,
+          start_time: event.start_time,
+          end_time: event.end_time,
+          address: event.address,
+          n_slots: event.n_slots,
+          n_volunteers: event.n_volunteers,
+          description: event.description,
+          attendance_url: event.attendance_url!,
+        },
+        { onConflict: "attendance_url", ignoreDuplicates: false },
+      );
     if (upsertError) {
       console.error("sync: upsert failed for", event.name, upsertError);
       continue;

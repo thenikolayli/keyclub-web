@@ -2,8 +2,6 @@
     import Header from "$lib/components/Header.svelte";
     import Footer from "$lib/components/Footer.svelte";
     import Icon from "@iconify/svelte";
-    import gsap from "gsap";
-    import {ScrollTrigger} from "gsap/ScrollTrigger";
     import {onMount} from "svelte";
     import ImageHeader from "$lib/components/ImageHeader.svelte";
     import * as Carousel from "$lib/components/ui/carousel/index";
@@ -44,18 +42,7 @@
     let selectedSnap = $state(0)
 
     onMount(() => {
-        gsap.registerPlugin(ScrollTrigger)
-
-        const mm = gsap.matchMedia()
-        mm.add("(prefers-reduced-motion: no-preference)", () => {
-            gsap.utils.toArray<HTMLElement>(".reveal").forEach((el) => {
-                gsap.from(el, {
-                    opacity: 0, y: 40, duration: .6, ease: "power2.out",
-                    scrollTrigger: {trigger: el, start: "top 88%"}
-                })
-            })
-        })
-        return () => mm.revert()
+        document.title = "About";
     })
 
     $effect(() => {
