@@ -2,14 +2,14 @@
   import Header from "$lib/components/Header.svelte";
   import Footer from "$lib/components/Footer.svelte";
   import Icon from "@iconify/svelte";
-  import gsap from "gsap";
-  import { SplitText } from "gsap/SplitText";
   import { onMount } from "svelte";
   import { Button } from "$lib/components/ui/button/index";
   import { Badge } from "$lib/components/ui/badge/index";
   import moment from "moment-timezone";
   import EventCard from "$lib/components/EventCard.svelte";
   import * as Carousel from "$lib/components/ui/carousel/index";
+  import gsap from "gsap";
+  import { SplitText } from "gsap/SplitText";
   import { reveal } from "$lib/reveal";
 
   const {data} = $props();
@@ -60,6 +60,7 @@
     countdown[2].value = d.minutes();
     countdown[3].value = d.seconds();
   }
+
 
   onMount(() => {
     document.title = "JHS Key Club";
