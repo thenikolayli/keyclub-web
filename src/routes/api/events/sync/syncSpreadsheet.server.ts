@@ -54,7 +54,7 @@ export async function syncSpreadsheet(): Promise<Result<number>> {
     const { id: _id, created_at: _c, description: _d, ...row } = event;
     const { error: upsertError } = await supabase
       .from("spreadsheet_events")
-      .upsert(row, { onConflict: "attendance_url" });
+      .upsert(row, { onConflict: "name" });
     if (upsertError) {
       console.error("syncSpreadsheet: upsert failed for", event.name, upsertError);
       continue;

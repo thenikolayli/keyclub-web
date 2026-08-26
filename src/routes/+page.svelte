@@ -4,10 +4,15 @@
   import Icon from "@iconify/svelte";
   import gsap from "gsap";
   import { SplitText } from "gsap/SplitText";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
   import { onMount } from "svelte";
   import { Button } from "$lib/components/ui/button/index";
   import { Badge } from "$lib/components/ui/badge/index";
+  import moment from "moment-timezone";
+  import EventCard from "$lib/components/EventCard.svelte";
+  import * as Carousel from "$lib/components/ui/carousel/index";
+  import { reveal } from "$lib/reveal";
+
+  const {data} = $props();
 
   const committees = [
     {
@@ -36,35 +41,34 @@
     },
   ];
 
-  const socials = [
-    {
-      label: "Instagram",
-      icon: "fa7-brands:instagram",
-      href: "https://www.instagram.com/jhskeyclub21",
-    },
-    {
-      label: "TikTok",
-      icon: "fa7-brands:tiktok",
-      href: "https://tiktok.com/@jhskeyclub21",
-    },
-    {
-      label: "YouTube",
-      icon: "fa7-brands:youtube",
-      href: "https://www.youtube.com/@jhskeyclub4870",
-    },
-    {
-      label: "Linktree",
-      icon: "solar:link-bold",
-      href: "https://linktr.ee/jhskeyclub21",
-    },
+  const meetingDetails = [
+    { label: "Date", value: "Tuesday, September 9, 2026" },
+    { label: "Time", value: "2:15 PM — 3:15 PM" },
+    { label: "Location", value: "The Annex" },
+    { label: "What it's about", value: "Learn about Key Club & registration info." },
+    { label: "Goodies", value: "Free donuts — one per member. Register to claim yours." },
+    { label: "Getting there", value: "Bus passes will be provided." },
   ];
+
+  const nextMeeting = $derived(moment.tz(data.meetings[0].start, "America/Los_Angeles"));
+  const countdown = $state([{ value: 0, label: "days" }, { value: 0, label: "hours" }, { value: 0, label: "minutes" }, { value: 0, label: "seconds" }]);
+
+  function tick() {
+    const d = moment.duration(nextMeeting.diff(moment()));
+    countdown[0].value = d.days();
+    countdown[1].value = d.hours();
+    countdown[2].value = d.minutes();
+    countdown[3].value = d.seconds();
+  }
 
   onMount(() => {
     document.title = "JHS Key Club";
-    gsap.registerPlugin(SplitText, ScrollTrigger);
+    gsap.registerPlugin(SplitText);
+
+    tick();
+    const timer = setInterval(tick, 1000);
 
     const mm = gsap.matchMedia();
-
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       const tl = gsap.timeline({
         defaults: { ease: "power2.out", duration: 0.7 },
@@ -76,19 +80,12 @@
         .from(intro2, { opacity: 0, yPercent: 60, stagger: 0.08 }, 0.7)
         .from(".intro3", { opacity: 0, yPercent: 40 }, 1.1)
         .from(".intro4", { opacity: 0 }, 1.5);
-
-      gsap.utils.toArray<HTMLElement>(".reveal").forEach((el) => {
-        gsap.from(el, {
-          opacity: 0,
-          y: 40,
-          duration: 0.6,
-          ease: "power2.out",
-          scrollTrigger: { trigger: el, start: "top 85%" },
-        });
-      });
     });
 
-    return () => mm.revert();
+    return () => {
+      clearInterval(timer);
+      mm.revert();
+    };
   });
 </script>
 
@@ -133,24 +130,29 @@
     </div>
   </div>
 
-  <div class="absolute bottom-6 z-10 text-muted">
+  <a
+    class="absolute bottom-6 z-10 text-muted transition-colors hover:text-background"
+    aria-label="Scroll down to learn more"
+    href="#who"
+  >
     <Icon
-      icon="solar:double-alt-arrow-down-linear"
+      icon="solar:alt-arrow-down-linear"
       class="size-8 animate-bounce"
     />
-  </div>
+  </a>
 </section>
 
 <!-- Who are we -->
 <section
-  class="grid w-full grid-cols-1 bg-background text-foreground md:grid-cols-2"
+  id="who"
+  class="grid w-full grid-cols-1 bg-background text-foreground md:grid-cols-2 scroll-mt-24"
 >
   <img
     class="h-64 w-full object-cover md:h-full"
     src="/canes.webp"
     alt="Key Club members volunteering"
   />
-  <div class="reveal flex flex-col justify-center p-8 md:p-14">
+  <div use:reveal class="flex flex-col justify-center p-8 md:p-14">
     <span class="font-bold-gothic text-kcblue">WHO WE ARE</span>
     <h2 class="mt-2 text-4xl md:text-5xl">
       A student-led volunteering family.
@@ -162,7 +164,7 @@
       community and make new friends across the division.
     </p>
     <div class="mt-8 flex flex-wrap gap-3">
-      {#each ["Leadership", "Character", "Caring", "Inclusiveness"] as value}
+      {#each ["Leadership", "Character Building", "Caring", "Inclusiveness"] as value}
         <Badge>{value}</Badge>
       {/each}
     </div>
@@ -175,33 +177,31 @@
     <span class="font-bold-gothic text-primary">BECOME A KEYUTIE</span>
     <h2 class="mt-2 text-4xl text-background md:text-5xl">Join our chapter</h2>
     <p class="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-      Anyone can join &mdash; that's what we're about. Here's how membership
-      works once registration opens.
+      Anyone can join &mdash; that's what we're all about.
+      Here's how membership works.
     </p>
 
     <div class="mt-12 grid gap-6 md:grid-cols-3">
-      <div
-        class="reveal flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
+      <div use:reveal
+        class="flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
       >
         <Icon icon="solar:user-plus-bold" class="size-12 text-primary" />
         <h3 class="font-bold-gothic mt-4 text-2xl text-background">Register</h3>
         <p class="mt-3 text-muted">
-          Sign up to become an official Key Club member during registration
-          season.
+            Attend our <a class="text-primary underline" href="#countdown">first meeting</a> on September 9th in the annex.
         </p>
       </div>
-      <div
-        class="reveal flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
+      <div use:reveal
+        class="flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
       >
         <Icon icon="solar:wallet-bold" class="size-12 text-primary" />
         <h3 class="font-bold-gothic mt-4 text-2xl text-background">Pay Dues</h3>
         <p class="mt-3 text-muted">
-          Dues are $41 total: $10 International, $5.50 District, $2.50 Club and
-          a $23 hoodie.
+            Payments will open on <a class="text-primary underline" target="_blank" href="https://wa-everett.intouchreceipting.com/">Payments Online</a> in October.
         </p>
       </div>
-      <div
-        class="reveal flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
+      <div use:reveal
+        class="flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
       >
         <img src="/bee.webp" alt="Bee" class="size-14 object-contain" />
         <h3 class="font-bold-gothic mt-4 text-2xl text-background">
@@ -227,9 +227,46 @@
         Follow for updates
       </Button>
       <p class="mt-4 text-muted-foreground">
-        Registration reopens in October 2026. Follow our Instagram to be the
-        first to know.
+          We make awesome Instagram posts.
       </p>
+    </div>
+  </div>
+</section>
+
+<!-- Next General Meeting -->
+<section class="w-full bg-kcblue scroll-mt-24 px-8 py-20 text-stone-100" id="countdown">
+  <div class="mx-auto max-w-6xl">
+    <div use:reveal class="flex flex-col items-center justify-between gap-10 lg:flex-row lg:items-end">
+      <div class="text-center lg:text-left">
+        <span class="font-bold-gothic text-kcyellow">UP NEXT</span>
+        <h2 class="mt-2 text-4xl md:text-5xl">The First General Meeting</h2>
+        <p class="mt-4 max-w-xl text-lg text-stone-300">
+          The year kicks off with everything you need to become a Keyutie.
+        </p>
+
+        <dl class="mx-auto mt-8 grid max-w-md grid-cols-1 gap-x-8 gap-y-4 text-left sm:grid-cols-2 lg:mx-0 lg:max-w-none">
+          {#each meetingDetails as item (item.label)}
+            <div class="border-l-2 border-kcyellow/60 pl-4">
+              <dt class="font-bold-gothic text-sm uppercase tracking-wider text-kcyellow">{item.label}</dt>
+              <dd class="mt-1 text-stone-100">{item.value}</dd>
+            </div>
+          {/each}
+        </dl>
+      </div>
+
+      <div use:reveal class="w-full max-w-xl lg:w-auto">
+        <p class="font-bold-gothic mb-3 text-sm uppercase tracking-widest text-stone-400">Time until the meeting</p>
+        <div class="grid grid-cols-4 gap-3">
+          {#each countdown as unit (unit.label)}
+            <div class="flex flex-col items-center rounded-xl bg-stone-900/40 px-2 py-5">
+              <span class="font-[abril] text-4xl text-kcyellow tabular-nums sm:text-5xl">
+                {String(unit.value).padStart(2, "0")}
+              </span>
+              <span class="mt-1 text-xs uppercase tracking-wider text-stone-400">{unit.label}</span>
+            </div>
+          {/each}
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -237,23 +274,23 @@
 <!-- Committees -->
 <section class="w-full bg-background px-8 py-20 text-foreground">
   <div class="mx-auto max-w-6xl">
-    <div class="reveal text-center">
+    <div use:reveal class="text-center">
       <span class="font-bold-gothic text-secondary">GET INVOLVED</span>
       <h2 class="mt-2 text-4xl md:text-5xl">Our four committees</h2>
       <p class="mx-auto mt-4 max-w-2xl text-lg">
         Committees are the best way to meet new people and earn volunteer hours.
-        Every member joins at least one.
+        Every member should join at least one.
       </p>
     </div>
 
     <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
       {#each committees as committee (committee.name)}
         <div
-          class="reveal group overflow-hidden rounded-xl bg-card shadow-md transition-transform hover:-translate-y-1"
+          class="overflow-hidden rounded-xl bg-card shadow-md"
         >
           <div class="relative h-40 overflow-hidden">
             <img
-              class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              class="h-full w-full object-cover"
               src={committee.image}
               alt={committee.name}
             />
@@ -273,9 +310,9 @@
 </section>
 
 <!-- Upcoming events teaser -->
-<!-- <section class="w-full bg-kcblue px-8 py-20 text-stone-100">
+<section class="w-full bg-kcblue px-8 py-20 text-stone-100">
     <div class="mx-auto max-w-6xl">
-        <div class="reveal flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
+        <div use:reveal class="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
             <div>
                 <span class="font-bold-gothic text-kcyellow">WHAT'S NEXT</span>
                 <h2 class="mt-2 text-4xl md:text-5xl">Upcoming events</h2>
@@ -285,43 +322,26 @@
             </a>
         </div>
 
-        <div class="mt-10 grid gap-6 md:grid-cols-3">
-            {#each [1, 2, 3] as n (n)}
-                <a class="reveal block overflow-hidden rounded-xl bg-stone-100 text-kcblack no-underline shadow-md transition-transform hover:-translate-y-1" href="/events">
-                    <img class="h-44 w-full object-cover" src="/faz.webp" alt=""/>
-                    <div class="p-5">
-                        <span class="text-sm font-semibold text-kcblue">Date TBA</span>
-                        <h3 class="font-bold-gothic mt-1 text-xl">Upcoming Event {n}</h3>
-                        <p class="mt-2 text-stone-600">Check the calendar for details, sign-ups and the latest opportunities to serve.</p>
-                    </div>
-                </a>
-            {/each}
+        <div use:reveal>
+            <Carousel.Root
+              class="mt-10 w-full cursor-grab"
+              opts={{ loop: true, align: "start", skipSnaps: false }}
+            >
+              <Carousel.Content>
+                {#each data.events as event}
+                  <Carousel.Item class="basis-1/2">
+                      <EventCard event={event} size="lg" />
+                  </Carousel.Item>
+                {/each}
+              </Carousel.Content>
+            </Carousel.Root>
+        </div>
+
+        <div class="mt-6 flex items-center justify-center gap-2 text-stone-400">
+          <Icon icon="solar:arrow-left-right-linear" class="size-5" />
+          <span class="text-sm">Drag to see more</span>
         </div>
     </div>
-</section> -->
-
-<!-- Socials -->
-<section class="w-full bg-background px-8 py-20 text-center text-foreground">
-  <div class="reveal mx-auto max-w-2xl">
-    <h2 class="text-4xl md:text-5xl">Follow the buzz</h2>
-    <p class="mt-4 text-lg">
-      Catch event recaps, reminders and announcements on our socials.
-    </p>
-    <div class="mt-8 flex items-center justify-center gap-6">
-      {#each socials as social (social.label)}
-        <Button
-          href={social.href}
-          target="_blank"
-          rel="noopener"
-          size="icon-lg"
-          class="text-secondary"
-          variant="icon"
-        >
-          <Icon icon={social.icon} class="size-10" />
-        </Button>
-      {/each}
-    </div>
-  </div>
 </section>
 
 <Footer />

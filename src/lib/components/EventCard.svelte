@@ -6,7 +6,7 @@
   import { cn } from "$lib/utils";
   import type { CalendarEvent } from "$lib/events/types";
 
-  let { event, size = "sm" }: { event: CalendarEvent; size?: "sm" | "lg" } = $props();
+  let { event, size = "sm", class: className = "" }: { event: CalendarEvent; size?: "sm" | "lg"; class?: string } = $props();
 
   const sizeClasses = {
     sm: "w-sm",
@@ -85,9 +85,9 @@
 </script>
 
 <div
-  class="overflow-hidden flex flex-col rounded-2xl bg-foreground text-background shadow-lg {sizeClasses[
+  class="overflow-hidden flex flex-col rounded-2xl border-foreground/20 border-2 bg-foreground text-background shadow-lg {sizeClasses[
     size
-  ]}"
+  ]} {className}"
 >  <div class="bg-secondary px-5 py-3">
     <h2 class="font-bold-gothic text-2xl text-primary">{event.name}</h2>
   </div>
@@ -126,7 +126,7 @@
       </Badge>
     </div>
 
-    <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+    <div class="flex flex-col items-start justify-between gap-3 pt-1">
       {#if eventAddress}
         <Button
           variant="secondary"

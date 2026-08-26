@@ -3,9 +3,6 @@
     import Footer from "$lib/components/Footer.svelte";
     import ImageHeader from "$lib/components/ImageHeader.svelte";
     import Icon from "@iconify/svelte";
-    import gsap from "gsap";
-    import {ScrollTrigger} from "gsap/ScrollTrigger";
-    import {onMount} from "svelte";
 
     const highlights = [
         {icon: "solar:user-speak-rounded-bold", title: "Leadership Workshops", text: "Hands-on sessions that build real skills you bring back to our chapter."},
@@ -15,20 +12,6 @@
     ]
 
     let canSend = $state(true)
-
-    onMount(() => {
-        gsap.registerPlugin(ScrollTrigger)
-        const mm = gsap.matchMedia()
-        mm.add("(prefers-reduced-motion: no-preference)", () => {
-            gsap.utils.toArray(".reveal").forEach((el) => {
-                gsap.from(el, {
-                    opacity: 0, y: 40, duration: .6, ease: "power2.out",
-                    scrollTrigger: {trigger: el, start: "top 88%"}
-                })
-            })
-        })
-        return () => mm.revert()
-    })
 </script>
 
 <Header/>

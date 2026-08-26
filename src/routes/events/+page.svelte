@@ -21,6 +21,7 @@
   import type { Result } from "$lib/responses";
   import type { CalendarEvent } from "$lib/events/types";
 
+  // The @internationalized/date stuff is for the date-picker component
   const start = today(getLocalTimeZone());
   const end = start.add({ days: 7 });
   let dates = $state<{start: CalendarDate; end: CalendarDate}>({ start, end });

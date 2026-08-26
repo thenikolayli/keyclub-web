@@ -3,6 +3,9 @@ import type { Database } from "$lib/db/schema";
 export type CalendarEvent = Database["public"]["Tables"]["calendar_events"]["Row"];
 export type SpreadsheetEvent = Database["public"]["Tables"]["spreadsheet_events"]["Row"];
 
+// General committee is just every member (default).
+export type Committee = "general" | "leadership" | "spirit" | "service" | "decoration";
+
 // The union of every field in CalendarEvent and SpreadsheetEvent.
 // Fields only present in one of them are nullable.
 export interface BaseEvent {
@@ -30,4 +33,15 @@ export interface MemberAttendance {
   hours: number | null;
   hoursStartIndex: number;
   hoursEndIndex: number;
+}
+
+// date, start, and end is an ISO 8601 string.
+export interface Meeting {
+  name: string;
+  description: string;
+  date: string;
+  start: string;
+  end: string;
+  committee: Committee;
+  location: string;
 }

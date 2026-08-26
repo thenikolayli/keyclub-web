@@ -170,9 +170,9 @@ function parseEventDateTimes(
   title: string,
 ): { date: string | null; startTime: string | null; endTime: string | null } {
   const dateStr = fields["date"] || "";
-  const date = dateStr
-    ? parseDateOrNull(dateStr)
-    : parseDateOrNull(title.split(")")[0].substring(1));
+  const dateRes = dateStr
+    ? parseDateField(dateStr)
+    : parseDateField(title.split(")")[0].substring(1));
 
   let startTime: string | null = null;
   let endTime: string | null = null;
@@ -181,21 +181,17 @@ function parseEventDateTimes(
     const [start, end] = timeStr
       .split(/\s*(?:-|to|until)\s*/i)
       .map((s) => s.trim());
-    if (start) startTime = parseTimeOrNull(start);
-    if (end) endTime = parseTimeOrNull(end);
+    if (start) {
+      const res = parseTimeField(start);
+      startTime = res.ok ? res.data : null;
+    }
+    if (end) {
+      const res = parseTimeField(end);
+      endTime = res.ok ? res.data : null;
+    }
   }
 
-  return { date, startTime, endTime };
-}
-
-function parseDateOrNull(s: string): string | null {
-  const res = parseDateField(s);
-  return res.ok ? res.data : null;
-}
-
-function parseTimeOrNull(s: string): string | null {
-  const res = parseTimeField(s);
-  return res.ok ? res.data : null;
+  return { date: dateRes.ok ? dateRes.data : null, startTime, endTime };
 }
 
 function splitLeaders(leaders: string): string[] | null {
