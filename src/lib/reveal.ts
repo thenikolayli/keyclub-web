@@ -1,5 +1,5 @@
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ScrollTrigger from "gsap/ScrollTrigger";
 import type { Action } from "svelte/action";
 
 gsap.registerPlugin(ScrollTrigger);
