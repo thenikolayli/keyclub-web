@@ -44,7 +44,7 @@
   ];
 
   const meetingDetails = [
-    { label: "Date", value: "Tuesday, September 9, 2026" },
+    { label: "Date", value: "Wednesday, September 9, 2026" },
     { label: "Time", value: "2:15 PM — 3:15 PM" },
     { label: "Location", value: "The Annex" },
     { label: "What it's about", value: "Learn about Key Club & registration info." },
