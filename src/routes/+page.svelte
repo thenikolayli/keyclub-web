@@ -11,8 +11,10 @@
   import gsap from "gsap";
   import { SplitText } from "gsap/SplitText";
   import { reveal } from "$lib/reveal";
+  import { IsMobile } from "$lib/hooks/is-mobile.svelte.js";
 
   const {data} = $props();
+  const isMobile = new IsMobile();
 
   const committees = [
     {
@@ -60,7 +62,6 @@
     countdown[2].value = d.minutes();
     countdown[3].value = d.seconds();
   }
-
 
   onMount(() => {
     document.title = "JHS Key Club";
@@ -326,12 +327,12 @@
         <div use:reveal>
             <Carousel.Root
               class="mt-10 w-full cursor-grab"
-              opts={{ loop: true, align: "start", skipSnaps: false }}
+              opts={{ loop: true, align: isMobile.current ? "center" : "start", skipSnaps: false }}
             >
               <Carousel.Content>
                 {#each data.events as event}
-                  <Carousel.Item class="basis-1/2">
-                      <EventCard event={event} size="lg" />
+                  <Carousel.Item class={isMobile.current ? "basis-full" : "basis-1/2"}>
+                      <EventCard event={event} size={isMobile.current ? "xs" : "lg"} class={!isMobile.current ? "w-full!" : ""} />
                   </Carousel.Item>
                 {/each}
               </Carousel.Content>

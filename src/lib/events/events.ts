@@ -44,6 +44,7 @@ export async function parseBaseEvent(
       // Rows without the full cell set (#, name, grade, email/phone, sign in, sign out, hours)
       // don't produce attendance
       if (cells.length < 7) continue;
+
       const hoursResult = calculateHours(getCellText(cells[4]), getCellText(cells[5]));
       const hours = hoursResult.ok ? hoursResult.data : null;
       if (hours != null) totalHours += hours;
@@ -172,7 +173,7 @@ function parseEventDateTimes(
   const dateStr = fields["date"] || "";
   const dateRes = dateStr
     ? parseDateField(dateStr)
-    : parseDateField(title.split(")")[0].substring(1));
+    : parseDateField(title.split(")")[0].substring(1)); // grabs it from inside the parenthesis
 
   let startTime: string | null = null;
   let endTime: string | null = null;
