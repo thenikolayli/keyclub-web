@@ -3,14 +3,16 @@
   import { Button } from "$lib/components/ui/button/index";
   import { Badge } from "$lib/components/ui/badge/index";
   import { toast } from "svelte-sonner";
+  import moment from "moment-timezone";
   import { cn } from "$lib/utils";
   import type { CalendarEvent } from "$lib/events/types";
 
-  let { event, size = "sm", class: className = "" }: { event: CalendarEvent; size?: "sm" | "lg"; class?: string } = $props();
+  let { event, size = "sm", class: className = "" }: { event: CalendarEvent; size?: "sm" | "lg" | "xs"; class?: string } = $props();
 
   const sizeClasses = {
     sm: "w-sm",
     lg: "w-xl",
+    xs: "w-xs"
   };
 
   // Color-code availability so members can gauge it at a glance.
@@ -20,44 +22,23 @@
     return "bg-green-500/15 text-green-600 dark:text-green-400";
   }
 
-  // Delegate 12h/AM-PM and locale correctness to the platform; fall back to
-  // the raw string if the server ever sends an unexpected format.
-  const timeFmt = new Intl.DateTimeFormat("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-  });
-  function parseTime(t: string) {
-    const pm = /pm/i.test(t);
-    const am = /am/i.test(t);
-    const [hStr, mStr] = t
-      .replace(/(am|pm)/i, "")
-      .trim()
-      .split(":")
-      .map(Number);
-    let h = hStr;
-    if (pm && h !== 12) h += 12;
-    if (am && h === 12) h = 0;
-    return { h, m: mStr || 0 };
-  }
-
-  const dateFmt = new Intl.DateTimeFormat("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-  function formatDate(d: string | null) {
+  // Dates are stored as "YYYY-MM-DD" and times as "HH:mm:ss", so we can format
+  // them directly with moment without guessing.
+  //
+  // The `date` column can arrive as a JS Date: postgres.js maps the Postgres
+  // `date` type to a Date at UTC midnight, so parsing it in the local timezone
+  // (e.g. America/Los_Angeles) shifts it to the previous day. Treating it as a
+  // pure calendar date in UTC keeps the day intact regardless of timezone.
+  function formatDate(d: string | Date | null) {
     if (!d) return "\u2014";
-    const date = new Date(d);
-    if (Number.isNaN(date.getTime())) return d;
-    return dateFmt.format(date);
+    const m = d instanceof Date ? moment.utc(d) : moment.utc(d, "YYYY-MM-DD");
+    return m.isValid() ? m.format("ddd, MMM D, YYYY") : String(d);
   }
 
   function formatTime(t: string | null) {
     if (!t) return "\u2014";
-    const { h, m } = parseTime(t);
-    if (Number.isNaN(h) || Number.isNaN(m)) return t;
-    return timeFmt.format(new Date(2000, 0, 1, h, m));
+    const m = moment(t, "HH:mm:ss");
+    return m.isValid() ? m.format("h:mm A") : t;
   }
 
   const openSlots = $derived(
@@ -66,10 +47,10 @@
 
   const eventLength = $derived(() => {
     if (!event.start_time || !event.end_time) return null;
-    const s = parseTime(event.start_time);
-    const e = parseTime(event.end_time);
-    const diff = e.h * 60 + e.m - (s.h * 60 + s.m);
-    return diff > 0 ? (diff / 60).toFixed(1) : null;
+    const start = moment(event.start_time, "HH:mm:ss");
+    let end = moment(event.end_time, "HH:mm:ss");
+    const diff = end.diff(start, "hours", true);
+    return diff > 0 ? diff.toFixed(1) : null;
   });
 
   const eventAddress = $derived(event.address);
@@ -85,9 +66,8 @@
 </script>
 
 <div
-  class="overflow-hidden flex flex-col rounded-2xl border-foreground/20 border-2 bg-foreground text-background shadow-lg {sizeClasses[
-    size
-  ]} {className}"
+  class="overflow-hidden mx-auto flex flex-col rounded-2xl border-foreground/20 border-2 bg-foreground text-background shadow-lg
+  {sizeClasses[size]} {className}"
 >  <div class="bg-secondary px-5 py-3">
     <h2 class="font-bold-gothic text-2xl text-primary">{event.name}</h2>
   </div>
