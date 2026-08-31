@@ -14,12 +14,14 @@
   } from "@internationalized/date";
   import { RangeCalendar } from "$lib/components/ui/range-calendar/index";
   import { Button } from "$lib/components/ui/button/index";
+  import * as Card from "$lib/components/ui/card/index";
   import EventCard from "$lib/components/EventCard.svelte";
   import { onMount } from "svelte";
   import { searchEvents } from "./events.remote";
   import { PUBLIC_CALENDAR_SRC } from "$env/static/public";
   import type { Result } from "$lib/responses";
   import type { CalendarEvent } from "$lib/events/types";
+    import { Separator } from "$lib/components/ui/separator";
 
   // The @internationalized/date stuff is for the date-picker component
   const start = today(getLocalTimeZone());
@@ -109,14 +111,13 @@
   class="w-full bg-background px-6 md:px-12 py-12 text-foreground flex flex-col items-center"
 >
   <!-- Calendar -->
-  <h2 class="text-2xl text-foreground mb-4">Calendar</h2>
   <div
     class="overflow-hidden w-full rounded-2xl border-4 border-primary bg-background"
   >
     <iframe
       title="JHS Key Club events calendar"
       src={PUBLIC_CALENDAR_SRC}
-      class="h-[70vh] min-h-130 w-full"
+      class="h-screen w-full"
       loading="lazy"
     ></iframe>
   </div>
@@ -124,82 +125,87 @@
   <Alert.Root class="mt-4 max-w-md mx-auto">
     <Icon icon="solar:info-circle-bold" class="mt-0.5 size-6 shrink-0" />
     <Alert.Title>
-      Add a specific event &mdash; or the whole calendar &mdash; to your
-      personal Google Calendar to open the event sign-up sheet. Tap an event
-      below for details.
+      Add a specific event —    or the whole calendar — to your
+      personal Google Calendar to open the event sign-up sheet.
     </Alert.Title>
   </Alert.Root>
 
-  <!-- Filters -->
-  <h2 class="text-2xl text-foreground mb-4 mt-12">Filters</h2>
-  <div class="w-full md:w-sm max-w-5xl">
-    <Accordion.Root type="multiple" class="w-full">
-      <Accordion.Item value="times">
-        <Accordion.Trigger
-          ><h3 class="text-lg font-normal">
-            Start and End times
-          </h3></Accordion.Trigger
-        >
-        <Accordion.Content>
-          <p class="text-muted-foreground">{timeLabel()}</p>
-          <Slider
-            type="multiple"
-            bind:value={times}
-            min={0}
-            max={24}
-            step={1}
-            class="w-full"
-          />
-        </Accordion.Content>
-      </Accordion.Item>
-      <Accordion.Item value="length">
-        <Accordion.Trigger
-          ><h3 class="text-lg font-normal">Length</h3></Accordion.Trigger
-        >
-        <Accordion.Content>
-          <p class="text-muted-foreground">
-            Between {length[0]} and {length[1]} hours
-          </p>
-          <Slider
-            type="multiple"
-            bind:value={length}
-            min={0}
-            max={24}
-            step={0.5}
-            class="w-full"
-          />
-        </Accordion.Content>
-      </Accordion.Item>
-      <Accordion.Item value="date">
-        <Accordion.Trigger
-          ><h3 class="text-lg font-normal">Date</h3></Accordion.Trigger
-        >
-        <Accordion.Content>
-          <p class="text-muted-foreground">{dateLabel}</p>
-          <RangeCalendar bind:value={dates} class="w-full" minValue={start} />
-        </Accordion.Content>
-      </Accordion.Item>
-      <Accordion.Item value="spots">
-        <Accordion.Trigger
-          ><h3 class="text-lg font-normal">Spots</h3></Accordion.Trigger
-        >
-        <Accordion.Content>
-          <p class="text-muted-foreground">
-            Between {spots[0]} and {spots[1]} open spots
-          </p>
-          <Slider
-            type="multiple"
-            bind:value={spots}
-            min={0}
-            max={40}
-            step={1}
-            class="w-full"
-          />
-        </Accordion.Content>
-      </Accordion.Item>
-    </Accordion.Root>
+  <Separator class="my-12" />
 
-    <div class="flex justify-between w-full mt-2">
+  <!-- Filters -->
+  <Card.Root class="w-full md:w-sm">
+    <Card.Header>
+      <Card.Title class="text-2xl">Filters</Card.Title>
+      <Card.Description>Easy event searching!</Card.Description>
+    </Card.Header>
+    <Card.Content>
+      <Accordion.Root type="multiple" class="w-full">
+        <Accordion.Item value="times">
+          <Accordion.Trigger
+            ><h3 class="text-lg font-normal">
+              Start and End times
+            </h3></Accordion.Trigger
+          >
+          <Accordion.Content>
+            <p class="text-muted-foreground">{timeLabel()}</p>
+            <Slider
+              type="multiple"
+              bind:value={times}
+              min={0}
+              max={24}
+              step={1}
+              class="w-full"
+            />
+          </Accordion.Content>
+        </Accordion.Item>
+        <Accordion.Item value="length">
+          <Accordion.Trigger
+            ><h3 class="text-lg font-normal">Length</h3></Accordion.Trigger
+          >
+          <Accordion.Content>
+            <p class="text-muted-foreground">
+              Between {length[0]} and {length[1]} hours
+            </p>
+            <Slider
+              type="multiple"
+              bind:value={length}
+              min={0}
+              max={24}
+              step={0.5}
+              class="w-full"
+            />
+          </Accordion.Content>
+        </Accordion.Item>
+        <Accordion.Item value="date">
+          <Accordion.Trigger
+            ><h3 class="text-lg font-normal">Date</h3></Accordion.Trigger
+          >
+          <Accordion.Content>
+            <p class="text-muted-foreground">{dateLabel}</p>
+            <RangeCalendar bind:value={dates} class="w-full" minValue={start} />
+          </Accordion.Content>
+        </Accordion.Item>
+        <Accordion.Item value="spots">
+          <Accordion.Trigger
+            ><h3 class="text-lg font-normal">Spots</h3></Accordion.Trigger
+          >
+          <Accordion.Content>
+            <p class="text-muted-foreground">
+              Between {spots[0]} and {spots[1]} open spots
+            </p>
+            <Slider
+              type="multiple"
+              bind:value={spots}
+              min={0}
+              max={40}
+              step={1}
+              class="w-full"
+            />
+          </Accordion.Content>
+        </Accordion.Item>
+      </Accordion.Root>
+    </Card.Content>
+    <Card.Footer class="flex justify-between gap-2">
       <Button variant="outline" onclick={resetFilters}>Reset filters</Button>
       <Button variant="secondary" onclick={handleClick}>
         {#if loading}
@@ -209,8 +215,8 @@
           Search
         {/if}
       </Button>
-    </div>
-  </div>
+    </Card.Footer>
+  </Card.Root>
 
   <!-- States -->
   <div class="mt-8 w-full flex flex-col gap-4" aria-live="polite">

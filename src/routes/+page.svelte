@@ -108,9 +108,9 @@
 
   <div class="relative z-10 px-6">
     <h2 class="intro1 text-2xl text-background sm:text-3xl">
-      we don't make keys&hellip;
+      We don't make keys...
     </h2>
-    <h2 class="intro2 text-2xl text-background sm:text-3xl">we make a</h2>
+    <h2 class="intro2 text-2xl text-background sm:text-3xl">We make a</h2>
     <h1
       class="intro3 font-[abril] mt-2 text-6xl italic text-primary sm:text-7xl md:text-8xl"
     >
@@ -150,97 +150,102 @@
   class="grid w-full grid-cols-1 bg-background text-foreground md:grid-cols-2 scroll-mt-24"
 >
   <img
-    class="h-64 w-full object-cover md:h-full"
+    class="h-64 w-full object-cover md:h-full order-2 md:order-1"
     src="/canes.webp"
     alt="Key Club members volunteering"
   />
-  <div use:reveal class="flex flex-col justify-center p-8 md:p-14">
-    <span class="font-bold-gothic text-kcblue">WHO WE ARE</span>
-    <h2 class="mt-2 text-4xl md:text-5xl">
-      A student-led volunteering family.
-    </h2>
-    <p class="mt-6 text-lg md:text-xl">
-      Key Club is a student-led volunteering organization. Henry M. Jackson High
-      School is one of 14 schools in PNW Division 21 &mdash; and currently the
-      chapter with the most members. It's a great way to give back to your
-      community and make new friends across the division.
-    </p>
-    <div class="mt-8 flex flex-wrap gap-3">
-      {#each ["Leadership", "Character Building", "Caring", "Inclusiveness"] as value}
-        <Badge>{value}</Badge>
-      {/each}
+  <div class="flex flex-col justify-center p-8 md:p-14 order-1 md:order-2">
+    <div use:reveal>
+        <span class="font-bold-gothic text-secondary">WHO WE ARE</span>
+        <h2 class="mt-2 text-4xl md:text-5xl">
+          A Student-Led Volunteering Family.
+        </h2>
+    </div>
+    <div use:reveal>
+        <p class="mt-6 text-lg md:text-xl">
+          Key Club is a student-led volunteering organization. Henry M. Jackson High
+          School is one of 14 schools in PNW Division 21 &mdash; and currently the
+          chapter with the most members. It's a great way to give back to your
+          community and make new friends across the division.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          {#each ["Leadership", "Character Building", "Caring", "Inclusiveness"] as value}
+            <Badge>{value}</Badge>
+          {/each}
+        </div>
     </div>
   </div>
 </section>
 
 <!-- Join CTA -->
-<section id="join" class="w-full scroll-mt-24 bg-foreground px-8 py-20">
-  <div class="mx-auto max-w-5xl text-center">
-    <span class="font-bold-gothic text-primary">BECOME A KEYUTIE</span>
-    <h2 class="mt-2 text-4xl text-background md:text-5xl">Join our chapter</h2>
-    <p class="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-      Anyone can join &mdash; that's what we're all about.
-      Here's how membership works.
-    </p>
-
-    <div class="mt-12 grid gap-6 md:grid-cols-3">
-      <div use:reveal
-        class="flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
-      >
-        <Icon icon="solar:user-plus-bold" class="size-12 text-primary" />
-        <h3 class="font-bold-gothic mt-4 text-2xl text-background">Register</h3>
-        <p class="mt-3 text-muted">
-            Attend our <a class="text-primary underline" href="#countdown">first meeting</a> on September 9th in the annex.
-        </p>
-      </div>
-      <div use:reveal
-        class="flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
-      >
-        <Icon icon="solar:wallet-bold" class="size-12 text-primary" />
-        <h3 class="font-bold-gothic mt-4 text-2xl text-background">Pay Dues</h3>
-        <p class="mt-3 text-muted">
-            Payments will open on <a class="text-primary underline" target="_blank" href="https://wa-everett.intouchreceipting.com/">Payments Online</a> in October.
-        </p>
-      </div>
-      <div use:reveal
-        class="flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
-      >
-        <img src="/bee.webp" alt="Bee" class="size-14 object-contain" />
-        <h3 class="font-bold-gothic mt-4 text-2xl text-background">
-          Stay in the Hive
-        </h3>
-        <p class="mt-3 text-muted">
-          Earn 25 service hours a year, attend 50% of general meetings and honor
-          your event sign-ups.
-        </p>
-      </div>
-    </div>
-
-    <div class="mx-auto mt-10 max-w-md">
-      <Button
-        href="https://www.instagram.com/jhskeyclub21"
-        target="_blank"
-        rel="noopener"
-        size="xl"
-        class="font-semibold"
-        variant="secondary"
-      >
-        <Icon icon="fa7-brands:instagram" class="size-10" />
-        Follow for updates
-      </Button>
-      <p class="mt-4 text-muted-foreground">
-          We make awesome Instagram posts.
+<section id="join" class="w-full scroll-mt-24 bg-foreground px-8 py-20 flex flex-col items-center justify-center text-center">
+    <div use:reveal>
+      <span class="font-bold-gothic text-primary">JOIN OUR CHAPTER</span>
+      <h2 class="mt-2 text-4xl text-background md:text-5xl">Become a Keyutie</h2>
+      <p class="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+        Anyone can join — that's what we're all about.
+        Here's how membership works.
       </p>
     </div>
-  </div>
+
+    <div use:reveal>
+        <div use:reveal class="mt-12 grid gap-6 md:grid-cols-3 max-w-5xl">
+          <div
+            class="flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
+          >
+            <Icon icon="solar:user-plus-bold" class="size-12 text-primary" />
+            <h3 class="font-bold-gothic mt-4 text-2xl text-background">Register</h3>
+            <p class="mt-3 text-muted">
+                Attend our <a class="text-primary underline" href="#countdown">first meeting</a> on September 9th in the annex.
+            </p>
+          </div>
+          <div
+            class="flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
+          >
+            <Icon icon="solar:wallet-bold" class="size-12 text-primary" />
+            <h3 class="font-bold-gothic mt-4 text-2xl text-background">Pay Dues</h3>
+            <p class="mt-3 text-muted">
+                Payments will open on <a class="text-primary underline" target="_blank" href="https://wa-everett.intouchreceipting.com/">Payments Online</a> in October.
+            </p>
+          </div>
+          <div
+            class="flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
+          >
+            <img src="/bee.webp" alt="Bee" class="size-14 object-contain" />
+            <h3 class="font-bold-gothic mt-4 text-2xl text-background">
+              Stay in the Hive
+            </h3>
+            <p class="mt-3 text-muted">
+              Earn 25 service hours a year, attend 50% of general meetings and honor
+              your event sign-ups.
+            </p>
+          </div>
+        </div>
+
+        <div class="mx-auto mt-10 max-w-md">
+          <Button
+            href="https://www.instagram.com/jhskeyclub21"
+            target="_blank"
+            rel="noopener"
+            size="xl"
+            class="font-semibold"
+            variant="secondary"
+          >
+            <Icon icon="fa7-brands:instagram" class="size-10" />
+            Follow for updates
+          </Button>
+          <p class="mt-4 text-muted-foreground">
+              We make awesome Instagram posts.
+          </p>
+        </div>
+    </div>
 </section>
 
 <!-- Next General Meeting -->
-<section class="w-full bg-kcblue scroll-mt-24 px-8 py-20 text-stone-100" id="countdown">
-  <div class="mx-auto max-w-6xl">
-    <div use:reveal class="flex flex-col items-center justify-between gap-10 lg:flex-row lg:items-end">
+<section class="w-full bg-kcblue scroll-mt-24 px-8 py-20 text-stone-100 flex flex-col items-center justify-center text-center lg:text-left" id="countdown">
+    <div use:reveal class="flex flex-col max-w-6xl items-center justify-between gap-10 lg:flex-row lg:items-end">
       <div class="text-center lg:text-left">
-        <span class="font-bold-gothic text-kcyellow">UP NEXT</span>
+        <span class="font-bold-gothic text-primary">COMING UP</span>
         <h2 class="mt-2 text-4xl md:text-5xl">The First General Meeting</h2>
         <p class="mt-4 max-w-xl text-lg text-stone-300">
           The year kicks off with everything you need to become a Keyutie.
@@ -270,22 +275,20 @@
         </div>
       </div>
     </div>
-  </div>
 </section>
 
 <!-- Committees -->
-<section class="w-full bg-background px-8 py-20 text-foreground">
-  <div class="mx-auto max-w-6xl">
-    <div use:reveal class="text-center">
+<section class="w-full bg-background px-8 py-20 text-foreground flex flex-col items-center justify-center text-center">
+    <div use:reveal>
       <span class="font-bold-gothic text-secondary">GET INVOLVED</span>
-      <h2 class="mt-2 text-4xl md:text-5xl">Our four committees</h2>
+      <h2 class="mt-2 text-4xl md:text-5xl">Our Four Committees</h2>
       <p class="mx-auto mt-4 max-w-2xl text-lg">
         Committees are the best way to meet new people and earn volunteer hours.
         Every member should join at least one.
       </p>
     </div>
 
-    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    <div use:reveal class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl">
       {#each committees as committee (committee.name)}
         <div
           class="overflow-hidden rounded-xl bg-card shadow-md"
@@ -308,42 +311,42 @@
         </div>
       {/each}
     </div>
-  </div>
 </section>
 
 <!-- Upcoming events teaser -->
-<section class="w-full bg-kcblue px-8 py-20 text-stone-100">
-    <div class="mx-auto max-w-6xl">
-        <div use:reveal class="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
-            <div>
-                <span class="font-bold-gothic text-kcyellow">WHAT'S NEXT</span>
+<section class="w-full bg-kcblue px-8 py-20 text-stone-100 flex flex-col justify-center">
+    <div class="mx-auto w-full max-w-6xl">
+            <div use:reveal class="flex flex-col items-center justify-between gap-4 md:flex-row md:items-end">
                 <h2 class="mt-2 text-4xl md:text-5xl">Upcoming events</h2>
+                <Button class="mt-8 hidden md:inline" size="lg" href="/events">
+                    See full calendar
+                </Button>
             </div>
-            <a class="rounded-md bg-kcyellow px-6 py-3 font-semibold text-kcblack no-underline transition-transform hover:scale-[1.03]" href="/events">
-                See full calendar
-            </a>
-        </div>
 
-        <div use:reveal>
-            <Carousel.Root
-              class="mt-10 w-full cursor-grab"
-              opts={{ loop: true, align: isMobile.current ? "center" : "start", skipSnaps: false }}
-            >
-              <Carousel.Content>
-                {#each data.events as event}
-                  <Carousel.Item class={isMobile.current ? "basis-full" : "basis-1/2"}>
-                      <EventCard event={event} size={isMobile.current ? "xs" : "lg"} class={!isMobile.current ? "w-full!" : ""} />
-                  </Carousel.Item>
-                {/each}
-              </Carousel.Content>
-            </Carousel.Root>
-        </div>
+            <div use:reveal class="flex flex-col items-center">
+                <Carousel.Root
+                  class="mt-10 w-full cursor-grab select-none"
+                  opts={{ loop: true, align: isMobile.current ? "center" : "start", skipSnaps: false }}
+                >
+                  <Carousel.Content>
+                    {#each data.events as event}
+                      <Carousel.Item class={isMobile.current ? "basis-full" : "basis-1/2"}>
+                          <EventCard event={event} size={isMobile.current ? "xs" : "lg"} class={!isMobile.current ? "w-full!" : ""} />
+                      </Carousel.Item>
+                    {/each}
+                  </Carousel.Content>
+                </Carousel.Root>
 
-        <div class="mt-6 flex items-center justify-center gap-2 text-stone-400">
-          <Icon icon="solar:arrow-left-right-linear" class="size-5" />
-          <span class="text-sm">Drag to see more</span>
+                <div class="mt-6 flex items-center justify-center gap-2 text-stone-400">
+                  <Icon icon="solar:arrow-left-right-linear" class="size-5" />
+                  <span class="text-sm">Drag to see more</span>
+                </div>
+
+                <Button class="mt-8 inline md:hidden" size="lg" href="/events">
+                    See full calendar
+                </Button>
+            </div>
         </div>
-    </div>
 </section>
 
 <Footer />

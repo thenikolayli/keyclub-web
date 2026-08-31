@@ -8,6 +8,7 @@
     import * as Alert from "$lib/components/ui/alert/index";
     import { getHours } from "./hours.remote";
     import { onMount } from "svelte";
+    import {reveal} from "$lib/reveal";
 
     onMount(() => {
       document.title = "Hours"
@@ -19,9 +20,9 @@
 <ImageHeader imagePath="/stickers_after_workshop.webp" title="Your Hours" description="Look up your service hours" pageTitle="Hours"/>
 
 <section class="w-full bg-background px-6 py-16 text-foreground">
-    <div class="mx-auto max-w-xl">
+    <div use:reveal class="mx-auto max-w-xl">
         <form class="rounded-2xl bg-background p-8 shadow-lg" {...getHours}>
-            <h4 class="font-bold-gothic text-2xl text-foreground">Enter your name</h4>
+            <h4 class="font-bold-gothic text-2xl text-foreground">Enter Your Name</h4>
             <p class="mb-4 text-muted-foreground">Use the name you registered with.</p>
 
             <Input {...getHours.fields.name.as("text")} placeholder="Your name"/>
