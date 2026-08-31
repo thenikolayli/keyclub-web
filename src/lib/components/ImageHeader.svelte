@@ -20,7 +20,7 @@
 
 <section class="relative flex h-[34vh] w-full items-center justify-center overflow-hidden text-center">
     <img class="absolute inset-0 h-full w-full object-cover brightness-[.4]" src={imagePath} alt=""/>
-    <div class="absolute inset-0 bg-secondary/30"></div>
+    <div class="absolute inset-0 bg-foreground/30"></div>
     <div class="relative z-10 px-6">
         <h1 bind:this={titleElement} class="font-[abril] text-5xl italic text-primary md:text-7xl">{title}</h1>
         <p bind:this={descriptionElement} class="mt-3 text-lg text-muted-foreground md:text-xl">{description}</p>
