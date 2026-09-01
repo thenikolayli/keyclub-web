@@ -1,6 +1,5 @@
 <script lang="ts">
   import * as Sidebar from "$lib/components/ui/sidebar/index.js";
-  import LogOutIcon from "@lucide/svelte/icons/log-out";
   import { page } from "$app/state";
   import { getToolsForRole } from "$lib/auth/tools";
   import Icon from "@iconify/svelte";
@@ -71,7 +70,7 @@
                 </div>
                 <Sidebar.Menu>
                     <Sidebar.MenuButton variant="secondary" onclick={signOut}>
-                        <LogOutIcon />
+                        <Icon icon="solar:exit-linear" />
                         Sign out
                     </Sidebar.MenuButton>
                 </Sidebar.Menu>
@@ -80,11 +79,9 @@
         </Sidebar.Root>
 
         <Sidebar.Inset>
-            <!-- <header class="flex h-14 shrink-0 items-center gap-2 border-b px-4">
-                <Sidebar.Trigger class="-ml-1" />
-                <Separator orientation="vertical" class="mr-2 h-4" />
-                <span class="text-sm font-medium">Beekeper</span>
-            </header> -->
+            <header class="flex h-14 shrink-0 items-center justify-end gap-2 border-b px-4 text-foreground md:hidden">
+                <Sidebar.Trigger class="-mr-1" />
+            </header>
             <div class="flex flex-1 flex-col gap-4 p-4 md:p-6">
                 {@render children?.()}
             </div>

@@ -28,8 +28,8 @@
         </p>
         <Separator />
     </div>
-    <section class="grid grid-cols-10 p-4 gap-4">
-        <div class="col-span-3 flex flex-col gap-4">
+    <section class="flex flex-wrap p-4 gap-4">
+        <div class="flex w-full max-w-md flex-col gap-4">
             <form {...logEvent}>
                 <Card.Root>
                     <Card.Header>
@@ -66,7 +66,7 @@
             {/if}
         </div>
 
-        <div class="col-span-3 flex flex-col gap-4">
+        <div class="flex w-full max-w-md flex-1 min-w-[20rem] flex-col gap-4">
             <Card.Root>
                 <Card.Header class="flex flex-row items-center justify-between space-y-0">
                     <Card.Title>Members Logged</Card.Title>
@@ -91,7 +91,7 @@
             </Card.Root>
         </div>
 
-        <div class="col-span-4 flex flex-col gap-4">
+        <div class="flex w-full max-w-4xl flex-1 min-w-[20rem] flex-col gap-4">
             <Card.Root>
                 <Card.Header class="flex flex-row items-center justify-between space-y-0">
                     <Card.Title>Members Not Logged</Card.Title>

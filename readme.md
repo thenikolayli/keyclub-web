@@ -24,16 +24,8 @@ npx supabase gen types typescript --linked > ./src/lib/db/schema.ts
 
 ## Pushing Updates
 
-To push updates to the server, simply commit your changes and push to the `main` branch.
+To push updates to the server, simply commit your changes and push to any branch and then create a pull request to merge into `master`.
 Vercel will automatically deploy the changes and update the website to the latest commit if it has no build errors.
-Run this function to copy development database changes:
-```sh
-supabase db dump --db-url "postgresql://postgres:[DEV_PASSWORD]@[DEV_HOST]:5432/postgres" --schema public -f schema.sql
-```
-And then this function to push it to the production database:
-```sh
-supabase db push --db-url "postgresql://postgres:[PROD_PASSWORD]@[PROD_HOST]:5432/postgres" -f schema.sql
-```
 
 ## Error Handling and Returning Data
 

@@ -64,7 +64,7 @@
         <div use:reveal class="text-center">
             <h2 class="text-4xl text-background md:text-5xl">Meet The Officers</h2>
             <p class="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-                The one's running the show.
+                The ones running the show.
             </p>
         </div>
 
