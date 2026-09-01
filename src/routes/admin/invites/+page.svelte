@@ -24,8 +24,8 @@
         </p>
         <Separator />
     </div>
-    <section class="grid grid-cols-10 p-4 gap-4">
-        <div class="col-span-3 flex flex-col gap-4">
+    <section class="flex flex-wrap p-4 gap-4">
+        <div class="flex w-full max-w-md flex-col gap-4">
             <form {...invite}>
                 <Card.Root>
                     <Card.Header>
@@ -75,7 +75,7 @@
                 </Alert.Root>
             {/if}
         </div>
-        <div class="col-span-4">
+        <div class="w-full max-w-4xl flex-1 min-w-[20rem]">
             <Card.Root>
                 <Card.Header>
                     <Card.Title>

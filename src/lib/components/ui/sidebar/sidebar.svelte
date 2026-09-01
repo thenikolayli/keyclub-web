@@ -1,7 +1,6 @@
 <script lang="ts">
 	import * as Sheet from "$lib/components/ui/sheet/index.js";
 	import { cn, type WithElementRef } from "$lib/utils.js";
-	import { SIDEBAR_WIDTH_MOBILE } from "./constants.js";
 	import { useSidebar } from "./context.svelte.js";
 	import type { HTMLAttributes } from "svelte/elements";
 
@@ -41,10 +40,9 @@
 			data-slot="sidebar"
 			data-mobile="true"
 			class={cn(
-				"w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden",
+				"w-11/12 max-w-sm bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden",
 				className
 			)}
-			style="--sidebar-width: {SIDEBAR_WIDTH_MOBILE};"
 			{side}
 		>
 			<Sheet.Header class="sr-only">

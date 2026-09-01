@@ -240,7 +240,11 @@ async function findNextEmptyRowNoDupes(
     }
   }
 
-  return { ok: true, data: String((response.data.values?.length ?? 0) + 1) };
+  // The range starts at the first data row (e.g. A2:A, skipping the header).
+  // response.data.values is dense up to the last non-empty row, so the next empty
+  // row is one past that: startRow + values.length.
+  const startRow = Number(searchRange.match(/(\d+)/)?.[1] ?? 1);
+  return { ok: true, data: String(startRow + (response.data.values?.length ?? 0)) };
 }
 
 // converts a numerical index to a column letter (1 -> A, 2 -> B, 27 -> AA, etc)
