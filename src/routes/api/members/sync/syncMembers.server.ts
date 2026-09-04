@@ -1,4 +1,4 @@
-import { supabase } from "$lib/db/admin";
+import { supabaseAdmin } from "$lib/db/admin";
 import { getSheetsService } from "$lib/google";
 import { SPREADSHEET_ID } from "$env/static/private";
 import type { Result } from "$lib/responses";
@@ -84,7 +84,7 @@ export async function syncMembers(): Promise<Result<number>> {
 
   for (let i = 0; i < length; i++) {
     const phone = formatPhoneNumber(phoneNumbers[i]);
-    const { error: upsertError } = await supabase
+    const { error: upsertError } = await supabaseAdmin
       .from("members")
       .upsert({
         name: names[i],

@@ -205,7 +205,7 @@
             <Icon icon="solar:wallet-bold" class="size-12 text-primary" />
             <h3 class="font-bold-gothic mt-4 text-2xl text-background">Pay Dues</h3>
             <p class="mt-3 text-muted">
-                Payments will open on <a class="text-primary underline" target="_blank" href="https://wa-everett.intouchreceipting.com/">Payments Online</a> in October.
+                Dues are $45 and are available on <a class="text-primary underline" target="_blank" href="https://wa-everett.intouchreceipting.com/">Payments Online</a>.
             </p>
           </div>
           <div
@@ -216,8 +216,7 @@
               Stay in the Hive
             </h3>
             <p class="mt-3 text-muted">
-              Earn 25 service hours a year, attend 50% of general meetings and honor
-              your event sign-ups.
+                Attend general meetings and honor your event sign-ups.
             </p>
           </div>
         </div>
@@ -267,7 +266,7 @@
           {#each countdown as unit (unit.label)}
             <div class="flex flex-col items-center rounded-xl bg-stone-900/40 px-2 py-5">
               <span class="font-[abril] text-4xl text-kcyellow tabular-nums sm:text-5xl">
-                {String(unit.value).padStart(2, "0")}
+                {unit.value}
               </span>
               <span class="mt-1 text-xs uppercase tracking-wider text-stone-400">{unit.label}</span>
             </div>

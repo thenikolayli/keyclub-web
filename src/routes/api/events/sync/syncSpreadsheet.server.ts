@@ -1,4 +1,4 @@
-import { supabase } from "$lib/db/admin";
+import { supabaseAdmin } from "$lib/db/admin";
 import { getDocsService, getSheetsService } from "$lib/google";
 import { SPREADSHEET_ID } from "$env/static/private";
 import { docsUrlToId, parseBaseEvent } from "$lib/events/events";
@@ -52,7 +52,7 @@ export async function syncSpreadsheet(): Promise<Result<number>> {
     const event = result.data;
 
     const { id: _id, created_at: _c, description: _d, ...row } = event;
-    const { error: upsertError } = await supabase
+    const { error: upsertError } = await supabaseAdmin
       .from("spreadsheet_events")
       .upsert(row, { onConflict: "name" });
     if (upsertError) {

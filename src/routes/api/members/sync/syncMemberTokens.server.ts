@@ -1,11 +1,11 @@
-import { supabase } from "$lib/db/admin";
+import { supabaseAdmin } from "$lib/db/admin";
 import type { Result } from "$lib/responses";
 import type { MemberToken, Member } from "$lib/members/types";
 import {tokenizeName} from "$lib/members/tokenizeName";
 
 
 export async function syncMemberTokens(): Promise<Result<null>> {
-  const { data: deleteResult, error: deleteError } = await supabase
+  const { data: deleteResult, error: deleteError } = await supabaseAdmin
     .from("member_tokens")
     .delete()
     .not("id", "is", null);
@@ -13,7 +13,7 @@ export async function syncMemberTokens(): Promise<Result<null>> {
     return { ok: false, error: deleteError?.message };
   }
 
-  const { data: readResult, error: readError } = await supabase
+  const { data: readResult, error: readError } = await supabaseAdmin
     .from("members")
     .select("*");
   if (readError) {
@@ -28,7 +28,7 @@ export async function syncMemberTokens(): Promise<Result<null>> {
     }
   }
 
-  const { error: insertError } = await supabase
+  const { error: insertError } = await supabaseAdmin
     .from("member_tokens")
     .upsert(memberTokens);
   if (insertError) {

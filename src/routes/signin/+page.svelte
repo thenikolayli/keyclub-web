@@ -7,7 +7,7 @@
   import { signIn } from "./signIn.remote.js";
 
   onMount(() => {
-    document.title = "Admin Sign In";
+    document.title = "Beekeeper - Sign In";
   });
 </script>
 
@@ -41,6 +41,8 @@
             disabled={signIn.pending > 0}
           />
         </div>
+
+        <a class="text-sm underline text-muted-foreground" href="/resetpassword">Forgot password?</a>
 
         <Button type="submit" disabled={signIn.pending > 0}>
           {signIn.pending > 0 ? "Signing in..." : "Sign In"}
