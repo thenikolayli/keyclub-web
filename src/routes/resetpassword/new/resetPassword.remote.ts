@@ -17,7 +17,7 @@ export const resetPassword = form(
     const event = getRequestEvent();
     const { data: verifyData, error: verifyError } = await event.locals.supabase.auth.verifyOtp({
       token_hash: token_hash,
-      type: "invite",
+      type: "recovery",
     })
     if (verifyError) {
       return { ok: false, error: verifyError.message };
