@@ -47,7 +47,7 @@ export const logEvent = form(
           requestBody: { requests: attendanceUpdateRequests },
         });
       } catch {
-        return { ok: false, error: "Issue updating document while logging event." };
+        return { ok: false, error: "Failed to batch update requests for attendance doc." };
       }
     }
 
@@ -105,7 +105,7 @@ export const logEvent = form(
         },
       });
     } catch {
-      return { ok: false, error: "Issue updating sheets while logging event." };
+      return { ok: false, error: "Failed to update hours spreadsheet during event logging." };
     }
 
     return {

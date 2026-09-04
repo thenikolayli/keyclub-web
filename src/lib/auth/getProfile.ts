@@ -2,7 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "$lib/db/schema";
 import type { Result } from "$lib/responses";
 import type { Profile } from "$lib/auth/types";
-import { supabase as supabaseAdmin } from "$lib/db/admin";
+import { supabaseAdmin as supabaseAdmin } from "$lib/db/admin";
 
 export async function getProfile(supabase: SupabaseClient<Database>): Promise<Result<Profile>> {
   const { data: userData, error: userError } = await supabase.auth.getUser();

@@ -1,6 +1,6 @@
 import { form } from "$app/server";
 import * as v from "valibot";
-import { supabase as supabaseAdmin } from "$lib/db/admin";
+import { supabaseAdmin } from "$lib/db/admin";
 import type { Result } from "$lib/responses";
 import { getRequestEvent } from "$app/server";
 
@@ -29,8 +29,7 @@ export const invite = form(
       return { ok: false, error: userError.message };
     }
 
-    const { error: inviteError } =
-      await supabaseAdmin.auth.admin.inviteUserByEmail(email);
+    const { error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(email);
     if (inviteError) {
       return { ok: false, error: inviteError.message };
     }

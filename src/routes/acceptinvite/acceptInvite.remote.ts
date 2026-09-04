@@ -1,11 +1,11 @@
 import { form } from "$app/server";
 import * as v from "valibot"
 import { getRequestEvent } from "$app/server";
-import { supabase as supabaseAdmin } from "$lib/db/admin";
+import { supabaseAdmin } from "$lib/db/admin";
 import type { Result } from "$lib/responses";
 import { isValidPassword } from "$lib/auth/validatePassword";
 
-export const accept = form(
+export const acceptInvite = form(
   v.object({
     token_hash: v.string(),
     first_name: v.pipe(v.string(), v.nonEmpty(), v.trim()),

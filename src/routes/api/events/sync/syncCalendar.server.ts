@@ -1,4 +1,4 @@
-import { supabase } from "$lib/db/admin";
+import { supabaseAdmin } from "$lib/db/admin";
 import { getCalendarService, getDocsService } from "$lib/google";
 import { CALENDAR_ID } from "$env/static/private";
 import type { BaseEvent } from "$lib/events/types";
@@ -44,7 +44,7 @@ export async function syncCalendar(): Promise<Result<number>> {
   let updates = 0;
 
   for (const event of parsedEvents) {
-    const { error: upsertError } = await supabase
+    const { error: upsertError } = await supabaseAdmin
       .from("calendar_events")
       .upsert(
         {

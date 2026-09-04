@@ -1,7 +1,6 @@
 import { form } from "$app/server";
 import * as v from "valibot";
-import { supabase } from "$lib/db/admin";
-import type { MemberToken } from "$lib/members/types";
+import { supabaseAdmin } from "$lib/db/admin";
 import {tokenizeName} from "$lib/members/tokenizeName";
 import type { Result } from "$lib/responses";
 
@@ -17,7 +16,7 @@ export const getHours = form(
       return result;
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from("members")
       .select("name, class, grad_year, all_hours, term_hours")
       .eq("id", result.data)
@@ -30,7 +29,7 @@ export const getHours = form(
 );
 
 async function intersectTokens(tokens: string[]): Promise<Result<string>> {
-  const {data, error} = await supabase.rpc("match_all_tokens", {tokens})
+  const {data, error} = await supabaseAdmin.rpc("match_all_tokens", {tokens})
   if (error || data.length === 0) {
     return { ok: false, error: "No member found." };
   }
