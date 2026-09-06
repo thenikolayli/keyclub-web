@@ -2,6 +2,7 @@ import { form } from "$app/server";
 import * as v from "valibot";
 import { isValidPassword } from "$lib/auth/validatePassword";
 import { getRequestEvent } from "$app/server";
+import { ok, fail } from "$lib/responses";
 
 export const resetPassword = form(
   v.object({
@@ -20,17 +21,17 @@ export const resetPassword = form(
       type: "recovery",
     })
     if (verifyError) {
-      return { ok: false, error: verifyError.message };
+      return fail(verifyError.message);
     }
     if (!verifyData.user) {
-      return { ok: false, error: "Invalid token" };
+      return fail("Invalid token");
     }
 
     const { data: updateData, error: updateError } = await event.locals.supabase.auth.updateUser({ password });
     if (updateError) {
-      return { ok: false, error: updateError.message };
+      return fail(updateError.message);
     }
 
-    return { ok: true, data: null };
+    return ok(null);
   }
 )

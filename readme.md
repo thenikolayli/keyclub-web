@@ -31,6 +31,8 @@ Vercel will automatically deploy the changes and update the website to the lates
 
 I'm using Go-style error handling for this with the `Result` type.
 Essentially, all functions must return a `Result`, for simpler and more detailed error handling.
+*Use `fail()` to return an error, and `ok()` to return a result.*
+This is better than constructing a `Response` object directly, as it allows for more detailed error handling and logging via the `cause?` parameter on the `fail()` function.
 But, the API endpoints must return `toResponse(result)` instead.
 The `toResponse()` function turns a `Result` object into a `Response` object.
 
@@ -42,3 +44,8 @@ Also, run
 cat google_key.json | base64
 ```
 and copy and paste that into the `GOOGLE_KEY_BASE64` environment variable in the .env file.
+
+## To-do
+
+- [x] Optimize getCellText to getRowText, since it's called several times on the same row. Could be nice to map columns to info in each row instead of hardcoding it.
+- [ ] Add district project page.

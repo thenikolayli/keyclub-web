@@ -5,28 +5,28 @@ export const Tools: Tool[] = [
     id: "dashboard",
     label: "Dashboard",
     href: "/admin",
-    icon: "lucide:layout-dashboard",
+    icon: "solar:sofa-2-linear",
     roles: ["leader", "officer"],
   },
   {
     id: "invites",
     label: "Invites",
     href: "/admin/invites",
-    icon: "lucide:user-plus",
+    icon: "solar:user-plus-outline",
     roles: ["officer"],
   },
   {
     id: "calendar",
     label: "Calendar",
     href: "/admin/calendar",
-    icon: "lucide:calendar",
+    icon: "solar:calendar-add-outline",
     roles: ["leader", "officer"]
   },
   {
     id: "events",
     label: "Log Event",
     href: "/admin/events",
-    icon: "lucide:clipboard-check",
+    icon: "solar:clipboard-check-outline",
     roles: ["officer"],
   }
 ];

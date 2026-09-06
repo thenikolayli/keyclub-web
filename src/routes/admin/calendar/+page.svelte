@@ -18,7 +18,7 @@
         <h1 class="text-3xl font-semibold tracking-tight">
             Invites
         </h1>
-        <p class="text-md text-muted-foreground capitalize">
+        <p class="text-md text-muted-foreground">
             Invite someone to give them access to the Beekeper admin panel.
         </p>
         <Separator />

@@ -41,8 +41,8 @@
     return m.isValid() ? m.format("h:mm A") : t;
   }
 
-  const openSlots = $derived(
-    (event.n_slots ?? 0) - (event.n_volunteers ?? 0),
+  const openSpots = $derived(
+    (event.n_spots ?? 0) - (event.n_volunteers ?? 0),
   );
 
   const eventLength = $derived(() => {
@@ -96,12 +96,12 @@
         <Icon icon="solar:hourglass-linear" class="size-4 text-primary" />
         {eventLength() ?? "\u2014"} hours
       </span>
-      <Badge class="py-1 px-2 {cn(spotsClass(openSlots))}">
-        {#if openSlots <= 0}
+      <Badge class="py-1 px-2 {cn(spotsClass(openSpots))}">
+        {#if openSpots <= 0}
           Full
         {:else}
-          {openSlots}
-          {openSlots === 1 ? "spot" : "spots"} left
+          {openSpots}
+          {openSpots === 1 ? "spot" : "spots"} left
         {/if}
       </Badge>
     </div>

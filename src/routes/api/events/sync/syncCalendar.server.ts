@@ -2,6 +2,7 @@ import { supabaseAdmin } from "$lib/db/admin";
 import { getCalendarService, getDocsService } from "$lib/google";
 import { CALENDAR_ID } from "$env/static/private";
 import type { BaseEvent } from "$lib/events/types";
+import { ok } from "$lib/responses";
 import type { Result } from "$lib/responses";
 import { parseBaseEvent, docsUrlToId } from "$lib/events/events";
 
@@ -52,7 +53,7 @@ export async function syncCalendar(): Promise<Result<number>> {
           date: event.date,
           start_time: event.start_time,
           end_time: event.end_time,
-          address: event.address,
+          address: event.n_spots,
           n_slots: event.n_slots,
           n_volunteers: event.n_volunteers,
           description: event.description,
@@ -67,5 +68,5 @@ export async function syncCalendar(): Promise<Result<number>> {
     updates++;
   }
 
-  return { ok: true, data: updates };
+  return ok(updates);
 };

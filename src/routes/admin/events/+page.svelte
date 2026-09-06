@@ -23,7 +23,7 @@
         <h1 class="text-3xl font-semibold tracking-tight">
             Events
         </h1>
-        <p class="text-md text-muted-foreground capitalize">
+        <p class="text-md text-muted-foreground">
             Log a volunteer event from its attendance doc.
         </p>
         <Separator />

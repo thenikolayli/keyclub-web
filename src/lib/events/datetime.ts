@@ -1,6 +1,7 @@
 import moment from "moment-timezone";
-import type { Result } from "../responses";
+import { ok, fail, type Result} from "$lib/responses";
 
+// Everything takes place in LA time for this club.
 const LA_TIMEZONE = "America/Los_Angeles";
 const DATE_FORMATS = [
   "YYYY-MM-DD",
@@ -22,15 +23,14 @@ export function parseDateField(dateStr: string): Result<string> {
     .trim();
 
   const parsed = moment.tz(normalized, DATE_FORMATS, LA_TIMEZONE);
-  if (!parsed.isValid()) return { ok: false, error: `Could not parse date "${dateStr}".` };
-  return { ok: true, data: parsed.format("YYYY-MM-DD") };
+  if (!parsed.isValid()) return fail(`Could not parse date "${dateStr}".`);
+  return ok(parsed.format("YYYY-MM-DD"));
 }
 
 // Converts "10 am", "4 pm", "10:30 am", or "16:00" into 24h "HH:MM:SS".
-// Times are always in LA time.
 export function parseTimeField(timeStr: string): Result<string> {
   const m = timeStr.trim().match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)?$/i);
-  if (!m) return { ok: false, error: `Could not parse time "${timeStr}".` };
+  if (!m) return fail(`Could not parse time "${timeStr}".`);
 
   let hours = parseInt(m[1], 10);
   const minutes = m[2] ? parseInt(m[2], 10) : 0;
@@ -40,5 +40,5 @@ export function parseTimeField(timeStr: string): Result<string> {
   if (meridiem === "am" && hours === 12) hours = 0;
 
   const parsed = moment.tz({ hours, minutes, seconds: 0 }, LA_TIMEZONE);
-  return { ok: true, data: parsed.format("HH:mm:ss") };
+  return ok(parsed.format("HH:mm:ss"));
 }

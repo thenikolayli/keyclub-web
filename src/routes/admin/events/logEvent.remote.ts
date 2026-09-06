@@ -2,11 +2,12 @@ import { form } from "$app/server";
 import * as v from "valibot";
 import { getDocsService, getSheetsService } from "$lib/google";
 import { docsUrlToId, parseBaseEvent } from "$lib/events/events";
-import { eventsMembersSheet, eventsSheet } from "$lib/sheetsConfig";
+import { eventsMembersSheetInfo, eventsSheetInfo } from "$lib/sheetsConfig";
 import { SPREADSHEET_ID } from "$env/static/private";
 import { tokenizeName, matchesAllTokens } from "$lib/members/tokenizeName";
 import type { Result } from "$lib/responses";
 import type { MemberAttendance, BaseEvent } from "$lib/events/types";
+import {fail, ok} from "$lib/responses";
 
 // Logs a volunteer event from its attendance document.
 // Writes calculated hours back into the attendance doc, then appends the event to the Events sheet and
@@ -23,7 +24,7 @@ export const logEvent = form(
   }>> => {
     const idResult = docsUrlToId(url);
     if (!idResult.ok) {
-      return { ok: false, error: idResult.error };
+      return fail(idResult.error);
     }
 
     const documentId = idResult.data;
@@ -32,7 +33,7 @@ export const logEvent = form(
 
     const eventInfo = await parseBaseEvent(documentId, docs);
     if (!eventInfo.ok) {
-      return { ok: false, error: eventInfo.error };
+      return fail(eventInfo.error);
     }
     const { event, memberAttendance } = eventInfo.data;
 
@@ -46,15 +47,15 @@ export const logEvent = form(
           documentId,
           requestBody: { requests: attendanceUpdateRequests },
         });
-      } catch {
-        return { ok: false, error: "Failed to batch update requests for attendance doc." };
+      } catch (error) {
+        return fail("Failed to batch update requests for attendance doc.", error);
       }
     }
 
     // Finds next empty row to log new event attendance
     const emptyRowEventsMembersResult = await findNextEmptyRowNoDupes(
       sheets,
-      eventsMembersSheet.events,
+      eventsMembersSheetInfo.events,
       event.name!,
     );
     if (!emptyRowEventsMembersResult.ok) {
@@ -74,7 +75,7 @@ export const logEvent = form(
     // Finds next empty row to log new event
     const emptyRowEventsResult = await findNextEmptyRowNoDupes(
       sheets,
-      eventsSheet.events,
+      eventsSheetInfo.events,
       event.name!,
     );
     if (!emptyRowEventsResult.ok) {
@@ -92,30 +93,27 @@ export const logEvent = form(
           valueInputOption: "USER_ENTERED",
           data: [
             {
-              range: `${eventsMembersSheet.sheetName}!A${emptyRowEventsMembersResult.data}:${indexToCol(
+              range: `${eventsMembersSheetInfo.sheetName}!A${emptyRowEventsMembersResult.data}:${indexToCol(
                 eventsMembersUpdateValues.length - 1,
               )}${emptyRowEventsMembersResult.data}`,
               values: [eventsMembersUpdateValues],
             },
             {
-              range: `${eventsSheet.sheetName}!A${emptyRowEventsResult.data}:C${emptyRowEventsResult.data}`,
+              range: `${eventsSheetInfo.sheetName}!A${emptyRowEventsResult.data}:C${emptyRowEventsResult.data}`,
               values: [eventsUpdateValues],
             },
           ],
         },
       });
-    } catch {
-      return { ok: false, error: "Failed to update hours spreadsheet during event logging." };
+    } catch (error) {
+      return fail("Failed to update hours spreadsheet during event logging.", error);
     }
 
-    return {
-      ok: true,
-      data: {
-        event,
-        membersLogged,
-        membersNotLogged,
-      },
-    };
+    return ok({
+      event,
+      membersLogged,
+      membersNotLogged,
+    });
   },
 );
 
@@ -136,10 +134,10 @@ async function createUpdateValues(
   try {
     namesResponse = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: eventsMembersSheet.members,
+      range: eventsMembersSheetInfo.members,
     });
-  } catch {
-    return { ok: false, error: "Issue fetching member columns from sheet while logging event." };
+  } catch (error) {
+    return fail("Issue fetching member columns from sheet while logging event.", error);
   }
 
   const headerRow = namesResponse.data.values?.[0] ?? [];
@@ -163,14 +161,11 @@ async function createUpdateValues(
   // member headers start at column B (config uses B1:ZZ1); prepend event name for column A
   const values = [eventName, ...updateValues];
 
-  return {
-    ok: true,
-    data: {
-      updateValues: values,
-      membersLogged,
-      membersNotLogged,
-    },
-  };
+  return ok({
+    updateValues: values,
+    membersLogged,
+    membersNotLogged,
+  });
 }
 
 // Builds a batch of requests to write calculated hours into the attendance doc
@@ -230,21 +225,17 @@ async function findNextEmptyRowNoDupes(
       spreadsheetId: SPREADSHEET_ID,
       range: searchRange,
     });
-  } catch {
-    return { ok: false, error: "Issue fetching events from sheet while logging event." };
+  } catch (error) {
+    return fail("Issue fetching events from sheet while logging event.", error);
   }
 
   for (const row of response.data.values ?? []) {
     if (row[0] === eventName) {
-      return { ok: false, error: `Event ${eventName} already logged in sheet` };
+      return fail(`Event ${eventName} already logged in sheet`);
     }
   }
 
-  // The range starts at the first data row (e.g. A2:A, skipping the header).
-  // response.data.values is dense up to the last non-empty row, so the next empty
-  // row is one past that: startRow + values.length.
-  const startRow = Number(searchRange.match(/(\d+)/)?.[1] ?? 1);
-  return { ok: true, data: String(startRow + (response.data.values?.length ?? 0)) };
+  return ok(String((response.data.values?.length ?? 0) + 2));
 }
 
 // converts a numerical index to a column letter (1 -> A, 2 -> B, 27 -> AA, etc)

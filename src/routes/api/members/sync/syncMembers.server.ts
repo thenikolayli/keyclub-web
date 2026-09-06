@@ -1,8 +1,9 @@
 import { supabaseAdmin } from "$lib/db/admin";
 import { getSheetsService } from "$lib/google";
 import { SPREADSHEET_ID } from "$env/static/private";
+import { ok, fail } from "$lib/responses";
 import type { Result } from "$lib/responses";
-import { membersSheet } from "$lib/sheetsConfig";
+import { membersSheetInfo } from "$lib/sheetsConfig";
 
 type Parser<T> = (v: string) => T;
 
@@ -12,28 +13,28 @@ export async function syncMembers(): Promise<Result<number>> {
   const response = await sheets.spreadsheets.values.batchGet({
     spreadsheetId: SPREADSHEET_ID,
     ranges: [
-      membersSheet.names,
-      membersSheet.all_hours,
-      membersSheet.term_hours,
-      membersSheet.grad_year,
-      membersSheet.class,
-      membersSheet.strikes,
-      membersSheet.personal_email,
-      membersSheet.school_email,
-      membersSheet.phone_number,
-      membersSheet.shirt_size,
-      membersSheet.paid_dues,
+      membersSheetInfo.names,
+      membersSheetInfo.all_hours,
+      membersSheetInfo.term_hours,
+      membersSheetInfo.grad_year,
+      membersSheetInfo.class,
+      membersSheetInfo.strikes,
+      membersSheetInfo.personal_email,
+      membersSheetInfo.school_email,
+      membersSheetInfo.phone_number,
+      membersSheetInfo.shirt_size,
+      membersSheetInfo.paid_dues,
     ],
   });
 
   const valueRanges = response.data.valueRanges;
   if (!valueRanges || valueRanges.length === 0) {
-    return { ok: false, error: "No data returned from spreadsheet" };
+    return fail("No data returned from spreadsheet");
   }
 
   const length = valueRanges[0].values?.length ?? 0;
   if (length === 0) {
-    return { ok: false, error: "No members found."};
+    return fail("No members found.");
   }
 
   const names = normalize(valueRanges[0].values ?? [], length, Parsers.string);
@@ -107,7 +108,7 @@ export async function syncMembers(): Promise<Result<number>> {
     synced++;
   }
 
-  return { ok: true, data: synced };
+  return ok(synced);
 }
 
 const Parsers = {

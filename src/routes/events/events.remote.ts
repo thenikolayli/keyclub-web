@@ -1,6 +1,7 @@
 import { query } from "$app/server";
 import * as v from "valibot";
 import { supabase } from "$lib/db/postgres";
+import { ok } from "$lib/responses";
 import type { Result } from "$lib/responses";
 import type { CalendarEvent } from "$lib/events/types";
 
@@ -20,5 +21,5 @@ export const searchEvents = query(
     AND n_slots - n_volunteers BETWEEN ${spots[0]} AND ${spots[1]}
   `;
 
-  return { ok: true, data: rows };
+  return ok(rows);
 })

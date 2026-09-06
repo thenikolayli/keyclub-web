@@ -2,6 +2,7 @@ import { form } from "$app/server";
 import * as v from "valibot";
 import { supabaseAdmin } from "$lib/db/admin";
 import {tokenizeName} from "$lib/members/tokenizeName";
+import { ok, fail } from "$lib/responses";
 import type { Result } from "$lib/responses";
 
 
@@ -22,16 +23,16 @@ export const getHours = form(
       .eq("id", result.data)
       .single();
     if (error) {
-      return { ok: false, error: "No member found." };
+      return fail("No member found.");
     }
-    return { ok: true, data: data };
+    return ok(data);
   },
 );
 
 async function intersectTokens(tokens: string[]): Promise<Result<string>> {
   const {data, error} = await supabaseAdmin.rpc("match_all_tokens", {tokens})
   if (error || data.length === 0) {
-    return { ok: false, error: "No member found." };
+    return fail("No member found.");
   }
-  return { ok: true, data: data[0].member_id };
+  return ok(data[0].member_id);
 }

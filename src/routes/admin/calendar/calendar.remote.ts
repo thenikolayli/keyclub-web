@@ -1,5 +1,6 @@
 import { form } from "$app/server";
 import * as v from "valibot";
+import { ok, fail } from "$lib/responses";
 import type { Result } from "$lib/responses";
 import { docsUrlToId, parseBaseEvent } from "$lib/events/events";
 import { getDocsService, getCalendarService } from "$lib/google";
@@ -15,21 +16,18 @@ export const calendar = form(
   async ({ url }): Promise<Result<{link: string, name: string}>> => {
     const idResult = docsUrlToId(url);
     if (!idResult.ok) {
-      return { ok: false, error: idResult.error };
+      return fail(idResult.error);
     }
     const id = idResult.data;
 
     const calendarService = getCalendarService();
     const eventInfo = await parseBaseEvent(id, getDocsService());
     if (!eventInfo.ok) {
-      return {
-        ok: false,
-        error: "Failed to extract event info from attendance document.",
-      };
+      return fail("Failed to extract event info from attendance document.");
     }
     const event = eventInfo.data.event;
     if (!event.date || !event.start_time || !event.end_time) {
-      return { ok: false, error: "Event is missing date or time information." };
+      return fail("Event is missing date or time information.");
     }
 
     const calendarEvent = {
@@ -53,7 +51,7 @@ export const calendar = form(
     };
 
     if (await alreadyExists(calendarService, CALENDAR_ID, calendarEvent)) {
-      return { ok: false, error: "Event already exists in calendar." };
+      return fail("Event already exists in calendar.");
     }
 
     const result = await calendarService.events.insert({
@@ -62,7 +60,7 @@ export const calendar = form(
       supportsAttachments: true,
     });
 
-    return { ok: true, data: { link: result.data.htmlLink ?? "", name: event.name! } };
+    return ok({ link: result.data.htmlLink ?? "", name: event.name! });
   },
 );
 
@@ -81,7 +79,10 @@ async function alreadyExists(
     timeMax: moment.tz(event.end.dateTime, "America/Los_Angeles").toISOString(),
   });
 
-  return (response.data.items ?? []).some(
-    (item) => item.summary === event.summary,
-  );
+  for (const item of response.data.items ?? []) {
+    if (item.summary?.trim().toLowerCase() === event.summary.trim().toLowerCase()) {
+      return true;
+    }
+  }
+  return false;
 }
