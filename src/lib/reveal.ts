@@ -6,6 +6,7 @@ interface RevealParams {
   start?: string;
 }
 
+// Reveal action for Svelte that uses GSAP.
 export const reveal: Action<HTMLElement, RevealParams | undefined> = (node, params = {}) => {
   let tween: gsap.core.Tween | undefined;
 

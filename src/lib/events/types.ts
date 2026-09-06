@@ -11,14 +11,12 @@ export type Committee = "general" | "leadership" | "spirit" | "service" | "decor
 export interface BaseEvent {
   address: string | null;
   attendance_url: string | null;
-  created_at: string;
   date: string | null;
   description: string | null;
   end_time: string | null;
-  id: string;
   leaders: string[] | null;
   made_by: string | null;
-  n_slots: number | null;
+  n_spots: number | null;
   n_volunteers: number | null;
   name: string | null;
   start_time: string | null;

@@ -1,12 +1,12 @@
 import { syncCalendar } from "./syncCalendar.server";
 import { syncSpreadsheet } from "./syncSpreadsheet.server";
-import { toResponse } from "$lib/responses";
+import { toResponse, ok, fail } from "$lib/responses";
 import { SYNC_SECRET } from "$env/static/private";
 
 export async function GET({ url }) {
   const token = url.searchParams.get("secret");
   if (token !== SYNC_SECRET) {
-    return toResponse({ ok: false, error: "Unauthorized" }, 401);
+    return toResponse(fail("Unauthorized"), 401);
   }
 
   const calendarResult = await syncCalendar();
@@ -17,5 +17,5 @@ export async function GET({ url }) {
   if (!spreadsheetResult.ok) {
     return toResponse(spreadsheetResult, 500);
   }
-  return toResponse({ ok: true, data: { synced: calendarResult.data + spreadsheetResult.data } }, 200);
+  return toResponse(ok({ synced: calendarResult.data + spreadsheetResult.data }), 200);
 }

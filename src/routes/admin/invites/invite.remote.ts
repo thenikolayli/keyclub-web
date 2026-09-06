@@ -1,6 +1,7 @@
 import { form } from "$app/server";
 import * as v from "valibot";
 import { supabaseAdmin } from "$lib/db/admin";
+import { ok, fail } from "$lib/responses";
 import type { Result } from "$lib/responses";
 import { getRequestEvent } from "$app/server";
 
@@ -16,31 +17,31 @@ export const invite = form(
       .eq("email", email)
       .maybeSingle();
     if (profileError) {
-      return { ok: false, error: profileError.message };
+      return fail(profileError.message);
     }
     if (profileData) {
-      return { ok: false, error: "User already exists" };
+      return fail("User already exists");
     }
 
     const event = getRequestEvent();
     const { data: userData, error: userError } =
       await event.locals.supabase.auth.getUser();
     if (userError) {
-      return { ok: false, error: userError.message };
+      return fail(userError.message);
     }
 
     const { error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(email);
     if (inviteError) {
-      return { ok: false, error: inviteError.message };
+      return fail(inviteError.message);
     }
 
     const { data: insertData, error: insertError } = await supabaseAdmin
       .from("pending_invites")
       .upsert({ email, role, invited_by: userData.user.id });
     if (insertError) {
-      return { ok: false, error: insertError.message };
+      return fail(insertError.message);
     }
 
-    return { ok: true, data: null };
+    return ok(null);
   },
 );

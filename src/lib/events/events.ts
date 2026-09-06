@@ -1,6 +1,6 @@
 import type { MemberAttendance, BaseEvent } from "./types";
-import { getDocsService } from "../google";
-import type { Result } from "../responses";
+import { getDocsService } from "$lib/google";
+import { ok, fail, type Result } from "$lib/responses";
 import { parseDateField, parseTimeField } from "./datetime";
 import { tokenizeName } from "$lib/members/tokenizeName";
 import moment from "moment-timezone";
@@ -14,45 +14,49 @@ export async function parseBaseEvent(
 ): Promise<Result<{ event: BaseEvent; memberAttendance: MemberAttendance[] }>> {
   const res = await docs.documents.get({ documentId });
   const doc = res.data;
-  if (!doc.body?.content) return { ok: false, error: "No content" };
+  if (!doc.body?.content) return fail("No content");
 
   const tables = doc.body.content
     .filter((el: any) => el.table)
     .map((el: any) => el.table!);
-  if (tables.length === 0) return { ok: false, error: "No tables" };
+  if (tables.length === 0) return fail("No tables");
 
   const fields = parseInfoFields(tables[0]);
-  const { date, startTime, endTime } = parseEventDateTimes(fields, doc.title!);
+  const eventDateTimesResult = parseEventDateTimes(fields, doc.title!);
+  if (!eventDateTimesResult.ok) return eventDateTimesResult;
+  const { date, startTime, endTime } = eventDateTimesResult.data;
 
-  let nOfSlots = 0;
-  let nOfVolunteers = 0;
+  let nSpots = 0;
+  let nVolunteers = 0;
   let totalHours = 0;
   const memberAttendance: MemberAttendance[] = [];
 
   // Grabs the attendance tables (every table after the first)
   for (const table of tables.slice(1)) {
-    if (!table.tableRows) continue;
+    if (!table.tableRows) return fail("Table has no rows");
+    if (table.tableRows[0].tableCells?.length < 7) {
+      return fail("Table does not have 7 columns, check formatting. Special events require manual logging.");
+    }
+
     for (let i = 1; i < table.tableRows.length; i++) {
-      nOfSlots++;
+      nSpots++;
       const cells = table.tableRows[i].tableCells;
       if (!cells || cells.length < 2) continue;
+      const cellTexts = cells.map(getCellText);
 
-      const memberName = getCellText(cells[1]);
+      const memberName = cellTexts[1];
       if (!memberName) continue;
-      nOfVolunteers++;
+      nVolunteers++;
 
-      // Rows without the full cell set (#, name, grade, email/phone, sign in, sign out, hours)
-      // don't produce attendance
-      if (cells.length < 7) continue;
-
-      const hoursResult = calculateHours(getCellText(cells[4]), getCellText(cells[5]));
-      const hours = hoursResult.ok ? hoursResult.data : null;
-      if (hours != null) totalHours += hours;
+      const hoursResult = calculateHours(cellTexts[4], cellTexts[5]);
+      if (hoursResult.ok) {
+        totalHours += hoursResult.data;
+      }
 
       memberAttendance.push({
         name: memberName,
         tokenizedName: tokenizeName(memberName),
-        hours,
+        hours: hoursResult.ok ? hoursResult.data : null,
         // +1/-1 offsets grab the inside of the cell, not its borders
         hoursStartIndex: cells[6].startIndex + 1,
         hoursEndIndex: cells[6].endIndex - 1,
@@ -60,44 +64,40 @@ export async function parseBaseEvent(
     }
   }
 
-  return {
-    ok: true,
-    data: {
-      event: {
-        name: doc.title!,
-        date,
-        start_time: startTime,
-        end_time: endTime,
-        address: fields["address"] || fields["location"] || null,
-        description: fetchDescription(doc.body.content),
-        attendance_url: attendanceUrlFromId(documentId),
-        made_by: fields["made by"] || null,
-        leaders: splitLeaders(fields["leaders"]),
-        n_slots: nOfSlots,
-        n_volunteers: nOfVolunteers,
-        total_hours: totalHours,
-        created_at: "",
-        id: "",
-      },
-      memberAttendance,
+  const descriptionResult = fetchDescription(doc.body.content);
+
+  return ok({
+    event: {
+      name: doc.title!,
+      date,
+      start_time: startTime,
+      end_time: endTime,
+      address: fields["address"] || fields["location"] || null,
+      description: descriptionResult.ok ? descriptionResult.data : "Check attendance doc for description.",
+      attendance_url: attendanceUrlFromId(documentId),
+      made_by: fields["made by"] || null,
+      leaders: splitLeaders(fields["leaders"]),
+      n_spots: nSpots,
+      n_volunteers: nVolunteers,
+      total_hours: totalHours,
     },
-  };
+    memberAttendance,
+  });
 }
 
 // computes hours between start and end time strings (HH:MM)
 // returns null (not an error) when both times are blank, meaning no hours logged
-function calculateHours(startTime: string, endTime: string): Result<number | null> {
+function calculateHours(startTime: string, endTime: string): Result<number> {
   const start = startTime.trim();
   const end = endTime.trim();
-  if (!start && !end) return { ok: true, data: null };
+  if (!start && !end) return fail("No start or end time.");
 
   const startMoment = moment(start, "HH:mm");
   const endMoment = moment(end, "HH:mm");
   if (!startMoment.isValid() || !endMoment.isValid()) {
-    return {
-      ok: false,
-      error: `Invalid time format (expected HH:MM): start="${start}" end="${end}"`,
-    };
+    return fail(
+      `Invalid time format (expected HH:MM): start="${start}" end="${end}".`,
+    );
   }
 
   // assume 12-hour format: if end is before start, end is PM, e.g. 8 to 2 -> 8am to 2pm
@@ -106,7 +106,7 @@ function calculateHours(startTime: string, endTime: string): Result<number | nul
   }
 
   const hours = Math.round(endMoment.diff(startMoment, "hours", true) * 100) / 100;
-  return { ok: true, data: hours };
+  return ok(hours);
 }
 
 // https://docs.google.com/document/d/id-example/edit?tab=t.0
@@ -125,11 +125,11 @@ export function docsUrlToId(url: string): Result<string> {
   }
 
   const id = url.split("/")[0];
-  if (!id) return { ok: false, error: "Could not extract document ID from URL." };
-  return { ok: true, data: id };
+  if (!id) return fail("Could not extract document ID from URL.");
+  return ok(id);
 }
 
-function fetchDescription(content: any[]): string | null {
+function fetchDescription(content: any[]): Result<string> {
   let foundFirstTable = false;
 
   for (const el of content) {
@@ -146,10 +146,10 @@ function fetchDescription(content: any[]): string | null {
     if (!text) continue;
 
     const newlineIdx = text.indexOf("\n");
-    return newlineIdx >= 0 ? text.slice(0, newlineIdx).trim() : text.trim();
+    return newlineIdx >= 0 ? ok(text.slice(0, newlineIdx).trim()) : ok(text.trim());
   }
 
-  return "Check attendance doc for description.";
+  return fail("Failed to fetch description.");
 }
 
 function parseInfoFields(table: any): Record<string, string> {
@@ -169,11 +169,10 @@ function parseInfoFields(table: any): Record<string, string> {
 function parseEventDateTimes(
   fields: Record<string, string>,
   title: string,
-): { date: string | null; startTime: string | null; endTime: string | null } {
+): Result<{ date: string | null; startTime: string | null; endTime: string | null }> {
   const dateStr = fields["date"] || "";
-  const dateRes = dateStr
-    ? parseDateField(dateStr)
-    : parseDateField(title.split(")")[0].substring(1)); // grabs it from inside the parenthesis
+  const dateRes = dateStr ? parseDateField(dateStr) : parseDateField(title.split(")")[0].substring(1));
+  // grabs it from inside the parenthesis
 
   let startTime: string | null = null;
   let endTime: string | null = null;
@@ -192,7 +191,7 @@ function parseEventDateTimes(
     }
   }
 
-  return { date: dateRes.ok ? dateRes.data : null, startTime, endTime };
+  return ok({ date: dateRes.ok ? dateRes.data : null, startTime, endTime });
 }
 
 function splitLeaders(leaders: string): string[] | null {

@@ -1,3 +1,4 @@
+import { ok } from "$lib/responses";
 import type { Result } from "$lib/responses";
 import { MEETING_CALENDAR_ID } from "$env/static/private";
 import { getCalendarService } from "$lib/google";
@@ -11,9 +12,7 @@ export async function getMeetings(): Promise<Result<Meeting[]>> {
   const now = new Date();
   const timeMax = new Date();
   timeMax.setFullYear(timeMax.getFullYear() + 1);
-
-  let meetings: Meeting[] = [];
-
+  const meetings: Meeting[] = [];
   const response = await calendar.events.list({
     calendarId: MEETING_CALENDAR_ID,
     timeMin: now.toISOString(),
@@ -22,9 +21,10 @@ export async function getMeetings(): Promise<Result<Meeting[]>> {
 
   for (const calEvent of response.data.items || []) {
     const description = calEvent.description ?? "";
-    const committeeMatch = description.match(/Committee:\s*(.+?)\n/) ?? description.match(/committee:\s*(.+?)\n/);
-    const locationMatch = description.match(/Location:\s*(.+?)\n/) ?? description.match(/Location:\s*(.+?)\n/);
-    const descMatch = description.match(/Description:\s*(.+)/) ?? description.match(/description:\s*(.+)/);
+    const committeeMatch = description.match(/committee:\s*(.+?)\n/i);
+    const locationMatch = description.match(/location:\s*(.+?)\n/i);
+    const descMatch = description.match(/description:\s*(.+)/i);
+    // Description doesn't have a newline terminator since it's meant to be multiline.
 
     const meeting: Meeting = {
       name: calEvent.summary ?? "",
@@ -38,5 +38,5 @@ export async function getMeetings(): Promise<Result<Meeting[]>> {
     meetings.push(meeting);
   }
 
-  return { ok: true, data: meetings };
+  return ok(meetings);
 };

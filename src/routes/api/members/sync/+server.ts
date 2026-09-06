@@ -1,12 +1,12 @@
 import { syncMembers } from "./syncMembers.server";
 import { syncMemberTokens } from "./syncMemberTokens.server";
-import { toResponse } from "$lib/responses";
+import { toResponse, ok, fail } from "$lib/responses";
 import { SYNC_SECRET } from "$env/static/private";
 
 export async function GET({ url }) {
   const token = url.searchParams.get("secret");
   if (token !== SYNC_SECRET) {
-    return toResponse({ ok: false, error: "Unauthorized" }, 401);
+    return toResponse(fail("Unauthorized"), 401);
   }
 
   const memberResult = await syncMembers();
@@ -17,5 +17,5 @@ export async function GET({ url }) {
   if (!tokenResult.ok) {
     return toResponse(tokenResult, 500);
   }
-  return toResponse({ ok: true, data: { synced: memberResult.data } }, 200);
+  return toResponse(ok({ synced: memberResult.data }), 200);
 }

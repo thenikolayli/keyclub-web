@@ -1,5 +1,6 @@
 import * as v from 'valibot';
 import { form } from '$app/server';
+import { ok, fail } from '$lib/responses';
 import type { Result } from '$lib/responses';
 import { getRequestEvent } from '$app/server';
 
@@ -14,8 +15,8 @@ export const signIn = form(
 
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
-      return { ok: false, error: error.message };
+      return fail(error.message);
     }
-    return { ok: true, data: null };
+    return ok(null);
   },
 )

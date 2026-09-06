@@ -2,6 +2,7 @@ import { form } from "$app/server";
 import * as v from "valibot"
 import { getRequestEvent } from "$app/server";
 import { supabaseAdmin } from "$lib/db/admin";
+import { ok, fail } from "$lib/responses";
 import type { Result } from "$lib/responses";
 import { isValidPassword } from "$lib/auth/validatePassword";
 
@@ -24,10 +25,10 @@ export const acceptInvite = form(
       type: "invite",
     })
     if (verifyError) {
-      return { ok: false, error: verifyError.message };
+      return fail(verifyError.message);
     }
     if (!verifyData.user) {
-      return { ok: false, error: "Invalid token" };
+      return fail("Invalid token");
     }
 
     const { data: roleData, error: roleError } = await supabaseAdmin
@@ -36,7 +37,7 @@ export const acceptInvite = form(
       .eq("email", verifyData.user.email)
       .single()
     if (roleError) {
-      return { ok: false, error: roleError.message };
+      return fail(roleError.message);
     }
 
     const { data: profileData, error: profileError } = await supabaseAdmin
@@ -49,12 +50,12 @@ export const acceptInvite = form(
         role: roleData.role,
       })
     if (profileError) {
-      return { ok: false, error: profileError.message };
+      return fail(profileError.message);
     }
 
     const { data: updateData, error: updateError } = await event.locals.supabase.auth.updateUser({ password });
     if (updateError) {
-      return { ok: false, error: updateError.message };
+      return fail(updateError.message);
     }
 
     const { data: pendingInviteDeleteData, error: pendingInviteDeleteError } = await supabaseAdmin
@@ -62,9 +63,9 @@ export const acceptInvite = form(
       .delete()
       .eq("id", roleData.id)
     if (pendingInviteDeleteError) {
-      return { ok: false, error: pendingInviteDeleteError.message };
+      return fail(pendingInviteDeleteError.message);
     }
 
-    return { ok: true, data: null };
+    return ok(null);
   }
 )
