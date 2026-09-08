@@ -12,14 +12,20 @@ export const searchEvents = query(
     dates: v.tuple([v.string(), v.string()]), // 2026-08-09
     spots: v.tuple([v.number(), v.number()]),
   }),
-  async ({times, lengths, dates, spots}): Promise<Result<CalendarEvent[]>> => {
-  const rows = await supabase<CalendarEvent[]>`
+  async ({
+    times,
+    lengths,
+    dates,
+    spots,
+  }): Promise<Result<CalendarEvent[]>> => {
+    const rows = await supabase<CalendarEvent[]>`
     SELECT * FROM calendar_events
     WHERE start_time BETWEEN ${times[0]} AND ${times[1]}
     AND end_time BETWEEN ${times[0]} AND ${times[1]}
     AND date BETWEEN ${dates[0]} AND ${dates[1]}
-    AND n_slots - n_volunteers BETWEEN ${spots[0]} AND ${spots[1]}
+    AND n_spots - n_volunteers BETWEEN ${spots[0]} AND ${spots[1]}
   `;
 
-  return ok(rows);
-})
+    return ok(rows);
+  },
+);
