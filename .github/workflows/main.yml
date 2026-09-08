@@ -1,0 +1,17 @@
+name: Sync
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch: 
+
+jobs:
+  api_request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync via API call
+        env:
+          # Best practice: Store sensitive API tokens in GitHub Secrets
+          SYNC_SECRET: ${{ secrets.SYNC_SECRET }} 
+        run: |
+          curl --request GET --url "https://www.jhskeyclub.org/api/members/sync?secret=$SYNC_SECRET"
+          curl --request GET --url "https://www.jhskeyclub.org/api/events/sync?secret=$SYNC_SECRET"
