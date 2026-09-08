@@ -87,14 +87,16 @@
             <table class="w-full text-sm">
               <thead>
                 <tr class="border-b text-muted-foreground text-left">
+                  <th class="py pr-4 font-medium">Rank</th>
                   <th class="py-2 pr-4 font-medium">Name</th>
                   <th class="py-2 pr-4 font-medium">All Hours</th>
                   <th class="py-2 font-medium">Term Hours</th>
                 </tr>
               </thead>
               <tbody>
-                {#each ranks.result.data as member (member.id)}
+                {#each ranks.result.data as member, index}
                   <tr class="border-b last:border-0">
+                    <td class="py-pr-4">{index + 1}</td>
                     <td class="py-2 pr-4">{member.name}</td>
                     <td class="py-2 pr-4">{member.all_hours ?? 0}</td>
                     <td class="py-2">{member.term_hours ?? 0}</td>
