@@ -49,3 +49,4 @@ and copy and paste that into the `GOOGLE_KEY_BASE64` environment variable in the
 
 - [x] Optimize getCellText to getRowText, since it's called several times on the same row. Could be nice to map columns to info in each row instead of hardcoding it.
 - [ ] Add district project page.
+- [ ] Add member leaderboard.
