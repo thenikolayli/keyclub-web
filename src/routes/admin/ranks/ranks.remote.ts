@@ -29,6 +29,6 @@ export const ranks = form(
           matchesAllTokens(tokens, tokenizeName(member.name ?? "")),
         ),
     );
-    return ok(members.slice(0, 5));
+    return ok(members.slice(0, limit));
   },
 );

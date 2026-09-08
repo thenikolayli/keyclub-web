@@ -33,9 +33,15 @@
             <Card.Title>View Class Ranks</Card.Title>
           </Card.Header>
           <Card.Content class="flex flex-col gap-2">
+            <input
+              type="hidden"
+              name="n:gradYear"
+              value={ranks.fields.gradYear.value() ?? ""}
+            />
             <Select.Root
               type="single"
-              onValueChange={(value) => ranks.fields.gradYear.set(Number(value))}
+              onValueChange={(value) =>
+                ranks.fields.gradYear.set(Number(value))}
             >
               <Select.Trigger>
                 {ranks.fields.gradYear.value() === undefined
@@ -48,24 +54,9 @@
                 {/each}
               </Select.Content>
             </Select.Root>
-            <input
-              type="hidden"
-              name="n:gradYear"
-              value={ranks.fields.gradYear.value() ?? ""}
-            />
-            <Input
-              type="number"
-              min={1}
-              placeholder="Limit"
-              value={ranks.fields.limit.value() ?? 5}
-              oninput={(e) =>
-                ranks.fields.limit.set(Number((e.currentTarget as HTMLInputElement).value))}
-            />
-            <input
-              type="hidden"
-              name="n:limit"
-              value={ranks.fields.limit.value() ?? 5}
-            />
+
+            <Input placeholder="Limit" {...ranks.fields.limit.as("number")} />
+
             <Button
               type="submit"
               class="mt-2"
@@ -73,7 +64,10 @@
               disabled={ranks.pending > 0}
             >
               {#if ranks.pending > 0}
-                <Icon icon="svg-spinners:ring-resize" data-icon="inline-start" />
+                <Icon
+                  icon="svg-spinners:ring-resize"
+                  data-icon="inline-start"
+                />
                 Loading...
               {:else}
                 View Ranks
