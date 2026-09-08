@@ -20,7 +20,7 @@ export const Tools: Tool[] = [
     label: "Calendar",
     href: "/admin/calendar",
     icon: "solar:calendar-add-outline",
-    roles: ["leader", "officer"]
+    roles: ["leader", "officer"],
   },
   {
     id: "events",
@@ -28,7 +28,14 @@ export const Tools: Tool[] = [
     href: "/admin/events",
     icon: "solar:clipboard-check-outline",
     roles: ["officer"],
-  }
+  },
+  {
+    id: "ranks",
+    label: "Ranks",
+    href: "/admin/ranks",
+    icon: "solar:cup-star-linear",
+    roles: ["officer", "leader"],
+  },
 ];
 
 export function getToolsForRole(role: Role | undefined): Tool[] {
