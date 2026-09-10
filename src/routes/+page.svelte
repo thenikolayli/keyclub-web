@@ -54,9 +54,7 @@
     { label: "Going home", value: "Bus passes will be provided" },
   ];
 
-  const nextMeeting = $derived(
-    moment.tz(data.meetings[0].start, "America/Los_Angeles"),
-  );
+  const nextMeeting = $derived(data.meetings);
   const countdown = $state([
     { value: 0, label: "days" },
     { value: 0, label: "hours" },
@@ -65,7 +63,12 @@
   ]);
 
   function tick() {
-    const ms = nextMeeting.diff(moment());
+    if (!nextMeeting) {
+      return;
+    }
+    const ms = moment
+      .tz(nextMeeting.start, "America/Los_Angeles")
+      .diff(moment());
     const total = moment.duration(ms);
     countdown[0].value = Math.floor(total.asDays());
     countdown[1].value = total.hours();
@@ -259,62 +262,64 @@
 </section>
 
 <!-- Next General Meeting -->
-<section
-  class="w-full bg-kcblue scroll-mt-24 px-8 py-20 text-stone-100 flex flex-col items-center justify-center text-center lg:text-left"
-  id="countdown"
->
-  <div
-    use:reveal
-    class="flex flex-col max-w-6xl items-center justify-between gap-10 lg:flex-row lg:items-end"
+{#if nextMeeting}
+  <section
+    class="w-full bg-kcblue scroll-mt-24 px-8 py-20 text-stone-100 flex flex-col items-center justify-center text-center lg:text-left"
+    id="countdown"
   >
-    <div class="text-center lg:text-left">
-      <span class="font-bold-gothic text-primary">COMING UP</span>
-      <h2 class="mt-2 text-4xl md:text-5xl">The October General Meeting</h2>
-      <p class="mt-4 max-w-xl text-lg text-stone-300">
-        The spookiest meeting of the year...
-      </p>
+    <div
+      use:reveal
+      class="flex flex-col max-w-6xl items-center justify-between gap-10 lg:flex-row lg:items-end"
+    >
+      <div class="text-center lg:text-left">
+        <span class="font-bold-gothic text-primary">COMING UP</span>
+        <h2 class="mt-2 text-4xl md:text-5xl">The October General Meeting</h2>
+        <p class="mt-4 max-w-xl text-lg text-stone-300">
+          {nextMeeting.description}
+        </p>
 
-      <dl
-        class="mx-auto mt-8 grid max-w-md grid-cols-1 gap-x-8 gap-y-4 text-left sm:grid-cols-2 lg:mx-0 lg:max-w-none"
-      >
-        {#each meetingDetails as item (item.label)}
-          <div class="border-l-2 border-kcyellow/60 pl-4">
-            <dt
-              class="font-bold-gothic text-sm uppercase tracking-wider text-kcyellow"
-            >
-              {item.label}
-            </dt>
-            <dd class="mt-1 text-stone-100">{item.value}</dd>
-          </div>
-        {/each}
-      </dl>
-    </div>
+        <dl
+          class="mx-auto mt-8 grid max-w-md grid-cols-1 gap-x-8 gap-y-4 text-left sm:grid-cols-2 lg:mx-0 lg:max-w-none"
+        >
+          {#each meetingDetails as item (item.label)}
+            <div class="border-l-2 border-kcyellow/60 pl-4">
+              <dt
+                class="font-bold-gothic text-sm uppercase tracking-wider text-kcyellow"
+              >
+                {item.label}
+              </dt>
+              <dd class="mt-1 text-stone-100">{item.value}</dd>
+            </div>
+          {/each}
+        </dl>
+      </div>
 
-    <div use:reveal class="w-full max-w-xl lg:w-auto">
-      <p
-        class="font-bold-gothic mb-3 text-sm uppercase tracking-widest text-stone-400"
-      >
-        Time until the meeting
-      </p>
-      <div class="grid grid-cols-4 gap-3">
-        {#each countdown as unit (unit.label)}
-          <div
-            class="flex flex-col items-center rounded-xl bg-stone-900/40 px-2 py-5"
-          >
-            <span
-              class="font-[abril] text-4xl text-kcyellow tabular-nums sm:text-5xl"
+      <div use:reveal class="w-full max-w-xl lg:w-auto">
+        <p
+          class="font-bold-gothic mb-3 text-sm uppercase tracking-widest text-stone-400"
+        >
+          Time until the meeting
+        </p>
+        <div class="grid grid-cols-4 gap-3">
+          {#each countdown as unit (unit.label)}
+            <div
+              class="flex flex-col items-center rounded-xl bg-stone-900/40 px-2 py-5"
             >
-              {unit.value}
-            </span>
-            <span class="mt-1 text-xs uppercase tracking-wider text-stone-400"
-              >{unit.label}</span
-            >
-          </div>
-        {/each}
+              <span
+                class="font-[abril] text-4xl text-kcyellow tabular-nums sm:text-5xl"
+              >
+                {unit.value}
+              </span>
+              <span class="mt-1 text-xs uppercase tracking-wider text-stone-400"
+                >{unit.label}</span
+              >
+            </div>
+          {/each}
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+{/if}
 
 <!-- Committees -->
 <section
