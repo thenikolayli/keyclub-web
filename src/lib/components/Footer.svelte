@@ -9,6 +9,16 @@
       href: "https://www.instagram.com/jhskeyclub21",
     },
     {
+      label: "Linktree",
+      icon: "solar:link-bold",
+      href: "https://linktr.ee/jhskeyclub21",
+    },
+    {
+      label: "GroupMe",
+      icon: "thesvg:groupme",
+      href: "https://groupme.com/join_group/117343192/3W7crLIS",
+    },
+    {
       label: "TikTok",
       icon: "fa7-brands:tiktok",
       href: "https://tiktok.com/@jhskeyclub21",
@@ -17,11 +27,6 @@
       label: "YouTube",
       icon: "fa7-brands:youtube",
       href: "https://www.youtube.com/@jhskeyclub4870",
-    },
-    {
-      label: "Linktree",
-      icon: "solar:link-bold",
-      href: "https://linktr.ee/jhskeyclub21",
     },
   ];
 
