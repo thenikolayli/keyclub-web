@@ -7,7 +7,7 @@ import { SPREADSHEET_ID } from "$env/static/private";
 import { tokenizeName, matchesAllTokens } from "$lib/members/tokenizeName";
 import type { Result } from "$lib/responses";
 import type { MemberAttendance, BaseEvent } from "$lib/events/types";
-import {fail, ok} from "$lib/responses";
+import { fail, ok } from "$lib/responses";
 
 // Logs a volunteer event from its attendance document.
 // Writes calculated hours back into the attendance doc, then appends the event to the Events sheet and
@@ -17,11 +17,15 @@ export const logEvent = form(
   v.object({
     url: v.pipe(v.string(), v.nonEmpty(), v.trim(), v.url()),
   }),
-  async ({ url }): Promise<Result<{
-    event: BaseEvent;
-    membersLogged: MemberAttendance[];
-    membersNotLogged: MemberAttendance[];
-  }>> => {
+  async ({
+    url,
+  }): Promise<
+    Result<{
+      event: BaseEvent;
+      membersLogged: MemberAttendance[];
+      membersNotLogged: MemberAttendance[];
+    }>
+  > => {
     const idResult = docsUrlToId(url);
     if (!idResult.ok) {
       return fail(idResult.error);
@@ -48,7 +52,10 @@ export const logEvent = form(
           requestBody: { requests: attendanceUpdateRequests },
         });
       } catch (error) {
-        return fail("Failed to batch update requests for attendance doc.", error);
+        return fail(
+          "Failed to batch update requests for attendance doc.",
+          error,
+        );
       }
     }
 
@@ -59,12 +66,16 @@ export const logEvent = form(
       event.name!,
     );
     if (!emptyRowEventsMembersResult.ok) {
-      return emptyRowEventsMembersResult;
+      return fail("Failed to find next empty row to log new event attendance.");
     }
 
-    const createUpdateValuesResult = await createUpdateValues(sheets, memberAttendance, event.name!);
+    const createUpdateValuesResult = await createUpdateValues(
+      sheets,
+      memberAttendance,
+      event.name!,
+    );
     if (!createUpdateValuesResult.ok) {
-      return createUpdateValuesResult;
+      return fail("Failed to create update values.");
     }
     const {
       updateValues: eventsMembersUpdateValues,
@@ -79,12 +90,16 @@ export const logEvent = form(
       event.name!,
     );
     if (!emptyRowEventsResult.ok) {
-      return emptyRowEventsResult;
+      return fail("Failed to find next empty row to log new event.");
     }
 
     // the Events sheet only has name, total hours, and attendance doc link.
     // all other info is stored on supabase, not in the sheet.
-    const eventsUpdateValues = [event.name, event.total_hours, event.attendance_url];
+    const eventsUpdateValues = [
+      event.name,
+      event.total_hours,
+      event.attendance_url,
+    ];
 
     try {
       await sheets.spreadsheets.values.batchUpdate({
@@ -106,7 +121,10 @@ export const logEvent = form(
         },
       });
     } catch (error) {
-      return fail("Failed to update hours spreadsheet during event logging.", error);
+      return fail(
+        "Failed to update hours spreadsheet during event logging.",
+        error,
+      );
     }
 
     return ok({
@@ -137,11 +155,16 @@ async function createUpdateValues(
       range: eventsMembersSheetInfo.members,
     });
   } catch (error) {
-    return fail("Issue fetching member columns from sheet while logging event.", error);
+    return fail(
+      "Issue fetching member columns from sheet while logging event.",
+      error,
+    );
   }
 
   const headerRow = namesResponse.data.values?.[0] ?? [];
-  const updateValues: (number | null)[] = new Array(headerRow.length).fill(null);
+  const updateValues: (number | null)[] = new Array(headerRow.length).fill(
+    null,
+  );
   const matched = new Set<MemberAttendance>();
 
   for (let index = 0; index < headerRow.length; index++) {

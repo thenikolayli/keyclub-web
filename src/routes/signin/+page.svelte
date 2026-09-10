@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { navigating } from "$app/state";
   import * as Card from "$lib/components/ui/card/index";
   import { Input } from "$lib/components/ui/input/index";
   import { Button } from "$lib/components/ui/button/index";
@@ -18,7 +19,7 @@
       <Card.Description>Enter your credentials to continue.</Card.Description>
     </Card.Header>
 
-    <form {...signIn}>
+    <form {...signIn.enhance(async ({ submit }) => await submit())}>
       <Card.Content class="flex flex-col gap-4">
         <div class="flex flex-col gap-1.5">
           <label for="email" class="text-sm font-medium">Email</label>
@@ -27,7 +28,7 @@
             type="email"
             placeholder="you@example.com"
             {...signIn.fields.email.as("text")}
-            disabled={signIn.pending > 0}
+            disabled={signIn.pending > 0 || navigating.to != null}
           />
         </div>
 
@@ -38,14 +39,24 @@
             type="password"
             placeholder="Enter your password"
             {...signIn.fields.password.as("text")}
-            disabled={signIn.pending > 0}
+            disabled={signIn.pending > 0 || navigating.to != null}
           />
         </div>
 
-        <a class="text-sm underline text-muted-foreground" href="/resetpassword">Forgot password?</a>
+        <a
+          class="text-sm underline text-muted-foreground"
+          href="/resetpassword"
+        >
+          Forgot password?
+        </a>
 
-        <Button type="submit" disabled={signIn.pending > 0}>
-          {signIn.pending > 0 ? "Signing in..." : "Sign In"}
+        <Button
+          type="submit"
+          disabled={signIn.pending > 0 || navigating.to != null}
+        >
+          {signIn.pending > 0 || navigating.to != null
+            ? "Signing in..."
+            : "Sign In"}
         </Button>
 
         {#if signIn.result && !signIn.result.ok}

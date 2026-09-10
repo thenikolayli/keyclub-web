@@ -27,7 +27,7 @@
   </div>
   <section class="flex flex-wrap p-4 gap-4">
     <div class="flex w-full max-w-md flex-col gap-4">
-      <form {...ranks}>
+      <form {...ranks.enhance(async ({ submit }) => await submit())}>
         <Card.Root>
           <Card.Header>
             <Card.Title>View Class Ranks</Card.Title>

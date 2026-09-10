@@ -1,6 +1,7 @@
 import * as v from 'valibot';
 import { form } from '$app/server';
-import { ok, fail } from '$lib/responses';
+import { redirect } from '@sveltejs/kit';
+import { fail } from '$lib/responses';
 import type { Result } from '$lib/responses';
 import { getRequestEvent } from '$app/server';
 
@@ -17,6 +18,6 @@ export const signIn = form(
     if (error) {
       return fail(error.message);
     }
-    return ok(null);
+    throw redirect(303, "/admin");
   },
 )

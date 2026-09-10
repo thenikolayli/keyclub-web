@@ -12,14 +12,19 @@ export async function parseBaseEvent(
   documentId: string,
   docs: ReturnType<typeof getDocsService>,
 ): Promise<Result<{ event: BaseEvent; memberAttendance: MemberAttendance[] }>> {
-  const res = await docs.documents.get({ documentId });
+  let res;
+  try {
+    res = await docs.documents.get({ documentId });
+  } catch (error) {
+    return fail("Failed to fetch Google Document: " + documentId, error);
+  }
   const doc = res.data;
-  if (!doc.body?.content) return fail("No content");
+  if (!doc.body?.content) return fail("No content: " + documentId);
 
   const tables = doc.body.content
     .filter((el: any) => el.table)
     .map((el: any) => el.table!);
-  if (tables.length === 0) return fail("No tables");
+  if (tables.length === 0) return fail("No tables: " + documentId);
 
   const fields = parseInfoFields(tables[0]);
   const eventDateTimesResult = parseEventDateTimes(fields, doc.title!);
@@ -33,9 +38,12 @@ export async function parseBaseEvent(
 
   // Grabs the attendance tables (every table after the first)
   for (const table of tables.slice(1)) {
-    if (!table.tableRows) return fail("Table has no rows");
+    if (!table.tableRows) return fail("Table has no rows: " + documentId);
     if (table.tableRows[0].tableCells?.length < 7) {
-      return fail("Table does not have 7 columns, check formatting. Special events require manual logging.");
+      return fail(
+        "Table does not have 7 columns, check formatting. Special events require manual logging: " +
+          documentId,
+      );
     }
 
     for (let i = 1; i < table.tableRows.length; i++) {
@@ -73,7 +81,9 @@ export async function parseBaseEvent(
       start_time: startTime,
       end_time: endTime,
       address: fields["address"] || fields["location"] || null,
-      description: descriptionResult.ok ? descriptionResult.data : "Check attendance doc for description.",
+      description: descriptionResult.ok
+        ? descriptionResult.data
+        : "Check attendance doc for description.",
       attendance_url: attendanceUrlFromId(documentId),
       made_by: fields["made by"] || null,
       leaders: splitLeaders(fields["leaders"]),
@@ -105,7 +115,8 @@ function calculateHours(startTime: string, endTime: string): Result<number> {
     endMoment.add(12, "hours");
   }
 
-  const hours = Math.round(endMoment.diff(startMoment, "hours", true) * 100) / 100;
+  const hours =
+    Math.round(endMoment.diff(startMoment, "hours", true) * 100) / 100;
   return ok(hours);
 }
 
@@ -146,7 +157,9 @@ function fetchDescription(content: any[]): Result<string> {
     if (!text) continue;
 
     const newlineIdx = text.indexOf("\n");
-    return newlineIdx >= 0 ? ok(text.slice(0, newlineIdx).trim()) : ok(text.trim());
+    return newlineIdx >= 0
+      ? ok(text.slice(0, newlineIdx).trim())
+      : ok(text.trim());
   }
 
   return fail("Failed to fetch description.");
@@ -169,9 +182,15 @@ function parseInfoFields(table: any): Record<string, string> {
 function parseEventDateTimes(
   fields: Record<string, string>,
   title: string,
-): Result<{ date: string | null; startTime: string | null; endTime: string | null }> {
+): Result<{
+  date: string | null;
+  startTime: string | null;
+  endTime: string | null;
+}> {
   const dateStr = fields["date"] || "";
-  const dateRes = dateStr ? parseDateField(dateStr) : parseDateField(title.split(")")[0].substring(1));
+  const dateRes = dateStr
+    ? parseDateField(dateStr)
+    : parseDateField(title.split(")")[0].substring(1));
   // grabs it from inside the parenthesis
 
   let startTime: string | null = null;

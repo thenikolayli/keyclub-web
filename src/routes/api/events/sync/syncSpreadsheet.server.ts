@@ -47,7 +47,6 @@ export async function syncSpreadsheet(): Promise<Result<number>> {
   let synced = 0;
   for (const result of results) {
     if (!result.ok) {
-      console.error("syncSpreadsheet: failed to parse event", result.error);
       continue;
     }
     const event = result.data;
@@ -57,7 +56,11 @@ export async function syncSpreadsheet(): Promise<Result<number>> {
       .from("spreadsheet_events")
       .upsert(row, { onConflict: "name" });
     if (upsertError) {
-      console.error("syncSpreadsheet: upsert failed for", event.name, upsertError);
+      console.error(
+        "syncSpreadsheet: upsert failed for",
+        event.name,
+        upsertError,
+      );
       continue;
     }
     synced++;
