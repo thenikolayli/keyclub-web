@@ -43,17 +43,6 @@
     },
   ];
 
-  const meetingDetails = [
-    { label: "Date", value: "Wednesday, October 14, 2026" },
-    { label: "Time", value: "2:15 PM — 3:15 PM" },
-    { label: "Location", value: "The Annex" },
-    {
-      label: "What it's about",
-      value: "DCON!",
-    },
-    { label: "Going home", value: "Bus passes will be provided" },
-  ];
-
   const nextMeeting = $derived(data.meetings);
   const countdown = $state([
     { value: 0, label: "days" },
@@ -61,6 +50,27 @@
     { value: 0, label: "minutes" },
     { value: 0, label: "seconds" },
   ]);
+  const meetingDetails = $derived.by(() => {
+    // double-check, meeting details fields won't load if nextMeeting is null
+    if (!nextMeeting) {
+      return [];
+    }
+    const start = moment.tz(nextMeeting.start, "America/Los_Angeles");
+    const end = moment.tz(nextMeeting.end, "America/Los_Angeles");
+    return [
+      { label: "Date", value: start.format("dddd, MMMM D, YYYY") },
+      {
+        label: "Time",
+        value: `${start.format("h:mm A")} — ${end.format("h:mm A")}`,
+      },
+      { label: "Location", value: nextMeeting.location ?? "The Annex" },
+      {
+        label: "What it's about",
+        value: nextMeeting.topic ?? "TBD",
+      },
+      { label: "Transportation", value: "Bus passes will be provided" },
+    ];
+  });
 
   function tick() {
     if (!nextMeeting) {
@@ -264,7 +274,7 @@
 <!-- Next General Meeting -->
 {#if nextMeeting}
   <section
-    class="w-full bg-kcblue scroll-mt-24 px-8 py-20 text-stone-100 flex flex-col items-center justify-center text-center lg:text-left"
+    class="w-full bg-orange-600 scroll-mt-24 px-8 py-20 text-stone-100 flex flex-col items-center justify-center text-center lg:text-left"
     id="countdown"
   >
     <div
@@ -300,10 +310,10 @@
         >
           Time until the meeting
         </p>
-        <div class="grid grid-cols-4 gap-3">
+        <div class="relative grid grid-cols-4 gap-3">
           {#each countdown as unit (unit.label)}
             <div
-              class="flex flex-col items-center rounded-xl bg-stone-900/40 px-2 py-5"
+              class="flex z-10 flex-col items-center rounded-xl bg-orange-900 px-2 py-5"
             >
               <span
                 class="font-[abril] text-4xl text-kcyellow tabular-nums sm:text-5xl"
@@ -315,6 +325,11 @@
               >
             </div>
           {/each}
+          <img
+            class="absolute -left-18 -rotate-12 size-32"
+            src="/pumpkinbee.PNG"
+            alt="Pumpkin Wolfbee"
+          />
         </div>
       </div>
     </div>
