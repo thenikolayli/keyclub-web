@@ -1,28 +1,19 @@
 <script lang="ts">
-  import Header from "$lib/components/Header.svelte";
-  import Footer from "$lib/components/Footer.svelte";
-  import { Button } from "$lib/components/ui/button/index";
-  import { Input } from "$lib/components/ui/input/index";
-  import Icon from "@iconify/svelte";
-  import ImageHeader from "$lib/components/ImageHeader.svelte";
-  import * as Alert from "$lib/components/ui/alert/index";
-  import { getHours } from "./hours.remote";
-  import { onMount } from "svelte";
-  import { reveal } from "$lib/reveal";
+    import { Button } from "$lib/components/ui/button/index";
+    import { Input } from "$lib/components/ui/input/index";
+    import Icon from "@iconify/svelte";
+    import ImageHeader from "$lib/components/ImageHeader.svelte";
+    import * as Alert from "$lib/components/ui/alert/index";
+    import { getHours } from "./hours.remote";
+    import { onMount } from "svelte";
+    import {reveal} from "$lib/reveal";
 
   onMount(() => {
     document.title = "Hours";
   });
 </script>
 
-<Header />
-
-<ImageHeader
-  imagePath="/stickers_after_workshop.webp"
-  title="Your Hours"
-  description="Look up your service hours"
-  pageTitle="Hours"
-/>
+<ImageHeader imagePath="/stickers_after_workshop.webp" title="Your Hours" description="Look up your service hours" pageTitle="Hours"/>
 
 <section class="w-full bg-background px-6 py-16 text-foreground">
   <div use:reveal class="mx-auto max-w-xl">
@@ -95,5 +86,3 @@
     </div>
   </div>
 </section>
-
-<Footer />

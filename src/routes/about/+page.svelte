@@ -1,6 +1,4 @@
 <script lang="ts">
-    import Header from "$lib/components/Header.svelte";
-    import Footer from "$lib/components/Footer.svelte";
     import Icon from "@iconify/svelte";
     import {onMount} from "svelte";
     import ImageHeader from "$lib/components/ImageHeader.svelte";
@@ -53,8 +51,6 @@
         }
     })
 </script>
-
-<Header/>
 
 <ImageHeader imagePath="/about.jpg" title="About Us" description="The people and partners behind JHS Key Club" pageTitle="About"/>
 
@@ -154,4 +150,3 @@
     </div>
 </section>
 
-<Footer/>

@@ -1,6 +1,4 @@
 <script>
-    import Header from "$lib/components/Header.svelte";
-    import Footer from "$lib/components/Footer.svelte";
     import ImageHeader from "$lib/components/ImageHeader.svelte";
     import Icon from "@iconify/svelte";
     import {reveal} from "$lib/reveal";
@@ -15,8 +13,6 @@
 
     let canSend = $state(true)
 </script>
-
-<Header/>
 
 <ImageHeader imagePath="/yandcon.jpg" title="DCON" description="The biggest weekend of the Key Club year. One district, one family." pageTitle="DCON"/>
 
@@ -85,5 +81,3 @@
         </Button>
     </div>
 </section>
-
-<Footer/>
