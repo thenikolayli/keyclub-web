@@ -1,6 +1,4 @@
 <script lang="ts">
-    import Header from "$lib/components/Header.svelte";
-    import Footer from "$lib/components/Footer.svelte";
     import { Button } from "$lib/components/ui/button/index";
     import { Input } from "$lib/components/ui/input/index";
     import Icon from "@iconify/svelte";
@@ -14,8 +12,6 @@
       document.title = "Hours"
     })
 </script>
-
-<Header/>
 
 <ImageHeader imagePath="/stickers_after_workshop.webp" title="Your Hours" description="Look up your service hours" pageTitle="Hours"/>
 
@@ -65,5 +61,3 @@
         </div>
     </div>
 </section>
-
-<Footer/>

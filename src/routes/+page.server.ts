@@ -1,9 +1,6 @@
 import { getMeetings } from "$lib/events/meetings";
 import { searchEvents } from "./events/events.remote";
-import {
-  getLocalTimeZone,
-  today,
-} from "@internationalized/date";
+import { getLocalTimeZone, today } from "@internationalized/date";
 
 export const prerender = false;
 
@@ -11,7 +8,7 @@ export const prerender = false;
 export async function load() {
   const meetingsResult = await getMeetings();
   if (!meetingsResult.ok) {
-    return {meetings: [], events: []}
+    return { meetings: undefined, events: [] };
   }
 
   const start = today(getLocalTimeZone());
@@ -23,11 +20,17 @@ export async function load() {
     spots: [0, 50],
   });
   if (!eventsResult.ok) {
-    return {meetings: [], events: []}
+    return { meetings: undefined, events: [] };
   }
 
+  const nextMeeting = meetingsResult.data
+    .filter((meeting) => meeting.committee === "general")
+    .sort(
+      (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime(),
+    )[0];
+
   return {
-    meetings: meetingsResult.data.filter(meeting => meeting.committee === "general"),
+    meetings: nextMeeting,
     events: eventsResult.data.slice(0, 5),
     cache: { maxage: 60 * 15 },
   };

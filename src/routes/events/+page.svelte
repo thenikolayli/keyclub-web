@@ -1,6 +1,4 @@
 <script lang="ts">
-  import Header from "$lib/components/Header.svelte";
-  import Footer from "$lib/components/Footer.svelte";
   import Icon from "@iconify/svelte";
   import * as Alert from "$lib/components/ui/alert/index";
   import * as Accordion from "$lib/components/ui/accordion/index";
@@ -97,8 +95,6 @@
     document.title = "Events";
   })
 </script>
-
-<Header />
 
 <ImageHeader
   imagePath="/events.jpg"
@@ -242,5 +238,3 @@
     {/if}
   </div>
 </section>
-
-<Footer />

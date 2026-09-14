@@ -1,10 +1,13 @@
 import type { Database } from "$lib/db/schema";
 
-export type CalendarEvent = Database["public"]["Tables"]["calendar_events"]["Row"];
-export type SpreadsheetEvent = Database["public"]["Tables"]["spreadsheet_events"]["Row"];
+export type CalendarEvent =
+  Database["public"]["Tables"]["calendar_events"]["Row"];
+export type SpreadsheetEvent =
+  Database["public"]["Tables"]["spreadsheet_events"]["Row"];
 
 // General committee is just every member (default).
-export type Committee = "general" | "leadership" | "spirit" | "service" | "decoration";
+export type Committee =
+  "general" | "leadership" | "spirit" | "service" | "decoration";
 
 // The union of every field in CalendarEvent and SpreadsheetEvent.
 // Fields only present in one of them are nullable.
@@ -35,11 +38,12 @@ export interface MemberAttendance {
 
 // date, start, and end is an ISO 8601 string.
 export interface Meeting {
-  name: string;
-  description: string;
-  date: string;
-  start: string;
-  end: string;
+  name: string | null;
+  description: string | null;
+  date: string | null;
+  start: string | null;
+  end: string | null;
   committee: Committee;
-  location: string;
+  location: string | null;
+  topic: string | null;
 }

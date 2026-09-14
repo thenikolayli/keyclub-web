@@ -3,6 +3,8 @@
   import Icon from "@iconify/svelte";
   import * as Drawer from "$lib/components/ui/drawer/index.js";
 
+  const { profile } = $props();
+
   const links = [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
@@ -94,6 +96,11 @@
           </a>
         </li>
       {/each}
+      {#if profile}
+        <li>
+          <a class="relative py-1" href="/admin"> Admin </a>
+        </li>
+      {/if}
     </ul>
   </nav>
 </header>
