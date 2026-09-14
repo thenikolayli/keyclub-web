@@ -33,6 +33,7 @@ export async function syncCalendar(): Promise<Result<number>> {
     const docIdResult = docsUrlToId(fileUrl);
     if (!docIdResult.ok) continue;
     const docId = docIdResult.data;
+    console.log(calEvent.summary, fileUrl, docId);
 
     try {
       const parsed = await parseBaseEvent(docId, docs);
@@ -53,8 +54,8 @@ export async function syncCalendar(): Promise<Result<number>> {
           date: event.date,
           start_time: event.start_time,
           end_time: event.end_time,
-          address: event.n_spots,
-          n_slots: event.n_slots,
+          address: event.address,
+          n_spots: event.n_spots,
           n_volunteers: event.n_volunteers,
           description: event.description,
           attendance_url: event.attendance_url!,
@@ -69,4 +70,4 @@ export async function syncCalendar(): Promise<Result<number>> {
   }
 
   return ok(updates);
-};
+}
