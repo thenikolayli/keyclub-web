@@ -7,12 +7,20 @@
   import { cn } from "$lib/utils";
   import type { CalendarEvent } from "$lib/events/types";
 
-  let { event, size = "sm", class: className = "" }: { event: CalendarEvent; size?: "sm" | "lg" | "xs"; class?: string } = $props();
+  let {
+    event,
+    size = "sm",
+    class: className = "",
+  }: {
+    event: CalendarEvent;
+    size?: "sm" | "lg" | "xs";
+    class?: string;
+  } = $props();
 
   const sizeClasses = {
     sm: "w-sm",
     lg: "w-xl",
-    xs: "w-xs"
+    xs: "w-xs",
   };
 
   // Color-code availability so members can gauge it at a glance.
@@ -41,9 +49,7 @@
     return m.isValid() ? m.format("h:mm A") : t;
   }
 
-  const openSpots = $derived(
-    (event.n_spots ?? 0) - (event.n_volunteers ?? 0),
-  );
+  const openSpots = $derived((event.n_spots ?? 0) - (event.n_volunteers ?? 0));
 
   const eventLength = $derived(() => {
     if (!event.start_time || !event.end_time) return null;
@@ -66,9 +72,10 @@
 </script>
 
 <div
-  class="overflow-hidden mx-auto flex flex-col rounded-2xl border-foreground/20 border-2 bg-foreground text-background shadow-lg
+  class="overflow-hidden mx-auto flex flex-col rounded-2xl border-foreground/20 border bg-foreground text-background shadow-lg
   {sizeClasses[size]} {className}"
->  <div class="bg-secondary px-5 py-3">
+>
+  <div class="bg-secondary px-5 py-3">
     <h2 class="font-bold-gothic text-2xl text-primary">{event.name}</h2>
   </div>
 

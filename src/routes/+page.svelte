@@ -1,6 +1,4 @@
 <script lang="ts">
-  import Header from "$lib/components/Header.svelte";
-  import Footer from "$lib/components/Footer.svelte";
   import Icon from "@iconify/svelte";
   import { onMount } from "svelte";
   import { Button } from "$lib/components/ui/button/index";
@@ -14,6 +12,7 @@
   import { IsMobile } from "$lib/hooks/is-mobile.svelte.js";
 
   const { data } = $props();
+  const nextMeeting = $derived(data.meetings);
   const isMobile = new IsMobile();
 
   const committees = [
@@ -43,7 +42,6 @@
     },
   ];
 
-  const nextMeeting = $derived(data.meetings);
   const countdown = $state([
     { value: 0, label: "days" },
     { value: 0, label: "hours" },
@@ -176,7 +174,7 @@
     <div use:reveal>
       <span class="font-bold-gothic text-secondary">WHO WE ARE</span>
       <h2 class="mt-2 text-4xl md:text-5xl">
-        A Student-Led Volunteering Family.
+        A Student-Led Volunteering Family
       </h2>
     </div>
     <div use:reveal>
