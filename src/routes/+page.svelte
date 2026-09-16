@@ -114,8 +114,6 @@
   });
 </script>
 
-<Header />
-
 <!-- Hero -->
 <section
   class="relative flex h-[90vh] w-full flex-col items-center justify-center overflow-hidden text-center"
@@ -212,7 +210,7 @@
   </div>
 
   <div use:reveal>
-    <div use:reveal class="mt-12 grid gap-6 md:grid-cols-3 max-w-5xl">
+    <div class="mt-10 grid gap-6 md:grid-cols-3 max-w-5xl">
       <div
         class="flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
       >
@@ -254,7 +252,8 @@
       </div>
     </div>
 
-    <div class="mx-auto mt-10 max-w-md">
+    <p class="mt-10 text-muted-foreground text-lg">Follow for updates</p>
+    <div class="mt-2 w-full flex justify-center gap-4">
       <Button
         href="https://www.instagram.com/jhskeyclub21"
         target="_blank"
@@ -264,9 +263,20 @@
         variant="secondary"
       >
         <Icon icon="fa7-brands:instagram" class="size-10" />
-        Follow for updates
+        Instagram
       </Button>
-      <p class="mt-4 text-muted-foreground">We make awesome Instagram posts.</p>
+
+      <Button
+        href="https://groupme.com/join_group/117343192/3W7crLIS"
+        target="_blank"
+        rel="noopener"
+        size="xl"
+        class="font-semibold"
+        variant="secondary"
+      >
+        <Icon icon="thesvg:groupme" class="size-8" />
+        GroupMe
+      </Button>
     </div>
   </div>
 </section>
@@ -425,5 +435,3 @@
     </div>
   </div>
 </section>
-
-<Footer />
