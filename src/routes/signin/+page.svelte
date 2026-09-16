@@ -15,7 +15,7 @@
 <section class="flex min-h-screen items-center justify-center px-4">
   <Card.Root class="w-full max-w-sm">
     <Card.Header>
-      <Card.Title>Admin Sign In</Card.Title>
+      <Card.Title>Beekeper Sign In</Card.Title>
       <Card.Description>Enter your credentials to continue.</Card.Description>
     </Card.Header>
 
