@@ -30,7 +30,8 @@ export const invite = form(
       return fail(userError.message);
     }
 
-    const { error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(email);
+    const { error: inviteError } =
+      await supabaseAdmin.auth.admin.inviteUserByEmail(email);
     if (inviteError) {
       return fail(inviteError.message);
     }
