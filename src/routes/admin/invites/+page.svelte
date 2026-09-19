@@ -18,13 +18,13 @@
   <div class="w-fit flex flex-col gap-1">
     <h1 class="text-3xl font-semibold tracking-tight">Invites</h1>
     <p class="text-md text-muted-foreground">
-      Invite someone to give them access to the Beekeper admin panel.
+      Invite someone to give them access to the Beekeeper admin panel.
     </p>
     <Separator />
   </div>
   <section class="flex flex-wrap p-4 gap-4">
     <div class="flex w-full max-w-md flex-col gap-4">
-      <form {...invite}>
+      <form {...invite.enhance(async ({ submit }) => await submit())}>
         <Card.Root>
           <Card.Header>
             <Card.Title>Create Invite</Card.Title>

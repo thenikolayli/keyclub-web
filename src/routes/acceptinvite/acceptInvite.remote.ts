@@ -1,8 +1,8 @@
-import { form } from "$app/server";
-import * as v from "valibot"
-import { getRequestEvent } from "$app/server";
+import { form, getRequestEvent } from "$app/server";
+import * as v from "valibot";
 import { supabaseAdmin } from "$lib/db/admin";
-import { ok, fail } from "$lib/responses";
+import { redirect } from "@sveltejs/kit";
+import { fail } from "$lib/responses";
 import type { Result } from "$lib/responses";
 import { isValidPassword } from "$lib/auth/validatePassword";
 
@@ -13,17 +13,23 @@ export const acceptInvite = form(
     last_name: v.pipe(v.string(), v.nonEmpty(), v.trim()),
     password: v.string(),
   }),
-  async ({ token_hash, first_name, last_name, password }): Promise<Result<null>> => {
+  async ({
+    token_hash,
+    first_name,
+    last_name,
+    password,
+  }): Promise<Result<null>> => {
     const validPassword = isValidPassword(password);
     if (!validPassword.ok) {
       return validPassword;
     }
 
     const event = getRequestEvent();
-    const { data: verifyData, error: verifyError } = await event.locals.supabase.auth.verifyOtp({
-      token_hash: token_hash,
-      type: "invite",
-    })
+    const { data: verifyData, error: verifyError } =
+      await event.locals.supabase.auth.verifyOtp({
+        token_hash: token_hash,
+        type: "invite",
+      });
     if (verifyError) {
       return fail(verifyError.message);
     }
@@ -35,7 +41,7 @@ export const acceptInvite = form(
       .from("pending_invites")
       .select("role, id")
       .eq("email", verifyData.user.email)
-      .single()
+      .single();
     if (roleError) {
       return fail(roleError.message);
     }
@@ -48,24 +54,26 @@ export const acceptInvite = form(
         first_name,
         last_name,
         role: roleData.role,
-      })
+      });
     if (profileError) {
       return fail(profileError.message);
     }
 
-    const { data: updateData, error: updateError } = await event.locals.supabase.auth.updateUser({ password });
+    const { data: updateData, error: updateError } =
+      await event.locals.supabase.auth.updateUser({ password });
     if (updateError) {
       return fail(updateError.message);
     }
 
-    const { data: pendingInviteDeleteData, error: pendingInviteDeleteError } = await supabaseAdmin
-      .from("pending_invites")
-      .delete()
-      .eq("id", roleData.id)
+    const { data: pendingInviteDeleteData, error: pendingInviteDeleteError } =
+      await supabaseAdmin
+        .from("pending_invites")
+        .delete()
+        .eq("id", roleData.id);
     if (pendingInviteDeleteError) {
       return fail(pendingInviteDeleteError.message);
     }
 
-    return ok(null);
-  }
-)
+    return redirect(303, "/admin");
+  },
+);

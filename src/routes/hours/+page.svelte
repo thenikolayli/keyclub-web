@@ -24,7 +24,7 @@
 
 <section class="w-full bg-background px-6 py-16 text-foreground">
   <div use:reveal class="mx-auto max-w-xl">
-    <form {...getHours}>
+    <form {...getHours.enhance(async ({ submit }) => await submit())}>
       <Card.Root class="w-full">
         <Card.Header>
           <Card.Title class="text-2xl">Enter Your Name</Card.Title>

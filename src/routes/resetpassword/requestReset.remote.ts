@@ -14,5 +14,5 @@ export const requestReset = form(
     }
 
     return ok(null);
-  }
-)
+  },
+);
