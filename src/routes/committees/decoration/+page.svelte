@@ -152,7 +152,7 @@
       class="mx-auto mt-8 border-4 rounded border-primary"
       title="Registration Form"
       src="https://docs.google.com/forms/d/e/1FAIpQLSfpkLjHZKRBSSkMHHHD1b45o8E3gmrNTBGRwpEo2C6Gxt3U5Q/viewform"
-      width="640"
+      width={isMobile ? "350" : "650"}
       height="800"
       frameborder="0"
       marginheight="0"
