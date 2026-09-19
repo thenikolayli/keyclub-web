@@ -17,28 +17,32 @@
 
   const committees = [
     {
-      name: "Spirit",
-      icon: "solar:fire-bold",
-      text: "One of our LARGEST committees. Create fun energizers, take part in spirited events, and build a great atmosphere.",
-      image: "/spirit_committee.jpg",
-    },
-    {
-      name: "Service",
-      icon: "solar:hand-heart-bold",
-      text: "Brainstorm and run service events that power our District Project and serve the community.",
-      image: "/service_committee.jpg",
-    },
-    {
       name: "Decoration",
       icon: "solar:pallete-2-bold",
       text: "Make posters and signage, hang out at the AC, and keep things laid-back and creative after school.",
       image: "/decoration_committee.jpg",
+      href: "/committees/decoration",
     },
     {
       name: "Leadership",
       icon: "solar:star-bold",
       text: "Create and lead events for Key Club. Open to sophomores and above.",
       image: "/leadership_committee.jpg",
+      href: "/committees/leadership",
+    },
+    // {
+    //   name: "Service",
+    //   icon: "solar:hand-heart-bold",
+    //   text: "Brainstorm and run service events that power our District Project and serve the community.",
+    //   image: "/service_committee.jpg",
+    //   href: "/committees/service",
+    // },
+    {
+      name: "Spirit",
+      icon: "solar:fire-bold",
+      text: "One of our LARGEST committees. Create fun energizers, take part in spirited events, and build a great atmosphere.",
+      image: "/spirit_committee.jpg",
+      href: "/committees/spirit",
     },
   ];
 
@@ -365,16 +369,16 @@
     use:reveal
     class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl"
   >
-    {#each committees as committee (committee.name)}
-      <div class="overflow-hidden rounded-xl bg-card shadow-md">
-        <div class="relative h-40 overflow-hidden">
-          <img
-            class="h-full w-full object-cover"
-            src={committee.image}
-            alt={committee.name}
-          />
-          <div class="absolute inset-0 bg-secondary/30"></div>
-        </div>
+    {#each committees as committee}
+      <a
+        class="overflow-hidden rounded-xl bg-card shadow-md border border-secondary/30"
+        href={committee.href}
+      >
+        <img
+          class="h-40 w-full object-cover"
+          src={committee.image}
+          alt={committee.name}
+        />
         <div class="p-6">
           <div class="flex items-center gap-3">
             <Icon icon={committee.icon} class="size-7 text-secondary" />
@@ -382,7 +386,7 @@
           </div>
           <p class="mt-3 text-card-foreground">{committee.text}</p>
         </div>
-      </div>
+      </a>
     {/each}
   </div>
 </section>
