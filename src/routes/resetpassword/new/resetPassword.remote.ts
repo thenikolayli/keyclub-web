@@ -1,8 +1,8 @@
-import { form } from "$app/server";
+import { form, getRequestEvent } from "$app/server";
 import * as v from "valibot";
 import { isValidPassword } from "$lib/auth/validatePassword";
-import { getRequestEvent } from "$app/server";
-import { ok, fail } from "$lib/responses";
+import { redirect } from "@sveltejs/kit";
+import { fail } from "$lib/responses";
 
 export const resetPassword = form(
   v.object({
@@ -32,6 +32,6 @@ export const resetPassword = form(
       return fail(updateError.message);
     }
 
-    return ok(null);
+    return redirect(303, "/admin");
   }
 )

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { navigating } from "$app/state";
   import { requestReset } from "./requestReset.remote";
   import * as Card from "$lib/components/ui/card/index";
   import { Input } from "$lib/components/ui/input/index";
@@ -19,7 +20,7 @@
       <Card.Description>Enter your new password below.</Card.Description>
     </Card.Header>
 
-    <form {...requestReset}>
+    <form {...requestReset.enhance(async ({ submit }) => await submit())}>
       <Card.Content class="flex flex-col gap-4">
         <div class="flex flex-col gap-1.5">
           <label for="email" class="text-sm font-medium">Email</label>
@@ -28,16 +29,16 @@
             type="email"
             placeholder="Enter your email"
             {...requestReset.fields.email.as("text")}
-            disabled={requestReset.pending > 0}
+            disabled={requestReset.pending > 0 || navigating.to != null}
           />
         </div>
 
         <Button
           type="submit"
           variant="default"
-          disabled={requestReset.pending > 0}
+          disabled={requestReset.pending > 0 || navigating.to != null}
         >
-          {#if requestReset.pending > 0}
+          {#if requestReset.pending > 0 || navigating.to != null}
             <Icon icon="svg-spinners:ring-resize" data-icon="inline-start" />
             Sending reset email...
           {:else}

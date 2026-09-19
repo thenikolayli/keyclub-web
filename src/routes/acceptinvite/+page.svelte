@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from "$app/state";
+  import { page, navigating } from "$app/state";
   import { onMount } from "svelte";
   import { acceptInvite } from "./acceptInvite.remote";
   import * as Card from "$lib/components/ui/card/index";
@@ -13,12 +13,6 @@
   onMount(() => {
     document.title = "Beekeeper - Accept Invite";
   });
-
-  $effect(() => {
-    if (acceptInvite.result?.ok) {
-      window.location.reload();
-    }
-  });
 </script>
 
 <section class="flex min-h-screen items-center justify-center px-4">
@@ -28,7 +22,7 @@
       <Card.Description>Create your account to get started.</Card.Description>
     </Card.Header>
 
-    <form {...acceptInvite}>
+    <form {...acceptInvite.enhance(async ({ submit }) => await submit())}>
       <Card.Content class="flex flex-col gap-4">
         <!-- Hidden input for the token_hash, since the user shouldn't input it themselves -->
         <input type="hidden" name="token_hash" value={token_hash ?? ""} />
@@ -39,7 +33,7 @@
             type="text"
             placeholder="John"
             {...acceptInvite.fields.first_name.as("text")}
-            disabled={acceptInvite.pending > 0}
+            disabled={acceptInvite.pending > 0 || navigating.to != null}
           />
         </div>
         <div class="flex flex-col gap-1.5">
@@ -49,7 +43,7 @@
             type="text"
             placeholder="Doe"
             {...acceptInvite.fields.last_name.as("text")}
-            disabled={acceptInvite.pending > 0}
+            disabled={acceptInvite.pending > 0 || navigating.to != null}
           />
         </div>
         <div class="flex flex-col gap-1.5">
@@ -59,16 +53,16 @@
             type="password"
             placeholder="Enter a password"
             {...acceptInvite.fields.password.as("text")}
-            disabled={acceptInvite.pending > 0}
+            disabled={acceptInvite.pending > 0 || navigating.to != null}
           />
         </div>
 
         <Button
           type="submit"
           variant="default"
-          disabled={acceptInvite.pending > 0}
+          disabled={acceptInvite.pending > 0 || navigating.to != null}
         >
-          {#if acceptInvite.pending > 0}
+          {#if acceptInvite.pending > 0 || navigating.to != null}
             <Icon icon="svg-spinners:ring-resize" data-icon="inline-start" />
             Creating account...
           {:else}
@@ -76,16 +70,7 @@
           {/if}
         </Button>
 
-        {#if acceptInvite.result && acceptInvite.result.ok}
-          <Alert.Root variant="default">
-            <Icon icon="solar:check-bold" class="size-7" />
-            <Alert.Title>Account created successfully!</Alert.Title>
-            <Alert.Description>
-              Click <a class="underline text-secondary" href="/admin">here</a> to
-              be redirected to the Beekeper admin panel.
-            </Alert.Description>
-          </Alert.Root>
-        {:else if acceptInvite.result && !acceptInvite.result.ok}
+        {#if acceptInvite.result && !acceptInvite.result.ok}
           <Alert.Root variant="destructive">
             <Icon icon="solar:danger-triangle-bold" class="size-7" />
             <Alert.Title>Error</Alert.Title>

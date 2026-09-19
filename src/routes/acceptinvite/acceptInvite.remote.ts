@@ -1,8 +1,8 @@
-import { form } from "$app/server";
+import { form, getRequestEvent } from "$app/server";
 import * as v from "valibot";
-import { getRequestEvent } from "$app/server";
 import { supabaseAdmin } from "$lib/db/admin";
-import { ok, fail } from "$lib/responses";
+import { redirect } from "@sveltejs/kit";
+import { fail } from "$lib/responses";
 import type { Result } from "$lib/responses";
 import { isValidPassword } from "$lib/auth/validatePassword";
 
@@ -74,6 +74,6 @@ export const acceptInvite = form(
       return fail(pendingInviteDeleteError.message);
     }
 
-    return ok(null);
+    return redirect(303, "/admin");
   },
 );
