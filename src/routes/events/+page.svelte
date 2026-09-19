@@ -19,12 +19,15 @@
   import { PUBLIC_CALENDAR_SRC } from "$env/static/public";
   import type { Result } from "$lib/responses";
   import type { CalendarEvent } from "$lib/events/types";
-    import { Separator } from "$lib/components/ui/separator";
+  import { Separator } from "$lib/components/ui/separator";
 
   // The @internationalized/date stuff is for the date-picker component
   const start = today(getLocalTimeZone());
   const end = start.add({ days: 7 });
-  let dates = $state<{start: CalendarDate; end: CalendarDate}>({ start, end });
+  let dates = $state<{ start: CalendarDate; end: CalendarDate }>({
+    start,
+    end,
+  });
   let length = $state<[number, number]>([0, 24]);
   let spots = $state<[number, number]>([0, 40]);
   let times = $state<[number, number]>([0, 24]);
@@ -93,7 +96,7 @@
 
   onMount(async () => {
     document.title = "Events";
-  })
+  });
 </script>
 
 <ImageHeader
@@ -121,8 +124,8 @@
   <Alert.Root class="mt-4 max-w-md mx-auto">
     <Icon icon="solar:info-circle-bold" class="mt-0.5 size-6 shrink-0" />
     <Alert.Title>
-      Add a specific event —    or the whole calendar — to your
-      personal Google Calendar to open the event sign-up sheet.
+      Add a specific event — or the whole calendar — to your personal Google
+      Calendar to open the event sign-up sheet.
     </Alert.Title>
   </Alert.Root>
 

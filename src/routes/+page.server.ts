@@ -26,7 +26,7 @@ export async function load() {
   const nextMeeting = meetingsResult.data
     .filter((meeting) => meeting.committee === "general")
     .sort(
-      (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime(),
+      (a, b) => new Date(a.start!).getTime() - new Date(b.start!).getTime(),
     )[0];
 
   return {

@@ -10,7 +10,7 @@
   import Icon from "@iconify/svelte";
 
   onMount(() => {
-    document.title = "Beekeper - Invites";
+    document.title = "Beekeeper - Invites";
   });
 </script>
 
@@ -24,7 +24,7 @@
   </div>
   <section class="flex flex-wrap p-4 gap-4">
     <div class="flex w-full max-w-md flex-col gap-4">
-      <form {...invite.enhance(async ({ submit }) => await submit())}>
+      <form {...invite}>
         <Card.Root>
           <Card.Header>
             <Card.Title>Create Invite</Card.Title>

@@ -1,46 +1,54 @@
 <script lang="ts">
-    import { Button } from "$lib/components/ui/button/index";
-    import { Input } from "$lib/components/ui/input/index";
-    import Icon from "@iconify/svelte";
-    import ImageHeader from "$lib/components/ImageHeader.svelte";
-    import * as Alert from "$lib/components/ui/alert/index";
-    import { getHours } from "./hours.remote";
-    import { onMount } from "svelte";
-    import {reveal} from "$lib/reveal";
+  import { Button } from "$lib/components/ui/button/index";
+  import { Input } from "$lib/components/ui/input/index";
+  import Icon from "@iconify/svelte";
+  import ImageHeader from "$lib/components/ImageHeader.svelte";
+  import * as Alert from "$lib/components/ui/alert/index";
+  import { getHours } from "./hours.remote";
+  import { onMount } from "svelte";
+  import { reveal } from "$lib/reveal";
+  import * as Card from "$lib/components/ui/card/index";
+  import { Separator } from "$lib/components/ui/separator";
 
   onMount(() => {
     document.title = "Hours";
   });
 </script>
 
-<ImageHeader imagePath="/stickers_after_workshop.webp" title="Your Hours" description="Look up your service hours" pageTitle="Hours"/>
+<ImageHeader
+  imagePath="/stickers_after_workshop.webp"
+  title="Your Hours"
+  description="Look up your service hours"
+  pageTitle="Hours"
+/>
 
 <section class="w-full bg-background px-6 py-16 text-foreground">
   <div use:reveal class="mx-auto max-w-xl">
-    <form
-      class="rounded-2xl bg-background p-8 shadow-lg"
-      {...getHours.enhance(async ({ submit }) => await submit())}
-    >
-      <h4 class="font-bold-gothic text-2xl text-foreground">Enter Your Name</h4>
-      <p class="mb-4 text-muted-foreground">
-        Use the name you registered with.
-      </p>
-
-      <Input {...getHours.fields.name.as("text")} placeholder="Your name" />
-
-      <Button
-        type="submit"
-        size="lg"
-        class="mt-6 w-full"
-        disabled={getHours.pending > 0}
-      >
-        {#if getHours.pending > 0}
-          <Icon icon="svg-spinners:ring-resize" data-icon="inline-start" />
-          Checking...
-        {:else}
-          Check my hours
-        {/if}
-      </Button>
+    <form {...getHours}>
+      <Card.Root class="w-full">
+        <Card.Header>
+          <Card.Title class="text-2xl">Enter Your Name</Card.Title>
+          <Card.Description>Use the name you registered with.</Card.Description>
+        </Card.Header>
+        <Card.Content>
+          <Input {...getHours.fields.name.as("text")} placeholder="Your name" />
+        </Card.Content>
+        <Card.Footer>
+          <Button
+            type="submit"
+            size="lg"
+            class="w-full"
+            disabled={getHours.pending > 0}
+          >
+            {#if getHours.pending > 0}
+              <Icon icon="svg-spinners:ring-resize" data-icon="inline-start" />
+              Checking...
+            {:else}
+              Check my hours
+            {/if}
+          </Button>
+        </Card.Footer>
+      </Card.Root>
     </form>
 
     <!-- States -->

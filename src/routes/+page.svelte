@@ -1,6 +1,4 @@
 <script lang="ts">
-  import Header from "$lib/components/Header.svelte";
-  import Footer from "$lib/components/Footer.svelte";
   import Icon from "@iconify/svelte";
   import { onMount } from "svelte";
   import { Button } from "$lib/components/ui/button/index";
@@ -14,6 +12,7 @@
   import { IsMobile } from "$lib/hooks/is-mobile.svelte.js";
 
   const { data } = $props();
+  const nextMeeting = $derived(data.meetings);
   const isMobile = new IsMobile();
 
   const committees = [
@@ -21,29 +20,28 @@
       name: "Spirit",
       icon: "solar:fire-bold",
       text: "One of our LARGEST committees. Create fun energizers, take part in spirited events, and build a great atmosphere.",
-      image: "/spirit_co.jpg",
+      image: "/spirit_committee.jpg",
     },
     {
       name: "Service",
       icon: "solar:hand-heart-bold",
       text: "Brainstorm and run service events that power our District Project and serve the community.",
-      image: "/service_co.jpg",
+      image: "/service_committee.jpg",
     },
     {
       name: "Decoration",
       icon: "solar:pallete-2-bold",
       text: "Make posters and signage, hang out at the AC, and keep things laid-back and creative after school.",
-      image: "/deco_co.jpg",
+      image: "/decoration_committee.jpg",
     },
     {
       name: "Leadership",
       icon: "solar:star-bold",
       text: "Create and lead events for Key Club. Open to sophomores and above.",
-      image: "/gallery.jpg",
+      image: "/leadership_committee.jpg",
     },
   ];
 
-  const nextMeeting = $derived(data.meetings);
   const countdown = $state([
     { value: 0, label: "days" },
     { value: 0, label: "hours" },
@@ -165,18 +163,22 @@
 <!-- Who are we -->
 <section
   id="who"
-  class="grid w-full grid-cols-1 bg-background text-foreground md:grid-cols-2 scroll-mt-24"
+  class="grid w-full grid-cols-1 bg-background text-foreground md:grid-cols-2 scroll-mt-24 min-h-150"
 >
-  <img
-    class="h-64 w-full object-cover md:h-full order-2 md:order-1"
-    src="/canes.webp"
-    alt="Key Club members volunteering"
-  />
+  <div
+    class="relative overflow-hidden order-2 md:order-1 aspect-square md:aspect-auto"
+  >
+    <img
+      class="absolute inset-0 h-full w-full object-cover"
+      src="/canes.webp"
+      alt="Key Club members volunteering"
+    />
+  </div>
   <div class="flex flex-col justify-center p-8 md:p-14 order-1 md:order-2">
     <div use:reveal>
       <span class="font-bold-gothic text-secondary">WHO WE ARE</span>
       <h2 class="mt-2 text-4xl md:text-5xl">
-        A Student-Led Volunteering Family.
+        A Student-Led Volunteering Family
       </h2>
     </div>
     <div use:reveal>
