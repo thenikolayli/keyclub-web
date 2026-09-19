@@ -11,10 +11,10 @@
 </script>
 
 <ImageHeader
-  imagePath="/spirit_committee.jpg"
-  title="Spirit Committee"
-  description="Be spirited"
-  pageTitle="Spirit Committee"
+  imagePath="/decoration_committee.jpg"
+  title="Decoration Committee"
+  description="Be creative"
+  pageTitle="Decoration Committee"
 />
 
 <!-- About -->
@@ -34,26 +34,26 @@
     <div use:reveal>
       <span class="font-bold-gothic text-secondary">THE COMMITTEE</span>
       <h2 class="mt-2 text-2xl md:text-5xl">
-        We Love Spirit <br /> Yes We Do!
+        Make <span class="text-secondary">Bee</span>autiful Posters!
       </h2>
     </div>
     <div use:reveal>
       <p class="mt-6 text-lg md:text-xl">
-        We’re in charge of everything related to spirit in Key Club. For
-        example, preparing for DCON by learning spirit chants, making spirit
-        bracelets, and a bunch of other fun stuff!
+        The Decoration Committee paints posters for important school events such
+        as the Haunted Hallway and Deck the Halls. Show up and demonstrate your
+        creativity!
       </p>
     </div>
   </div>
 </section>
 
 <!-- Meetings -->
-<section
+<!-- <section
   class="relative w-full bg-background px-6 py-20 text-foreground md:px-12 flex flex-col items-center min-h-100"
 >
   <div use:reveal class="w-full max-w-6xl">
     <span class="font-bold-gothic text-secondary">WHEN WE MEET</span>
-    <h2 class="mt-2 text-4xl md:text-5xl">Next Spirit Meetings</h2>
+    <h2 class="mt-2 text-4xl md:text-5xl">Next Decoration Meetings</h2>
     <p class="mt-4 max-w-2xl text-lg">
       Spirit Committee members are expected to attend meetings.
     </p>
@@ -96,25 +96,22 @@
       </p>
     </div>
   {/if}
-</section>
+</section> -->
 
 <!-- Chair -->
-
 <section
-  class="relative grid w-full grid-cols-1 bg-background text-foreground md:grid-cols-2 min-h-150"
+  class="relative grid w-full grid-cols-1 bg-background text-foreground md:grid-cols-3 min-h-150"
 >
   <div class="order-2 flex flex-col justify-center p-8 md:order-1 md:p-14">
     <div use:reveal>
       <span class="font-bold-gothic text-secondary">MEET YOUR CHAIRS</span>
-      <h2 class="mt-2 text-4xl md:text-5xl">Will Badiang</h2>
+      <h2 class="mt-2 text-4xl md:text-5xl">Nana Endo</h2>
     </div>
     <div use:reveal>
       <p class="mt-6 text-lg md:text-xl">
-        WSP KEYCLUB FAM! It's me, Will, one of your Spirit chairs for this year.
-        Since we will spend the year together, you should get to know me. Some
-        of my interest are watching sports like football, basketball,
-        soccer,baseball, mma, and boxing. I was also the Key Club PNW Member of
-        the Year.
+        Hi everyone, I’m Nana Endo and I’m the other co-editor for the year with
+        Ellie! This will be an amazing artsy committee, Ellie and I are happy to
+        be co-chairs.
       </p>
     </div>
   </div>
@@ -123,33 +120,19 @@
   >
     <img
       class="absolute inset-0 h-full w-full object-cover"
-      src="/committees/will_chair.jpg"
+      src="/committees/ellie_nana_chairs.jpg"
       alt="Committee chair"
     />
   </div>
-</section>
-
-<section
-  class="relative grid w-full grid-cols-1 bg-background text-foreground md:grid-cols-2 min-h-150"
->
-  <div
-    class="order-1 relative overflow-hidden md:order-1 aspect-square md:aspect-auto"
-  >
-    <img
-      class="absolute inset-0 h-full w-full object-cover"
-      src="/committees/killian_chair.jpg"
-      alt="Committee chair"
-    />
-  </div>
-  <div class="order-2 flex flex-col justify-center p-8 md:order-2 md:p-14">
+  <div class="order-3 flex flex-col justify-center p-8 md:order-3 md:p-14">
     <div use:reveal>
       <span class="font-bold-gothic text-secondary">MEET YOUR CHAIRS</span>
-      <h2 class="mt-2 text-4xl md:text-5xl">Killian Bates</h2>
+      <h2 class="mt-2 text-4xl md:text-5xl">Ellie Nguyen</h2>
     </div>
     <div use:reveal>
       <p class="mt-6 text-lg md:text-xl">
-        My name is Killian and I’m a chill, ambitious guy who likes to try
-        making the world a better place and do good where I can.
+        Hey bees!! I’m Ellie Nguyen and I’m the co-editor for the year! I’m so
+        excited to help manage this committee along side Nana.
       </p>
     </div>
   </div>
@@ -168,7 +151,7 @@
     <iframe
       class="mx-auto mt-8 border-4 rounded border-primary"
       title="Registration Form"
-      src="https://docs.google.com/forms/d/e/1FAIpQLSf66fSlA9Kfy84ET2cen9ngna1FOqreUWQdapLW8F0Qevatcw/viewform"
+      src="https://docs.google.com/forms/d/e/1FAIpQLSfpkLjHZKRBSSkMHHHD1b45o8E3gmrNTBGRwpEo2C6Gxt3U5Q/viewform"
       width="640"
       height="800"
       frameborder="0"

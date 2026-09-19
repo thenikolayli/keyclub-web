@@ -39,13 +39,17 @@
 
 <!-- What is DCON -->
 <section
-  class="grid w-full grid-cols-1 bg-stone-200 text-kcblack md:grid-cols-2"
+  class="grid w-full grid-cols-1 bg-stone-200 text-kcblack md:grid-cols-2 min-h-150"
 >
-  <img
-    class="h-64 w-full object-cover md:h-full order-2 md:order-1"
-    src="/dcon.webp"
-    alt="Key Clubbers at DCON"
-  />
+  <div
+    class="relative overflow-hidden order-2 md:order-1 aspect-square md:aspect-auto"
+  >
+    <img
+      class="absolute inset-0 h-full w-full object-cover"
+      src="/dcon.webp"
+      alt="Key Clubbers at DCON"
+    />
+  </div>
   <div class="flex flex-col justify-center p-8 md:p-14 order-1 md:order-2">
     <div use:reveal>
       <span class="font-bold-gothic text-kcblue">WHAT IS DCON?</span>
@@ -64,7 +68,7 @@
 </section>
 
 <!-- Highlights -->
-<section class="w-full bg-kcblack px-8 py-20">
+<section class="w-full bg-kcblack px-8 py-20 min-h-150">
   <div class="mx-auto max-w-6xl">
     <h2 use:reveal class="text-4xl text-stone-100 md:text-5xl text-center">
       Why You Should Go
@@ -86,13 +90,15 @@
 </section>
 
 <!-- Bigger picture -->
-<section class="w-full bg-kcblue px-8 py-20 text-stone-100">
-  <div class="mx-auto max-w-4xl text-center">
+<section
+  class="w-full bg-kcblue px-8 py-20 text-stone-100 min-h-150 flex flex-col items-center justify-center text-center"
+>
+  <div class="max-w-4xl text-center flex flex-col items-center justify-center">
     <h2 use:reveal class="text-4xl md:text-5xl">
       Be a Part of Something Bigger
     </h2>
     <div use:reveal>
-      <p class="mx-auto mt-6 max-w-2xl text-lg text-stone-200">
+      <p class="mt-6 max-w-2xl text-lg text-stone-200">
         Key Club is an international organization with a parent (Kiwanis) and
         sibling programs, plus conventions at every level. DCON is our district
         convention and beyond it is ICON, the Key Club International Convention,
@@ -115,7 +121,9 @@
 </section>
 
 <!-- CTA -->
-<section class="w-full bg-stone-200 px-8 py-20 text-center text-kcblack">
+<section
+  class="w-full bg-stone-200 py-20 text-center text-kcblack min-h-100 flex flex-col items-center justify-center"
+>
   <h2 use:reveal class="text-4xl md:text-5xl">Want in on DCON?</h2>
   <div use:reveal>
     <p class="mt-4 text-lg max-w-2xl mx-auto">
@@ -123,7 +131,7 @@
       District website for dates and details.
     </p>
     <Button
-      class="w-fit mx-auto mt-2"
+      class="w-fit mt-2"
       size="lg"
       variant="secondary"
       href="https://www.pnwkeyclub.org/"

@@ -13,7 +13,7 @@
   const gradYears = Array.from({ length: 6 }, (_, i) => currentYear + i);
 
   onMount(() => {
-    document.title = "Beekeper - Ranks";
+    document.title = "Beekeeper - Ranks";
   });
 </script>
 

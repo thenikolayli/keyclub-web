@@ -11,7 +11,7 @@
 </script>
 
 <ImageHeader
-  imagePath="/faz.webp"
+  imagePath="/leadership_committee.jpg"
   title="Leadership Committee"
   description="Be a leader"
   pageTitle="Leadership Committee"
@@ -19,13 +19,17 @@
 
 <!-- About -->
 <section
-  class="grid w-full grid-cols-1 bg-background text-foreground md:grid-cols-2 scroll-mt-24"
+  class="grid w-full grid-cols-1 bg-background text-foreground md:grid-cols-2 scroll-mt-24 min-h-150"
 >
-  <img
-    class="order-2 h-64 w-full object-cover md:order-1 md:h-full"
-    src="/gallery.jpg"
-    alt="Leadership committee members"
-  />
+  <div
+    class="order-2 relative overflow-hidden md:order-1 aspect-square md:aspect-auto"
+  >
+    <img
+      class="absolute inset-0 h-full w-full object-cover"
+      src="/committees/leadership_members.jpg"
+      alt="Leadership committee members"
+    />
+  </div>
   <div class="order-1 flex flex-col justify-center p-8 md:order-2 md:p-14">
     <div use:reveal>
       <span class="font-bold-gothic text-secondary">THE COMMITTEE</span>
@@ -33,8 +37,12 @@
     </div>
     <div use:reveal>
       <p class="mt-6 text-lg md:text-xl">
-        Leadership is open to sophomores and above. Members create and lead
-        volunteer events.
+        Key Club Leadership Committee is the backbone of Key Club. We create and
+        lead every event you see—without us, not much volunteering would be
+        done! <span class="font-bold">
+          Applications for this committee will open in December
+        </span> and are open to sophomores or above, so if you think you have what
+        it takes to lead, then stay tuned!
       </p>
     </div>
   </div>
@@ -43,7 +51,7 @@
 <!-- Meetings -->
 {#if data.authorized}
   <section
-    class="w-full bg-background px-6 py-20 text-foreground md:px-12 flex flex-col items-center"
+    class="w-full bg-background px-6 py-20 text-foreground md:px-12 flex flex-col items-center min-h-100"
   >
     <div use:reveal class="w-full max-w-6xl">
       <span class="font-bold-gothic text-secondary">WHEN WE MEET</span>
@@ -97,7 +105,7 @@
 
 <!-- Chair -->
 <section
-  class="grid w-full grid-cols-1 bg-background text-foreground md:grid-cols-2 scroll-mt-24"
+  class="grid w-full grid-cols-1 bg-background text-foreground md:grid-cols-2 min-h-150"
 >
   <div class="order-1 flex flex-col justify-center p-8 md:order-1 md:p-14">
     <div use:reveal>
@@ -106,28 +114,36 @@
     </div>
     <div use:reveal>
       <p class="mt-6 text-lg md:text-xl">
-        [A short bio about the committee chair — what they do, how long they've
-        been leading, and why they joined Leadership.]
+        Hi! My name is Sorin Bulgannawar and I am the Key Club Leadership
+        Committee chair! I have two siblings, a sister who rides horses and a
+        younger brother who is crazy at Minecraft PvP. As for myself, I enjoy my
+        classes at Cascadia College, volunteering for Key Club, and playing
+        Magic the Gathering. Key Club is an amazing group of amazing people, and
+        I couldn’t ask for anything else!
       </p>
     </div>
   </div>
-  <img
-    class="order-2 h-64 w-full object-cover md:order-2 md:h-full"
-    src="/faz.webp"
-    alt="Committee chair"
-  />
+  <div
+    class="order-2 relative overflow-hidden md:order-2 aspect-square md:aspect-auto"
+  >
+    <img
+      class="absolute inset-0 h-full w-full object-cover"
+      src="/committees/sorin_chair.jpg"
+      alt="Committee chair"
+    />
+  </div>
 </section>
 
 <!-- Registration -->
 <section
-  class="w-full bg-background px-6 py-20 text-foreground md:px-12 flex flex-col items-center"
+  class="w-full bg-background px-6 py-20 text-foreground md:px-12 flex flex-col items-center min-h-100"
 >
   <div use:reveal class="w-full max-w-3xl text-center">
     <span class="font-bold-gothic text-secondary">WANT TO JOIN?</span>
     <h2 class="mt-2 text-4xl md:text-5xl">Registration is Currently Closed</h2>
     <p class="mx-auto mt-4 max-w-xl text-lg">
-      Registration opens in second semester. Reach out to Sorin if you have any
-      questions.
+      <span class="font-bold">Registration opens in December</span>. Reach out
+      to Sorin if you have any questions.
     </p>
   </div>
 </section>
