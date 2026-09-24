@@ -92,7 +92,7 @@
   {:else}
     <div use:reveal class="mt-12 text-center">
       <p class="text-lg text-muted-foreground">
-        No Spirit Committee meetings are scheduled yet. Check back soon.
+        No Spirit Committee meetings have been scheduled yet. Check back soon.
       </p>
     </div>
   {/if}

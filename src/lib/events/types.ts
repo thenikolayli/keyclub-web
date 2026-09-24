@@ -38,12 +38,11 @@ export interface MemberAttendance {
 
 // date, start, and end is an ISO 8601 string.
 export interface Meeting {
-  name: string | null;
+  name: string;
   description: string | null;
-  date: string | null;
-  start: string | null;
-  end: string | null;
   committee: Committee;
   location: string | null;
-  topic: string | null;
+  date: string;
+  start: string;
+  end: string;
 }

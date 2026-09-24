@@ -49,59 +49,57 @@
 </section>
 
 <!-- Meetings -->
-{#if data.authorized}
-  <section
-    class="w-full bg-background px-6 py-20 text-foreground md:px-12 flex flex-col items-center min-h-100"
-  >
-    <div use:reveal class="w-full max-w-6xl">
-      <span class="font-bold-gothic text-secondary">WHEN WE MEET</span>
-      <h2 class="mt-2 text-4xl md:text-5xl">Next Leadership Meetings</h2>
-      <p class="mt-4 max-w-2xl text-lg">
-        Leaders are expected to attend meetings.
+<section
+  class="w-full bg-background px-6 py-20 text-foreground md:px-12 flex flex-col items-center min-h-100"
+>
+  <div use:reveal class="w-full max-w-6xl">
+    <span class="font-bold-gothic text-secondary">WHEN WE MEET</span>
+    <h2 class="mt-2 text-4xl md:text-5xl">Next Leadership Meetings</h2>
+    <p class="mt-4 max-w-2xl text-lg">
+      Leaders are expected to attend meetings.
+      <span class="font-bold">Meetings are for leaders only.</span>
+    </p>
+  </div>
+
+  {#if data.meetings.length > 0}
+    <div use:reveal class="mt-12 w-full max-w-6xl">
+      <Carousel.Root
+        class="w-full cursor-grab select-none"
+        opts={{
+          loop: false,
+          align: isMobile.current ? "center" : "start",
+          skipSnaps: false,
+        }}
+      >
+        <Carousel.Content>
+          {#each data.meetings as meeting}
+            <Carousel.Item
+              class={isMobile.current ? "basis-full" : "basis-1/2 lg:basis-1/3"}
+            >
+              <MeetingCard {meeting} />
+            </Carousel.Item>
+          {/each}
+        </Carousel.Content>
+
+        <div class="mt-8 flex items-center justify-center gap-4">
+          <Carousel.Previous size="icon-lg" class="static translate-none" />
+          <p class="flex items-center gap-2 text-sm text-muted-foreground">
+            <Icon icon="solar:arrow-left-right-linear" class="size-5" />
+            Drag or use the arrows to see more
+          </p>
+          <Carousel.Next size="icon-lg" class="static translate-none" />
+        </div>
+      </Carousel.Root>
+    </div>
+  {:else}
+    <div use:reveal class="mt-12 text-center">
+      <p class="text-lg text-muted-foreground">
+        No Leadership Committee meetings have been scheduled yet. Check back
+        soon.
       </p>
     </div>
-
-    {#if data.meetings.length > 0}
-      <div use:reveal class="mt-12 w-full max-w-6xl">
-        <Carousel.Root
-          class="w-full cursor-grab select-none"
-          opts={{
-            loop: false,
-            align: isMobile.current ? "center" : "start",
-            skipSnaps: false,
-          }}
-        >
-          <Carousel.Content>
-            {#each data.meetings as meeting}
-              <Carousel.Item
-                class={isMobile.current
-                  ? "basis-full"
-                  : "basis-1/2 lg:basis-1/3"}
-              >
-                <MeetingCard {meeting} />
-              </Carousel.Item>
-            {/each}
-          </Carousel.Content>
-
-          <div class="mt-8 flex items-center justify-center gap-4">
-            <Carousel.Previous size="icon-lg" class="static translate-none" />
-            <p class="flex items-center gap-2 text-sm text-muted-foreground">
-              <Icon icon="solar:arrow-left-right-linear" class="size-5" />
-              Drag or use the arrows to see more
-            </p>
-            <Carousel.Next size="icon-lg" class="static translate-none" />
-          </div>
-        </Carousel.Root>
-      </div>
-    {:else}
-      <div use:reveal class="mt-12 text-center">
-        <p class="text-lg text-muted-foreground">
-          No Leadership meetings are scheduled yet. Check back soon.
-        </p>
-      </div>
-    {/if}
-  </section>
-{/if}
+  {/if}
+</section>
 
 <!-- Chair -->
 <section
