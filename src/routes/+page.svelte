@@ -14,6 +14,12 @@
   const { data } = $props();
   const nextMeeting = $derived(data.meetings);
   const isMobile = new IsMobile();
+  const countdown = $state([
+    { value: 0, label: "days" },
+    { value: 0, label: "hours" },
+    { value: 0, label: "minutes" },
+    { value: 0, label: "seconds" },
+  ]);
 
   const committees = [
     {
@@ -46,12 +52,6 @@
     },
   ];
 
-  const countdown = $state([
-    { value: 0, label: "days" },
-    { value: 0, label: "hours" },
-    { value: 0, label: "minutes" },
-    { value: 0, label: "seconds" },
-  ]);
   const meetingDetails = $derived.by(() => {
     // double-check, meeting details fields won't load if nextMeeting is null
     if (!nextMeeting) {
@@ -67,8 +67,8 @@
       },
       { label: "Location", value: nextMeeting.location ?? "The Annex" },
       {
-        label: "What it's about",
-        value: nextMeeting.topic ?? "TBD",
+        label: "Topic",
+        value: nextMeeting.description ?? "TBD",
       },
       { label: "Transportation", value: "Bus passes will be provided" },
     ];
@@ -301,7 +301,7 @@
         <span class="font-bold-gothic text-primary">COMING UP</span>
         <h2 class="mt-2 text-4xl md:text-5xl">The October General Meeting</h2>
         <p class="mt-4 max-w-xl text-lg text-stone-300">
-          {nextMeeting.description}
+          The spookiest meeting of the year...
         </p>
 
         <dl

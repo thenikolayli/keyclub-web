@@ -82,7 +82,15 @@
 @font-face {
   font-family: century;
   font-style: normal;
+  font-weight: normal;
   src: url("/fonts/centurygothic.ttf") format("opentype");
+}
+
+@font-face {
+  font-family: century;
+  font-style: normal;
+  font-weight: bold;
+  src: url("/fonts/centurygothic_bold.ttf") format("opentype");
 }
 
 /* Honor users who prefer less motion: kill transitions/animations site-wide. */
@@ -98,5 +106,5 @@
 }
 
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }

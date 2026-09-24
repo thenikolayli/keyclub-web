@@ -48,7 +48,7 @@
 </section>
 
 <!-- Meetings -->
-<!-- <section
+<section
   class="relative w-full bg-background px-6 py-20 text-foreground md:px-12 flex flex-col items-center min-h-100"
 >
   <div use:reveal class="w-full max-w-6xl">
@@ -92,11 +92,12 @@
   {:else}
     <div use:reveal class="mt-12 text-center">
       <p class="text-lg text-muted-foreground">
-        No Spirit Committee meetings are scheduled yet. Check back soon.
+        No Decoration Committee meetings have been scheduled yet. Check back
+        soon.
       </p>
     </div>
   {/if}
-</section> -->
+</section>
 
 <!-- Chair -->
 <section

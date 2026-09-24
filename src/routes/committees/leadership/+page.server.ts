@@ -3,13 +3,9 @@ import { getMeetings } from "$lib/events/meetings";
 export const prerender = false;
 
 export async function load({ locals }) {
-  if (!locals.profile || locals.profile.role == "member") {
-    return { meetings: [], authorized: false };
-  }
-
   const meetingsResult = await getMeetings();
   if (!meetingsResult.ok) {
-    return { meetings: [], authorized: true };
+    return { meetings: [] };
   }
 
   const meetings = meetingsResult.data
@@ -20,7 +16,6 @@ export async function load({ locals }) {
 
   return {
     meetings,
-    authorized: true,
     cache: { maxage: 60 * 15 },
   };
 }

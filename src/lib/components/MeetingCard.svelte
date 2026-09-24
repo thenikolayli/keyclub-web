@@ -4,30 +4,15 @@
 
   let { meeting }: { meeting: Meeting } = $props();
 
-  const start = $derived(
-    meeting.start
-      ? moment.tz(meeting.start, "America/Los_Angeles")
-      : null,
-  );
-
-  const dateLine = $derived(
-    start
-      ? start.format("dddd, MMMM D")
-      : meeting.date
-        ? moment(meeting.date).format("dddd, MMMM D")
-        : "Date TBD",
-  );
-
-  const timeRange = $derived(
-    start && meeting.end
-      ? `${start.format("h:mm A")} — ${moment.tz(meeting.end, "America/Los_Angeles").format("h:mm A")}`
-      : "Time TBD",
-  );
+  const start = $derived(moment.tz(meeting.start, "America/Los_Angeles"));
+  const end = $derived(moment.tz(meeting.end, "America/Los_Angeles"));
 
   const details = $derived([
-    { label: "Time", value: timeRange },
+    {
+      label: "Time",
+      value: `${start.format("h:mm A")} — ${end.format("h:mm A")}`,
+    },
     { label: "Location", value: meeting.location ?? "TBD" },
-    { label: "Topic", value: meeting.topic ?? "TBD" },
   ]);
 </script>
 
@@ -41,7 +26,9 @@
   </div>
 
   <div class="flex flex-1 flex-col p-5">
-    <p class="font-[abril] text-4xl italic text-primary">{dateLine}</p>
+    <p class="font-[abril] text-4xl italic text-primary">
+      {start.format("dddd, MMMM D")}
+    </p>
 
     <dl class="mt-5 flex flex-col gap-4">
       {#each details as item (item.label)}
@@ -57,7 +44,9 @@
     </dl>
 
     {#if meeting.description}
-      <p class="mt-5 border-t border-muted pt-4 text-sm leading-relaxed text-muted">
+      <p
+        class="mt-5 border-t border-muted pt-4 text-sm leading-relaxed text-muted"
+      >
         {meeting.description}
       </p>
     {/if}
