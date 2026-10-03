@@ -1,9 +1,9 @@
 <script lang="ts">
-  import MenuIcon from "@lucide/svelte/icons/menu";
   import { Button } from "$lib/components/ui/button/index.js";
   import { cn } from "$lib/utils.js";
   import { useSidebar } from "./context.svelte.js";
   import type { ComponentProps } from "svelte";
+  import Icon from "@iconify/svelte";
 
   let {
     ref = $bindable(null),
@@ -31,6 +31,6 @@
   }}
   {...restProps}
 >
-  <MenuIcon class="size-full" />
+  <Icon icon="solar:hamburger-menu-linear" class="size-full" />
   <span class="sr-only">Toggle Sidebar</span>
 </Button>
