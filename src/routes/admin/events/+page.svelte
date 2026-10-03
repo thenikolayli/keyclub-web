@@ -60,7 +60,7 @@
 
       {#if logEvent.result && logEvent.result.ok}
         <Alert.Root>
-          <Icon icon="lucide:check" class="size-7" />
+          <Icon icon="solar:check-circle-linear" class="size-7" />
           <Alert.Title>{logEvent.result.data.event.name} logged</Alert.Title>
           <Alert.Description>
             <span class="font-medium"
@@ -71,7 +71,7 @@
         </Alert.Root>
       {:else if logEvent.result && !logEvent.result.ok}
         <Alert.Root variant="destructive">
-          <Icon icon="lucide:alert-triangle" class="size-7" />
+          <Icon icon="solar:alert-triangle-linear" class="size-7" />
           <Alert.Title>{logEvent.result.error}</Alert.Title>
         </Alert.Root>
       {/if}

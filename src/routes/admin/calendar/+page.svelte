@@ -51,7 +51,7 @@
       </form>
       {#if calendar.result && calendar.result.ok}
         <Alert.Root>
-          <Icon icon="lucide:check" class="size-7" />
+          <Icon icon="solar:check-circle-linear" class="size-7" />
           <Alert.Title>Event added successfully</Alert.Title>
           <Alert.Description>
             <a
@@ -65,7 +65,7 @@
         </Alert.Root>
       {:else if calendar.result && !calendar.result.ok}
         <Alert.Root variant="destructive">
-          <Icon icon="lucide:alert-triangle" class="size-7" />
+          <Icon icon="solar:alert-triangle-linear" class="size-7" />
           <Alert.Title>{calendar.result.error}</Alert.Title>
         </Alert.Root>
       {/if}

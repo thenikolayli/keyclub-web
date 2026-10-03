@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { RangeCalendar as RangeCalendarPrimitive } from "bits-ui";
-	import ChevronRightIcon from '@lucide/svelte/icons/chevron-right';
+	import Icon from "@iconify/svelte";
 	import { buttonVariants, type ButtonVariant } from "$lib/components/ui/button/index.js";
 	import { cn } from "$lib/utils.js";
 
@@ -16,7 +16,7 @@
 </script>
 
 {#snippet Fallback()}
-	<ChevronRightIcon class={cn("size-4", className)} />
+	<Icon icon="solar:alt-arrow-right-linear" class={cn("size-4", className)} />
 {/snippet}
 
 <RangeCalendarPrimitive.NextButton

@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { Accordion as AccordionPrimitive } from "bits-ui";
 	import { cn, type WithoutChild } from "$lib/utils.js";
-	import ChevronDownIcon from '@lucide/svelte/icons/chevron-down';
-	import ChevronUpIcon from '@lucide/svelte/icons/chevron-up';
+	import Icon from "@iconify/svelte";
 
 	let {
 		ref = $bindable(null),
@@ -26,7 +25,7 @@
 		{...restProps}
 	>
 		{@render children?.()}
-		<ChevronDownIcon data-slot="accordion-trigger-icon" class="cn-accordion-trigger-icon pointer-events-none shrink-0 group-aria-expanded/accordion-trigger:hidden" />
-		<ChevronUpIcon data-slot="accordion-trigger-icon" class="cn-accordion-trigger-icon pointer-events-none hidden shrink-0 group-aria-expanded/accordion-trigger:inline" />
+		<Icon icon="solar:alt-arrow-down-linear" data-slot="accordion-trigger-icon" class="cn-accordion-trigger-icon pointer-events-none shrink-0 group-aria-expanded/accordion-trigger:hidden" />
+		<Icon icon="solar:alt-arrow-up-linear" data-slot="accordion-trigger-icon" class="cn-accordion-trigger-icon pointer-events-none hidden shrink-0 group-aria-expanded/accordion-trigger:inline" />
 	</AccordionPrimitive.Trigger>
 </AccordionPrimitive.Header>

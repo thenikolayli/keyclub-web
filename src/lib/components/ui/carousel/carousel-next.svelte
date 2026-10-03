@@ -3,7 +3,7 @@
 	import { getEmblaContext } from "./context.js";
 	import { cn } from "$lib/utils.js";
 	import { Button, type Props } from "$lib/components/ui/button/index.js";
-	import ChevronRightIcon from '@lucide/svelte/icons/chevron-right';
+	import Icon from "@iconify/svelte";
 
 	let {
 		ref = $bindable(null),
@@ -34,6 +34,6 @@
 	bind:ref
 	{...restProps}
 >
-	<ChevronRightIcon  />
+	<Icon icon="solar:alt-arrow-right-linear" class="size-4" />
 	<span class="sr-only">Next slide</span>
 </Button>

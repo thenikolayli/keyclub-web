@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import * as Card from "$lib/components/ui/card/index.js";
-  import ShieldAlertIcon from "@lucide/svelte/icons/shield-alert";
+  import Icon from "@iconify/svelte";
   import { Separator } from "$lib/components/ui/separator";
 
   let { data } = $props();
@@ -20,7 +20,7 @@
         <div
           class="mb-2 flex size-12 items-center justify-center rounded-full bg-destructive/10 text-destructive"
         >
-          <ShieldAlertIcon class="size-6" />
+          <Icon icon="solar:shield-warning-linear" class="size-6" />
         </div>
         <Card.Title>No Access</Card.Title>
         <Card.Description>
