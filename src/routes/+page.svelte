@@ -36,13 +36,13 @@
       image: "/leadership_committee.jpg",
       href: "/committees/leadership",
     },
-    // {
-    //   name: "Service",
-    //   icon: "solar:hand-heart-bold",
-    //   text: "Brainstorm and run service events that power our District Project and serve the community.",
-    //   image: "/service_committee.jpg",
-    //   href: "/committees/service",
-    // },
+    {
+      name: "Service",
+      icon: "solar:hand-heart-bold",
+      text: "Brainstorm and run service events that power our District Project and serve the community.",
+      image: "/service_committee.jpg",
+      href: "/committees/service",
+    },
     {
       name: "Spirit",
       icon: "solar:fire-bold",

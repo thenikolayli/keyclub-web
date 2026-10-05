@@ -1,6 +1,8 @@
 <script lang="ts">
   import ImageHeader from "$lib/components/ImageHeader.svelte";
   import { reveal } from "$lib/reveal";
+  import Button from "$lib/components/ui/button/button.svelte";
+  import Icon from "@iconify/svelte";
 </script>
 
 <ImageHeader
@@ -18,7 +20,7 @@
     class="relative overflow-hidden order-2 md:order-1 aspect-square md:aspect-auto"
   >
     <img
-      class="absolute inset-0 h-full w-full object-cover"
+      class="absolute inset-0 h-full w-full object-cover p-10"
       src="/rmhc_logo.png"
       alt="Ronald McDonald House Charities Logo"
     />
@@ -39,5 +41,27 @@
       donating. Follow the link below to learn how to get involved and explore ways
       to give, whether it be fulfilling a wishlist or making a direct donation.
     </p>
+    <div class="mt-4">
+      <Button
+        class="w-fit mx-auto mt-2"
+        size="lg"
+        variant="secondary"
+        href="https://rmhcseattle.org/get-involved/volunteer/individual-volunteering/"
+        target="_blank"
+      >
+        <Icon icon="solar:link-bold" class="size-4" />
+        Volunteer
+      </Button>
+      <Button
+        class="w-fit mx-auto mt-2"
+        size="lg"
+        variant="secondary"
+        href="https://rmhcseattle.org/?form=give"
+        target="_blank"
+      >
+        <Icon icon="solar:link-bold" class="size-4" />
+        Donate
+      </Button>
+    </div>
   </div>
 </section>

@@ -26,6 +26,7 @@
   const committees = [
     { href: "/committees/decoration", label: "Decoration" },
     { href: "/committees/leadership", label: "Leadership" },
+    { href: "/committees/service", label: "Service" },
     { href: "/committees/spirit", label: "Spirit" },
   ];
 

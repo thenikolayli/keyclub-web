@@ -27,7 +27,7 @@
     <img
       class="absolute inset-0 h-full w-full object-cover"
       src="/committees/parade_bts.jpg"
-      alt="Leadership committee members"
+      alt="Veteran's Day parade"
     />
   </div>
   <div class="order-1 flex flex-col justify-center p-8 md:order-2 md:p-14">
@@ -92,8 +92,7 @@
   {:else}
     <div use:reveal class="mt-12 text-center">
       <p class="text-lg text-muted-foreground">
-        No Decoration Committee meetings have been scheduled yet. Check back
-        soon.
+        No meetings have been scheduled yet. Check back soon.
       </p>
     </div>
   {/if}
