@@ -11,10 +11,10 @@
 </script>
 
 <ImageHeader
-  imagePath="/spirit_committee.jpg"
-  title="Spirit Committee"
-  description="Be spirited"
-  pageTitle="Spirit Committee"
+  imagePath="/service_committee.jpg"
+  title="Service Committee"
+  description="Support the cause"
+  pageTitle="Service Committee"
 />
 
 <!-- About -->
@@ -33,15 +33,15 @@
   <div class="order-1 flex flex-col justify-center p-8 md:order-2 md:p-14">
     <div use:reveal>
       <span class="font-bold-gothic text-secondary">THE COMMITTEE</span>
-      <h2 class="mt-2 text-2xl md:text-5xl">
-        We Love Spirit <br /> Yes We Do!
-      </h2>
+      <h2 class="mt-2 text-2xl md:text-5xl">Serve Your Community</h2>
     </div>
     <div use:reveal>
       <p class="mt-6 text-lg md:text-xl">
-        We’re in charge of everything related to spirit in Key Club. For
-        example, preparing for DCON by learning spirit chants, making spirit
-        bracelets, and a bunch of other fun stuff!
+        Service Committee is an amazing place where Key Club members can gather
+        to come up with new service ideas for the community. We take initiative
+        to bring the change we want to see in the community. Join us on our
+        monthly Tuesday meetings to show your service dedication and enjoy free
+        snacks!
       </p>
     </div>
   </div>
@@ -53,9 +53,9 @@
 >
   <div use:reveal class="w-full max-w-6xl">
     <span class="font-bold-gothic text-secondary">WHEN WE MEET</span>
-    <h2 class="mt-2 text-4xl md:text-5xl">Next Spirit Meetings</h2>
+    <h2 class="mt-2 text-4xl md:text-5xl">Next Service Meetings</h2>
     <p class="mt-4 max-w-2xl text-lg">
-      Spirit Committee members are expected to attend meetings.
+      Service Committee members are expected to attend meetings.
     </p>
   </div>
 
@@ -106,15 +106,14 @@
   <div class="order-2 flex flex-col justify-center p-8 md:order-1 md:p-14">
     <div use:reveal>
       <span class="font-bold-gothic text-secondary">MEET YOUR CHAIRS</span>
-      <h2 class="mt-2 text-4xl md:text-5xl">Will Badiang</h2>
+      <h2 class="mt-2 text-4xl md:text-5xl">Adwita Maheshwari</h2>
     </div>
     <div use:reveal>
       <p class="mt-6 text-lg md:text-xl">
-        WSP KEYCLUB FAM! It's me, Will, one of your Spirit chairs for this year.
-        Since we will spend the year together, you should get to know me. Some
-        of my interest are watching sports like football, basketball,
-        soccer,baseball, mma, and boxing. I was also the Key Club PNW Member of
-        the Year.
+        Hi I’m Adwita, one of the chairs for Service Committee. I’ve been in Key
+        Club for three years now and I’ve been to DCON all three years! A little
+        about me is that I love Drake (and Key Club ofc 🐝), and I’ve been to
+        10+ countries.
       </p>
     </div>
   </div>
@@ -123,7 +122,7 @@
   >
     <img
       class="absolute inset-0 h-full w-full object-cover"
-      src="/committees/will_chair.jpg"
+      src="/committees/adwita_chair.jpg"
       alt="Committee chair"
     />
   </div>
@@ -137,19 +136,22 @@
   >
     <img
       class="absolute inset-0 h-full w-full object-cover"
-      src="/committees/killian_chair.jpg"
+      src="/committees/ivanna_chair.png"
       alt="Committee chair"
     />
   </div>
   <div class="order-2 flex flex-col justify-center p-8 md:order-2 md:p-14">
     <div use:reveal>
       <span class="font-bold-gothic text-secondary">MEET YOUR CHAIRS</span>
-      <h2 class="mt-2 text-4xl md:text-5xl">Killian Bates</h2>
+      <h2 class="mt-2 text-4xl md:text-5xl">Ivanna Lim</h2>
     </div>
     <div use:reveal>
       <p class="mt-6 text-lg md:text-xl">
-        My name is Killian and I’m a chill, ambitious guy who likes to try
-        making the world a better place and do good where I can.
+        Hello! My name is Ivanna Lim and I’m a junior. As your Service Committee
+        co-chair, I work alongside Adwita to organize our Service Project. I’m
+        so excited to create something with a meaningful impact to our local
+        community and hope that you (yes, you!!) can come join Service Committee
+        and contribute to the cause. Fun fact: I own 500 books and 300 DVDs!
       </p>
     </div>
   </div>
@@ -168,7 +170,7 @@
     <iframe
       class="mx-auto mt-8 border-4 rounded border-primary"
       title="Registration Form"
-      src="https://docs.google.com/forms/d/e/1FAIpQLSf66fSlA9Kfy84ET2cen9ngna1FOqreUWQdapLW8F0Qevatcw/viewform"
+      src="https://docs.google.com/forms/d/e/1FAIpQLSe-FsnI_7jldhS7MGX6IMTSrrm4-s7e3KOHj0VnzI6BcCXrRg/viewform"
       width={isMobile ? "350" : "650"}
       height="800"
       frameborder="0"

@@ -94,8 +94,7 @@
   {:else}
     <div use:reveal class="mt-12 text-center">
       <p class="text-lg text-muted-foreground">
-        No Leadership Committee meetings have been scheduled yet. Check back
-        soon.
+        No meetings have been scheduled yet. Check back soon.
       </p>
     </div>
   {/if}
