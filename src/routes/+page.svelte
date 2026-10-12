@@ -10,6 +10,7 @@
   import { SplitText } from "gsap/SplitText";
   import { reveal } from "$lib/reveal";
   import { IsMobile } from "$lib/hooks/is-mobile.svelte.js";
+  import { Separator } from "$lib/components/ui/separator/index";
 
   const { data } = $props();
   const nextMeeting = $derived(data.meetings);
@@ -289,8 +290,11 @@
 
 <!-- Next General Meeting -->
 {#if nextMeeting}
+  <Separator />
   <section
-    class="w-full bg-orange-600 scroll-mt-24 px-8 py-20 text-stone-100 flex flex-col items-center justify-center text-center lg:text-left"
+    class={nextMeeting.name.toLowerCase().includes("november")
+      ? "w-full bg-foreground scroll-mt-24 px-8 py-20 text-stone-100 flex flex-col items-center justify-center text-center lg:text-left"
+      : "w-full bg-orange-600 scroll-mt-24 px-8 py-20 text-stone-100 flex flex-col items-center justify-center text-center lg:text-left"}
     id="countdown"
   >
     <div
@@ -299,9 +303,19 @@
     >
       <div class="text-center lg:text-left">
         <span class="font-bold-gothic text-primary">COMING UP</span>
-        <h2 class="mt-2 text-4xl md:text-5xl">The October General Meeting</h2>
+        <h2 class="mt-2 text-4xl md:text-5xl">
+          {#if nextMeeting.name.toLowerCase().includes("november")}
+            The November General Meeting
+          {:else}
+            The October General Meeting
+          {/if}
+        </h2>
         <p class="mt-4 max-w-xl text-lg text-stone-300">
-          The spookiest meeting of the year...
+          {#if nextMeeting.name.toLowerCase().includes("november")}
+            The most thankful meeting of the year
+          {:else}
+            The spookiest meeting of the year...
+          {/if}
         </p>
 
         <dl
@@ -329,7 +343,9 @@
         <div class="relative grid grid-cols-4 gap-3">
           {#each countdown as unit (unit.label)}
             <div
-              class="flex z-10 flex-col items-center rounded-xl bg-orange-900 px-2 py-5"
+              class={nextMeeting.name.toLowerCase().includes("november")
+                ? "flex z-10 flex-col items-center rounded-xl bg-zinc-700 px-2 py-5"
+                : "flex z-10 flex-col items-center rounded-xl bg-orange-900 px-2 py-5"}
             >
               <span
                 class="font-[abril] text-4xl text-kcyellow tabular-nums sm:text-5xl"
