@@ -36,13 +36,22 @@ export async function getMeetings(): Promise<Result<Meeting[]>> {
       committee = "spirit";
     } else if (lowercaseName.includes("service")) {
       committee = "service";
-    } else if (lowercaseName.includes("deco")) {
+    } else if (
+      lowercaseName.includes("deco") ||
+      lowercaseName.includes("poster")
+    ) {
       committee = "decoration";
     } else {
       continue;
     }
 
     const date = moment.tz(calEvent.start!.date, "America/Los_Angeles");
+    const nowLA = moment().tz("America/Los_Angeles");
+    const meetingStart = date.clone().set({ hour: 14, minute: 15, second: 0 });
+    if (meetingStart.isSame(nowLA, "day") && nowLA.isAfter(meetingStart)) {
+      continue;
+    }
+
     const description = calEvent.description ?? "";
     const locationMatch = description.match(/location:\s*(.+?)\n/i);
     const descMatch = description.match(/description:\s*(.+)/i);
