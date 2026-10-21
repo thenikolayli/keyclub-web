@@ -67,30 +67,91 @@
               {getHours.result.data.name}
             </h2>
             <p class="mt-1 text-muted-foreground">
-              {getHours.result.data.class} Class of {getHours.result.data
+              {getHours.result.data.class}, Class of {getHours.result.data
                 .grad_year}
             </p>
           </div>
-          <div class="grid grid-cols-2 divide-x divide-border">
-            <div class="p-6 text-center">
-              <p class="text-sm uppercase tracking-wide text-muted-foreground">
-                All-time hours
-              </p>
-              <p class="font-bold-gothic mt-1 text-4xl text-primary">
-                {getHours.result.data.all_hours}
-              </p>
+          <div
+            class="grid grid-cols-1 divide-y divide-border md:grid-cols-2 md:divide-x md:divide-y-0"
+          >
+            <div class="p-6">
+              <div class="text-center">
+                <p
+                  class="text-sm uppercase tracking-wide text-muted-foreground"
+                >
+                  All-time hours
+                </p>
+                <p class="font-bold-gothic mt-1 text-4xl text-primary">
+                  {getHours.result.data.all_hours}
+                </p>
+              </div>
+              <div class="mt-4 flex flex-wrap justify-center gap-x-8 gap-y-2">
+                <div class="text-center">
+                  <p
+                    class="text-sm uppercase tracking-wide text-muted-foreground"
+                  >
+                    Percentile<span class="align-super text-xs">*</span>
+                  </p>
+                  <p class="mt-1 text-xl font-semibold text-primary">
+                    {getHours.result.data.all_time_percentile}%
+                  </p>
+                </div>
+                <div class="text-center">
+                  <p
+                    class="text-sm uppercase tracking-wide text-muted-foreground"
+                  >
+                    Ranking
+                  </p>
+                  <p class="mt-1 text-xl font-semibold text-primary">
+                    #{getHours.result.data.all_time_ranking}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div class="p-6 text-center">
-              <p class="text-sm uppercase tracking-wide text-muted-foreground">
-                Term hours
-              </p>
-              <p class="font-bold-gothic mt-1 text-4xl text-primary">
-                {getHours.result.data.term_hours}
-              </p>
+            <div class="p-6">
+              <div class="text-center">
+                <p
+                  class="text-sm uppercase tracking-wide text-muted-foreground"
+                >
+                  Term hours
+                </p>
+                <p class="font-bold-gothic mt-1 text-4xl text-primary">
+                  {getHours.result.data.term_hours}
+                </p>
+              </div>
+              <div class="mt-4 flex flex-wrap justify-center gap-x-8 gap-y-2">
+                <div class="text-center">
+                  <p
+                    class="text-sm uppercase tracking-wide text-muted-foreground"
+                  >
+                    Percentile<span class="align-super text-xs">*</span>
+                  </p>
+                  <p class="mt-1 text-xl font-semibold text-primary">
+                    {getHours.result.data.term_percentile}%
+                  </p>
+                </div>
+                <div class="text-center">
+                  <p
+                    class="text-sm uppercase tracking-wide text-muted-foreground"
+                  >
+                    Ranking
+                  </p>
+                  <p class="mt-1 text-xl font-semibold text-primary">
+                    #{getHours.result.data.term_ranking}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       {/if}
     </div>
+
+    {#if getHours.result?.ok}
+      <p class="mt-4 text-center text-sm text-muted-foreground">
+        *Percentile and ranking are compared against other members in your
+        graduating class with more than 0 recorded hours.
+      </p>
+    {/if}
   </div>
 </section>
