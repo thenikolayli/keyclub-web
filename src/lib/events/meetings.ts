@@ -23,6 +23,21 @@ export async function getMeetings(): Promise<Result<Meeting[]>> {
     if (!calEvent.summary || !calEvent.description) {
       continue;
     }
+
+    const date = moment.tz(calEvent.start!.date, "America/Los_Angeles");
+    const nowLA = moment().tz("America/Los_Angeles");
+    const meetingStart = date.clone().set({ hour: 14, minute: 15, second: 0 });
+    if (meetingStart.isSame(nowLA, "day") && nowLA.isAfter(meetingStart)) {
+      continue;
+    }
+
+    const description = calEvent.description ?? "";
+    const locationMatch = description.match(/location:\s*(.+?)\n/i);
+    const descMatch = description.match(/description:\s*(.+)/i);
+    // Description doesn't have a newline terminator since it's meant to be multiline.
+    // Meetings are always "all day" on the calendar for priority,
+    // so I'm hardcoding the start and end times
+
     const lowercaseName = calEvent.summary.toLowerCase();
     if (!lowercaseName.includes("meeting")) {
       continue;
@@ -38,26 +53,13 @@ export async function getMeetings(): Promise<Result<Meeting[]>> {
       committee = "service";
     } else if (
       lowercaseName.includes("deco") ||
-      lowercaseName.includes("poster")
+      (lowercaseName.includes("poster") && locationMatch != null)
     ) {
       committee = "decoration";
     } else {
       continue;
     }
 
-    const date = moment.tz(calEvent.start!.date, "America/Los_Angeles");
-    const nowLA = moment().tz("America/Los_Angeles");
-    const meetingStart = date.clone().set({ hour: 14, minute: 15, second: 0 });
-    if (meetingStart.isSame(nowLA, "day") && nowLA.isAfter(meetingStart)) {
-      continue;
-    }
-
-    const description = calEvent.description ?? "";
-    const locationMatch = description.match(/location:\s*(.+?)\n/i);
-    const descMatch = description.match(/description:\s*(.+)/i);
-    // Description doesn't have a newline terminator since it's meant to be multiline.
-    // Meetings are always "all day" on the calendar for priority,
-    // so I'm hardcoding the start and end times
     const meeting: Meeting = {
       name: calEvent.summary!,
       description: descMatch ? descMatch[1].trim() : null,
