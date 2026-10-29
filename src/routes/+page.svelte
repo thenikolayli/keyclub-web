@@ -211,34 +211,34 @@
     <span class="font-bold-gothic text-primary">THE HOODIES</span>
     <h2 class="mt-2 text-4xl md:text-5xl">Buy Our Merch</h2>
     <p class="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-      Represent Key Club in style. Grab an official Key Club hoodie.
+      Represent Key Club in style. Grab an official Key Club hoodie for <span
+        class="underline">$30</span
+      >.
     </p>
   </div>
 
-  <div
-    use:reveal
-    class="mt-12 flex flex-col items-center justify-center gap-8 md:flex-row"
-  >
-    <img
-      class="aspect-square h-100 bg-primary object-contain rounded transition-all hover:scale-105 ease-out -rotate-3"
-      src="/hoodie_front.png"
-      alt="Key Club hoodie front"
-    />
-    <img
-      class="aspect-square h-100 bg-primary object-contain rounded transition-all hover:scale-105 ease-out rotate-3"
-      src="/hoodie_back.png"
-      alt="Key Club hoodie back"
-    />
-  </div>
+  <div use:reveal>
+    <div
+      class="mt-12 flex flex-col items-center justify-center gap-8 md:flex-row"
+    >
+      <img
+        class="aspect-square p-12 h-100 bg-primary object-contain rounded transition-all hover:scale-105 ease-out -rotate-3"
+        src="/hoodie_front.png"
+        alt="Key Club hoodie front"
+      />
+      <img
+        class="aspect-square p-12 h-100 bg-primary object-contain rounded transition-all hover:scale-105 ease-out rotate-3"
+        src="/hoodie_back.png"
+        alt="Key Club hoodie back"
+      />
+    </div>
 
-  <div use:reveal class="mt-10">
-    <p class="font-bold-gothic text-2xl">$30</p>
     <Button
       href="https://wa-everett.intouchreceipting.com/"
       target="_blank"
       rel="noopener"
       size="xl"
-      class="mt-4 font-semibold"
+      class="mt-10 font-semibold"
     >
       Payments Online
     </Button>
