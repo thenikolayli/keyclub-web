@@ -249,90 +249,42 @@
 <Separator />
 <section
   id="join"
-  class="w-full scroll-mt-24 bg-foreground px-8 py-20 flex flex-col items-center justify-center text-center"
+  class="w-full scroll-mt-24 bg-background flex flex-col text-center items-center p-8 md:p-14 min-h-150 text-foreground"
 >
   <div use:reveal>
-    <span class="font-bold-gothic text-primary">JOIN OUR CHAPTER</span>
-    <h2 class="mt-2 text-4xl text-background md:text-5xl">Become a Keyutie</h2>
-    <p class="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-      Anyone can join — that's what we're all about. Here's how membership
-      works.
+    <span class="font-bold-gothic text-secondary">WANT TO JOIN?</span>
+    <h2 class="mt-2 text-4xl md:text-5xl">Registration is Closed</h2>
+    <p class="mt-6 text-lg md:text-xl max-w-xl">
+      Registration closed on October 31st. It will reopen for the 27-28 school
+      year <span class="underline">next September</span>.
     </p>
   </div>
+  <div class="flex-1"></div>
+  <p class="mt-10 text-muted-foreground text-lg">Follow for updates</p>
+  <div class="mt-2 w-full flex justify-center gap-4">
+    <Button
+      href="https://www.instagram.com/jhskeyclub21"
+      target="_blank"
+      rel="noopener"
+      size="xl"
+      class="font-semibold"
+      variant="secondary"
+    >
+      <Icon icon="fa7-brands:instagram" class="size-10" />
+      Instagram
+    </Button>
 
-  <div use:reveal>
-    <div class="mt-10 grid gap-6 md:grid-cols-3 max-w-5xl">
-      <div
-        class="flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
-      >
-        <Icon icon="solar:user-plus-bold" class="size-12 text-primary" />
-        <h3 class="font-bold-gothic mt-4 text-2xl text-background">Register</h3>
-        <p class="mt-3 text-muted">
-          Fill out the
-          <a
-            class="text-primary underline"
-            href="https://docs.google.com/forms/d/e/1FAIpQLSehyBt28LPjbq5x_-AN4s1FSvQpIgNJFsinn7WED6G3z9HGdg/viewform?usp=dialog"
-          >
-            registration form
-          </a>.
-        </p>
-      </div>
-      <div
-        class="flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
-      >
-        <Icon icon="solar:wallet-bold" class="size-12 text-primary" />
-        <h3 class="font-bold-gothic mt-4 text-2xl text-background">Pay Dues</h3>
-        <p class="mt-3 text-muted">
-          Dues are $45 and are available on <a
-            class="text-primary underline"
-            target="_blank"
-            href="https://wa-everett.intouchreceipting.com/">Payments Online</a
-          > or at the ASB office.
-        </p>
-      </div>
-      <div
-        class="flex flex-col items-center rounded-xl border border-stone-700 bg-stone-900/40 p-8"
-      >
-        <img src="/bee.webp" alt="Bee" class="size-14 object-contain" />
-        <h3 class="font-bold-gothic mt-4 text-2xl text-background">
-          Stay in the Hive
-        </h3>
-        <p class="mt-3 text-muted">
-          Attend general meetings and honor your event sign-ups.
-        </p>
-      </div>
-    </div>
-
-    <p class="mt-10 text-muted-foreground text-lg">
-      Follow for updates
-      <br />
-      Register and pay for dues by Halloween
-    </p>
-    <div class="mt-2 w-full flex justify-center gap-4">
-      <Button
-        href="https://www.instagram.com/jhskeyclub21"
-        target="_blank"
-        rel="noopener"
-        size="xl"
-        class="font-semibold"
-        variant="secondary"
-      >
-        <Icon icon="fa7-brands:instagram" class="size-10" />
-        Instagram
-      </Button>
-
-      <Button
-        href="https://groupme.com/join_group/117343192/3W7crLIS"
-        target="_blank"
-        rel="noopener"
-        size="xl"
-        class="font-semibold"
-        variant="secondary"
-      >
-        <Icon icon="thesvg:groupme" class="size-8" />
-        GroupMe
-      </Button>
-    </div>
+    <Button
+      href="https://groupme.com/join_group/117343192/3W7crLIS"
+      target="_blank"
+      rel="noopener"
+      size="xl"
+      class="font-semibold"
+      variant="secondary"
+    >
+      <Icon icon="thesvg:groupme" class="size-8" />
+      GroupMe
+    </Button>
   </div>
 </section>
 
