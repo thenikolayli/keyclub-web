@@ -202,49 +202,6 @@
   </div>
 </section>
 
-<!-- Hoodies -->
-<Separator />
-<section
-  class="w-full bg-foreground px-8 py-20 text-background flex flex-col items-center justify-center text-center"
->
-  <div use:reveal>
-    <span class="font-bold-gothic text-primary">THE HOODIES</span>
-    <h2 class="mt-2 text-4xl md:text-5xl">Buy Our Merch</h2>
-    <p class="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-      Represent Key Club in style. Grab an official Key Club hoodie for <span
-        class="underline">$30</span
-      >.
-    </p>
-  </div>
-
-  <div use:reveal>
-    <div
-      class="mt-12 flex flex-col items-center justify-center gap-8 md:flex-row"
-    >
-      <img
-        class="aspect-square p-12 h-100 bg-primary object-contain rounded transition-all hover:scale-105 ease-out -rotate-3"
-        src="/hoodie_front.png"
-        alt="Key Club hoodie front"
-      />
-      <img
-        class="aspect-square p-12 h-100 bg-primary object-contain rounded transition-all hover:scale-105 ease-out rotate-3"
-        src="/hoodie_back.png"
-        alt="Key Club hoodie back"
-      />
-    </div>
-
-    <Button
-      href="https://wa-everett.intouchreceipting.com/"
-      target="_blank"
-      rel="noopener"
-      size="xl"
-      class="mt-10 font-semibold"
-    >
-      Payments Online
-    </Button>
-  </div>
-</section>
-
 <!-- Join CTA -->
 <Separator />
 <section
@@ -292,7 +249,7 @@
 {#if nextMeeting}
   <Separator />
   <section
-    class={nextMeeting.name.toLowerCase().includes("november")
+    class={nextMeeting.name!.toLowerCase().includes("november")
       ? "w-full bg-foreground scroll-mt-24 px-8 py-20 text-stone-100 flex flex-col items-center justify-center text-center lg:text-left"
       : "w-full bg-orange-600 scroll-mt-24 px-8 py-20 text-stone-100 flex flex-col items-center justify-center text-center lg:text-left"}
     id="countdown"
@@ -304,14 +261,14 @@
       <div class="text-center lg:text-left">
         <span class="font-bold-gothic text-primary">COMING UP</span>
         <h2 class="mt-2 text-4xl md:text-5xl">
-          {#if nextMeeting.name.toLowerCase().includes("november")}
+          {#if nextMeeting.name!.toLowerCase().includes("november")}
             The November General Meeting
           {:else}
             The October General Meeting
           {/if}
         </h2>
         <p class="mt-4 max-w-xl text-lg text-stone-300">
-          {#if nextMeeting.name.toLowerCase().includes("november")}
+          {#if nextMeeting.name!.toLowerCase().includes("november")}
             The most thankful meeting of the year
           {:else}
             The spookiest meeting of the year...
@@ -343,7 +300,7 @@
         <div class="relative grid grid-cols-4 gap-3">
           {#each countdown as unit (unit.label)}
             <div
-              class={nextMeeting.name.toLowerCase().includes("november")
+              class={nextMeeting.name!.toLowerCase().includes("november")
                 ? "flex z-10 flex-col items-center rounded-xl bg-zinc-700 px-2 py-5"
                 : "flex z-10 flex-col items-center rounded-xl bg-orange-900 px-2 py-5"}
             >
