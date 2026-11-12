@@ -4,6 +4,7 @@ import type { Result } from "$lib/responses";
 import { CALENDAR_ID } from "$env/static/private";
 import { getCalendarService } from "$lib/google";
 import type { Meeting, Committee } from "./types";
+import { convert } from "html-to-text";
 
 // Fetches all meetings for the next year.
 export async function getMeetings(): Promise<Result<Meeting[]>> {
@@ -32,14 +33,16 @@ export async function getMeetings(): Promise<Result<Meeting[]>> {
     }
 
     const description = calEvent.description ?? "";
-    const locationMatch = description.match(/location:\s*(.+?)\n/i);
-    const descMatch = description.match(/description:\s*(.+)/i);
+    let locationMatch = description.match(/location:\s*(.+?)\n/i);
+    let descMatch = description.match(/description:\s*(.+)/i);
     // Description doesn't have a newline terminator since it's meant to be multiline.
     // Meetings are always "all day" on the calendar for priority,
     // so I'm hardcoding the start and end times
-
     const lowercaseName = calEvent.summary.toLowerCase();
-    if (!lowercaseName.includes("meeting")) {
+    if (
+      !lowercaseName.includes("meeting") &&
+      !lowercaseName.includes("poster making")
+    ) {
       continue;
     }
     let committee: Committee;
@@ -53,9 +56,12 @@ export async function getMeetings(): Promise<Result<Meeting[]>> {
       committee = "service";
     } else if (
       lowercaseName.includes("deco") ||
-      (lowercaseName.includes("poster") && locationMatch != null)
+      lowercaseName.includes("poster making")
     ) {
       committee = "decoration";
+      if (descMatch == null) {
+        descMatch = ["", convert(description)]; // quirky workaround, temporary
+      }
     } else {
       continue;
     }

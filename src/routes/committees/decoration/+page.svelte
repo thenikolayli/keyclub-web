@@ -72,7 +72,9 @@
         <Carousel.Content>
           {#each data.meetings as meeting}
             <Carousel.Item
-              class={isMobile.current ? "basis-full" : "basis-1/2 lg:basis-1/3"}
+              class={isMobile.current
+                ? "basis-full"
+                : "basis-1/2 lg:basis-1/2 px-20"}
             >
               <MeetingCard {meeting} />
             </Carousel.Item>

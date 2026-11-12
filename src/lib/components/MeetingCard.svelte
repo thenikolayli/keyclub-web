@@ -17,7 +17,7 @@
 </script>
 
 <div
-  class="mx-auto flex w-sm max-w-full flex-col overflow-hidden rounded-2xl border border-foreground/20 bg-foreground text-background shadow-lg"
+  class="mx-auto flex w-full flex-col overflow-hidden rounded-2xl border border-foreground/20 bg-foreground text-background shadow-lg"
 >
   <div class="bg-secondary px-5 py-4">
     <h3 class="font-[abril] text-2xl italic text-primary">
