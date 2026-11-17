@@ -46,6 +46,7 @@ export async function parseBaseEvent(
       );
     }
 
+    // Skips header row
     for (let i = 1; i < table.tableRows.length; i++) {
       nSpots++;
       const cells = table.tableRows[i].tableCells;
@@ -187,7 +188,7 @@ function parseEventDateTimes(
   startTime: string | null;
   endTime: string | null;
 }> {
-  const dateStr = fields["date"] || "";
+  const dateStr = fields["date"].toLowerCase() || "";
   const dateRes = dateStr
     ? parseDateField(dateStr)
     : parseDateField(title.split(")")[0].substring(1));
@@ -195,7 +196,7 @@ function parseEventDateTimes(
 
   let startTime: string | null = null;
   let endTime: string | null = null;
-  const timeStr = fields["time"] || "";
+  const timeStr = fields["time"].toLowerCase() || "";
   if (timeStr) {
     const [start, end] = timeStr
       .split(/\s*(?:-|to|until)\s*/i)

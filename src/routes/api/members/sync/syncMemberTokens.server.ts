@@ -2,14 +2,12 @@ import { supabaseAdmin } from "$lib/db/admin";
 import { ok, fail } from "$lib/responses";
 import type { Result } from "$lib/responses";
 import type { MemberToken, Member } from "$lib/members/types";
-import {tokenizeName} from "$lib/members/tokenizeName";
-
+import { tokenizeName } from "$lib/members/tokenizeName";
 
 export async function syncMemberTokens(): Promise<Result<null>> {
   const { data: deleteResult, error: deleteError } = await supabaseAdmin
     .from("member_tokens")
-    .delete()
-    .not("id", "is", null);
+    .delete();
   if (deleteError) {
     return fail(deleteError?.message);
   }
@@ -25,6 +23,9 @@ export async function syncMemberTokens(): Promise<Result<null>> {
   for (const member of readResult as Member[]) {
     const tokens = tokenizeName(member.name);
     for (const token of tokens) {
+      if (token.trim() == "") {
+        continue;
+      }
       memberTokens.push({ member_id: member.id, token } as MemberToken);
     }
   }

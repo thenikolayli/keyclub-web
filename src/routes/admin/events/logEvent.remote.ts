@@ -59,7 +59,7 @@ export const logEvent = form(
       }
     }
 
-    // Finds next empty row to log new event attendance
+    // Finds next empty row in the events members sheet to log new event attendance.
     const emptyRowEventsMembersResult = await findNextEmptyRowNoDupes(
       sheets,
       eventsMembersSheetInfo.events,
@@ -83,7 +83,7 @@ export const logEvent = form(
       membersNotLogged,
     } = createUpdateValuesResult.data;
 
-    // Finds next empty row to log new event
+    // Finds next empty row in the events sheet to log new event.
     const emptyRowEventsResult = await findNextEmptyRowNoDupes(
       sheets,
       eventsSheetInfo.events,
@@ -172,7 +172,7 @@ async function createUpdateValues(
     const member = memberAttendance.find((m) =>
       matchesAllTokens(m.tokenizedName, sheetTokens),
     );
-    if (member) {
+    if (member && member.hours != null) {
       updateValues[index] = member.hours;
       matched.add(member);
     }
