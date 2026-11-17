@@ -9,16 +9,14 @@
   import Icon from "@iconify/svelte";
 
   onMount(() => {
-    document.title = "Beekeeper - Invites";
+    document.title = "Beekeeper - Calendar";
   });
 </script>
 
 <section class="flex flex-col text-foreground">
   <div class="w-fit flex flex-col gap-1">
-    <h1 class="text-3xl font-semibold tracking-tight">Invites</h1>
-    <p class="text-md text-muted-foreground">
-      Invite someone to give them access to the Beekeper admin panel.
-    </p>
+    <h1 class="text-3xl font-semibold tracking-tight">Calendar</h1>
+    <p class="text-md text-muted-foreground">Add an event to the calendar.</p>
     <Separator />
   </div>
   <section class="flex flex-wrap p-4 gap-4">
