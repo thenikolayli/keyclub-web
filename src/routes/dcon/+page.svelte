@@ -127,18 +127,21 @@
   <h2 use:reveal class="text-4xl md:text-5xl">Want in on DCON?</h2>
   <div use:reveal>
     <p class="mt-4 text-lg max-w-2xl mx-auto">
-      Talk to an officer at a general meeting, and keep an eye on the PNW
-      District website for dates and details.
+      Fill out the application below to join us at DCON. Applications close on
+      November 30th at 11:59 PM &mdash; don't wait until the last minute!
     </p>
     <Button
-      class="w-fit mt-2"
+      class="w-fit mt-6"
       size="lg"
       variant="secondary"
-      href="https://www.pnwkeyclub.org/"
+      href="https://docs.google.com/forms/d/e/1FAIpQLSdTYQ4CfPLgNw6EgQnlX2FOzCaLicVMEB5f2P9ZXddxkK4CyQ/viewform"
       target="_blank"
     >
       <Icon icon="solar:link-bold" class="size-4" />
-      PNW Key Club website
+      Apply for DCON
     </Button>
+    <p class="mt-4 text-sm text-kcblack/70">
+      Applications close November 30 at 11:59 PM.
+    </p>
   </div>
 </section>

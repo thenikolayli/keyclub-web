@@ -251,7 +251,7 @@
   <section
     class={nextMeeting.name!.toLowerCase().includes("november")
       ? "w-full bg-foreground scroll-mt-24 px-8 py-20 text-stone-100 flex flex-col items-center justify-center text-center lg:text-left"
-      : "w-full bg-orange-600 scroll-mt-24 px-8 py-20 text-stone-100 flex flex-col items-center justify-center text-center lg:text-left"}
+      : "w-full bg-blue-300 scroll-mt-24 px-8 py-20 text-foreground flex flex-col items-center justify-center text-center lg:text-left"}
     id="countdown"
   >
     <div
@@ -264,14 +264,14 @@
           {#if nextMeeting.name!.toLowerCase().includes("november")}
             The November General Meeting
           {:else}
-            The October General Meeting
+            The December General Meeting
           {/if}
         </h2>
         <p class="mt-4 max-w-xl text-lg text-stone-300">
           {#if nextMeeting.name!.toLowerCase().includes("november")}
             The most thankful meeting of the year
           {:else}
-            The spookiest meeting of the year...
+            The yummiest meeting of the year
           {/if}
         </p>
 
