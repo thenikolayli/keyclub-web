@@ -248,81 +248,149 @@
 <!-- Next General Meeting -->
 {#if nextMeeting}
   <Separator />
-  <section
-    class={nextMeeting.name!.toLowerCase().includes("november")
-      ? "w-full bg-foreground scroll-mt-24 px-8 py-20 text-stone-100 flex flex-col items-center justify-center text-center lg:text-left"
-      : "w-full bg-blue-300 scroll-mt-24 px-8 py-20 text-foreground flex flex-col items-center justify-center text-center lg:text-left"}
-    id="countdown"
-  >
-    <div
-      use:reveal
-      class="flex flex-col max-w-6xl items-center justify-between gap-10 lg:flex-row lg:items-end"
+  {#if nextMeeting.name!.toLowerCase().includes("december")}
+    <section
+      class="w-full bg-blue-300 scroll-mt-24 px-8 py-20 text-foreground flex flex-col items-center justify-center text-center lg:text-left"
+      id="countdown"
     >
-      <div class="text-center lg:text-left">
-        <span class="font-bold-gothic text-primary">COMING UP</span>
-        <h2 class="mt-2 text-4xl md:text-5xl">
-          {#if nextMeeting.name!.toLowerCase().includes("november")}
-            The November General Meeting
-          {:else}
+      <div
+        use:reveal
+        class="flex flex-col max-w-6xl items-center justify-between gap-10 lg:flex-row lg:items-end"
+      >
+        <div class="text-center lg:text-left">
+          <span class="font-bold-gothic text-secondary">COMING UP</span>
+          <h2 class="mt-2 text-4xl md:text-5xl">
             The December General Meeting
-          {/if}
-        </h2>
-        <p class="mt-4 max-w-xl text-lg text-stone-300">
-          {#if nextMeeting.name!.toLowerCase().includes("november")}
-            The most thankful meeting of the year
-          {:else}
+          </h2>
+          <p class="mt-4 max-w-xl text-lg text-stone-600">
             The yummiest meeting of the year
-          {/if}
-        </p>
+          </p>
 
-        <dl
-          class="mx-auto mt-8 grid max-w-md grid-cols-1 gap-x-8 gap-y-4 text-left sm:grid-cols-2 lg:mx-0 lg:max-w-none"
-        >
-          {#each meetingDetails as item (item.label)}
-            <div class="border-l-2 border-kcyellow/60 pl-4">
-              <dt
-                class="font-bold-gothic text-sm uppercase tracking-wider text-kcyellow"
-              >
-                {item.label}
-              </dt>
-              <dd class="mt-1 text-stone-100">{item.value}</dd>
-            </div>
-          {/each}
-        </dl>
-      </div>
+          <dl
+            class="mx-auto mt-8 grid max-w-md grid-cols-1 gap-x-8 gap-y-4 text-left sm:grid-cols-2 lg:mx-0 lg:max-w-none"
+          >
+            {#each meetingDetails as item (item.label)}
+              <div class="border-l-2 border-secondary pl-4">
+                <dt
+                  class="font-bold-gothic text-sm uppercase tracking-wider text-secondary"
+                >
+                  {item.label}
+                </dt>
+                <dd class="mt-1 text-stone-600">{item.value}</dd>
+              </div>
+            {/each}
+          </dl>
+        </div>
 
-      <div use:reveal class="w-full max-w-xl lg:w-auto">
-        <p
-          class="font-bold-gothic mb-3 text-sm uppercase tracking-widest text-stone-400"
-        >
-          Time until the meeting
-        </p>
-        <div class="relative grid grid-cols-4 gap-3">
-          {#each countdown as unit (unit.label)}
-            <div
-              class={nextMeeting.name!.toLowerCase().includes("november")
-                ? "flex z-10 flex-col items-center rounded-xl bg-zinc-700 px-2 py-5"
-                : "flex z-10 flex-col items-center rounded-xl bg-orange-900 px-2 py-5"}
-            >
-              <span
-                class="font-[abril] text-4xl text-kcyellow tabular-nums sm:text-5xl"
+        <div use:reveal class="w-full max-w-xl lg:w-auto">
+          <p
+            class="font-bold-gothic mb-3 text-sm uppercase tracking-widest text-stone-600"
+          >
+            Time until the meeting
+          </p>
+          <div class="relative grid grid-cols-4 gap-3">
+            {#each countdown as unit (unit.label)}
+              <div
+                class="flex z-10 flex-col items-center rounded-xl bg-secondary px-2 py-5"
               >
-                {unit.value}
-              </span>
-              <span class="mt-1 text-xs uppercase tracking-wider text-stone-400"
-                >{unit.label}</span
-              >
-            </div>
-          {/each}
-          <img
-            class="absolute -left-18 -rotate-12 size-32"
-            src="/pumpkinbee.PNG"
-            alt="Pumpkin Wolfbee"
-          />
+                <span
+                  class="font-[abril] text-4xl text-kcyellow tabular-nums sm:text-5xl"
+                >
+                  {unit.value}
+                </span>
+                <span
+                  class="mt-1 text-xs uppercase tracking-wider text-stone-400"
+                  >{unit.label}</span
+                >
+              </div>
+            {/each}
+            <img
+              class="absolute -left-18 -rotate-12 size-32"
+              src="/wolfbee_festive.png"
+              alt="Festive Wolfbee"
+            />
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  {:else}
+    <section
+      class={nextMeeting.name!.toLowerCase().includes("november")
+        ? "w-full bg-foreground scroll-mt-24 px-8 py-20 text-stone-100 flex flex-col items-center justify-center text-center lg:text-left"
+        : "w-full bg-blue-300 scroll-mt-24 px-8 py-20 text-foreground flex flex-col items-center justify-center text-center lg:text-left"}
+      id="countdown"
+    >
+      <div
+        use:reveal
+        class="flex flex-col max-w-6xl items-center justify-between gap-10 lg:flex-row lg:items-end"
+      >
+        <div class="text-center lg:text-left">
+          <span class="font-bold-gothic text-secondary">COMING UP</span>
+          <h2 class="mt-2 text-4xl md:text-5xl">
+            {#if nextMeeting.name!.toLowerCase().includes("november")}
+              The November General Meeting
+            {:else}
+              The December General Meeting
+            {/if}
+          </h2>
+          <p class="mt-4 max-w-xl text-lg text-stone-300">
+            {#if nextMeeting.name!.toLowerCase().includes("november")}
+              The most thankful meeting of the year
+            {:else}
+              The yummiest meeting of the year
+            {/if}
+          </p>
+
+          <dl
+            class="mx-auto mt-8 grid max-w-md grid-cols-1 gap-x-8 gap-y-4 text-left sm:grid-cols-2 lg:mx-0 lg:max-w-none"
+          >
+            {#each meetingDetails as item (item.label)}
+              <div class="border-l-2 border-kcyellow/60 pl-4">
+                <dt
+                  class="font-bold-gothic text-sm uppercase tracking-wider text-kcyellow"
+                >
+                  {item.label}
+                </dt>
+                <dd class="mt-1 text-stone-100">{item.value}</dd>
+              </div>
+            {/each}
+          </dl>
+        </div>
+
+        <div use:reveal class="w-full max-w-xl lg:w-auto">
+          <p
+            class="font-bold-gothic mb-3 text-sm uppercase tracking-widest text-stone-400"
+          >
+            Time until the meeting
+          </p>
+          <div class="relative grid grid-cols-4 gap-3">
+            {#each countdown as unit (unit.label)}
+              <div
+                class={nextMeeting.name!.toLowerCase().includes("november")
+                  ? "flex z-10 flex-col items-center rounded-xl bg-zinc-700 px-2 py-5"
+                  : "flex z-10 flex-col items-center rounded-xl bg-orange-900 px-2 py-5"}
+              >
+                <span
+                  class="font-[abril] text-4xl text-kcyellow tabular-nums sm:text-5xl"
+                >
+                  {unit.value}
+                </span>
+                <span
+                  class="mt-1 text-xs uppercase tracking-wider text-stone-400"
+                  >{unit.label}</span
+                >
+              </div>
+            {/each}
+            <img
+              class="absolute -left-18 -rotate-12 size-32"
+              src="/wolfbee_festive.png"
+              alt="Festive Wolfbee"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  {/if}
 {/if}
 
 <!-- Committees -->
