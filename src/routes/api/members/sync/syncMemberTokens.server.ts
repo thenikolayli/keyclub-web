@@ -5,9 +5,12 @@ import type { MemberToken, Member } from "$lib/members/types";
 import { tokenizeName } from "$lib/members/tokenizeName";
 
 export async function syncMemberTokens(): Promise<Result<null>> {
-  const { data: deleteResult, error: deleteError } = await supabaseAdmin
+  // wipes every token so renames are picked up; a filter is required for the
+  // delete to run, so match all rows
+  const { error: deleteError } = await supabaseAdmin
     .from("member_tokens")
-    .delete();
+    .delete()
+    .not("id", "is", null);
   if (deleteError) {
     return fail(deleteError?.message);
   }

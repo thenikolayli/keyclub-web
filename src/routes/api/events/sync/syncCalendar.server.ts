@@ -22,26 +22,32 @@ export async function syncCalendar(): Promise<Result<number>> {
   });
 
   const unparsedEvents = response.data.items || [];
-  const parsedEvents: BaseEvent[] = [];
 
-  for (const calEvent of unparsedEvents) {
-    if (!calEvent.attachments || calEvent.attachments.length === 0) continue;
+  // concurrently parse every attendance doc into full event info
+  const parsedEvents = (
+    await Promise.all(
+      unparsedEvents.map(async (calEvent): Promise<BaseEvent | null> => {
+        if (!calEvent.attachments || calEvent.attachments.length === 0)
+          return null;
 
-    const fileUrl = calEvent.attachments[0].fileUrl;
-    if (!fileUrl) continue;
+        const fileUrl = calEvent.attachments[0].fileUrl;
+        if (!fileUrl) return null;
 
-    const docIdResult = docsUrlToId(fileUrl);
-    if (!docIdResult.ok) continue;
-    const docId = docIdResult.data;
-    console.log(calEvent.summary, fileUrl, docId);
+        const docIdResult = docsUrlToId(fileUrl);
+        if (!docIdResult.ok) return null;
+        const docId = docIdResult.data;
+        console.log(calEvent.summary, fileUrl, docId);
 
-    try {
-      const parsed = await parseBaseEvent(docId, docs);
-      if (parsed.ok) parsedEvents.push(parsed.data.event);
-    } catch (err) {
-      console.warn("sync: failed to parse doc for", calEvent.summary, err);
-    }
-  }
+        try {
+          const parsed = await parseBaseEvent(docId, docs);
+          return parsed.ok ? parsed.data.event : null;
+        } catch (err) {
+          console.warn("sync: failed to parse doc for", calEvent.summary, err);
+          return null;
+        }
+      }),
+    )
+  ).filter((event): event is BaseEvent => event !== null);
 
   let updates = 0;
 
